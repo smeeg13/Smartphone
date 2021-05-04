@@ -10,5 +10,7 @@ public class HelloWorld {
 
         int a = 0;
         System.out.println(++a);
+        a*=5;
+        System.out.println(a);
     }
 }
