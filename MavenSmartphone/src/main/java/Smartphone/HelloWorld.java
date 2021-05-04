@@ -7,5 +7,8 @@ public class HelloWorld {
 
         System.out.println("Mon premier message sur GIT");
         System.out.println("hiii");
+
+        int a = 0;
+        System.out.println(++a);
     }
 }
