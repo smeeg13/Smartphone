@@ -1,4 +1,4 @@
-package Smartphone;
+package Smartphone.Contacts;
 
 import javax.swing.*;
 
