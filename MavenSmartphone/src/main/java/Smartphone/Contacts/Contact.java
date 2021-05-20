@@ -1,5 +1,8 @@
 package Smartphone.Contacts;
 
+import Smartphone.Errors.BusinessException;
+import Smartphone.Errors.ErrorCodes;
+
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -7,7 +10,11 @@ public class Contact extends JPanel {
 
     private String firstName;
     private String lastName;
-    private int phoneNumber;
+    private String phoneNumber;
+    private int indicatif;
+
+
+
     private String email;
     private String address;
 
@@ -17,25 +24,25 @@ public class Contact extends JPanel {
     private static AtomicInteger nextId = new AtomicInteger(0);
 
 
-    public Contact(String firstName,String lastName,
-    int phoneNumber, String email,
-            String address){
+    public Contact(String firstName,String lastName,int indicatif,
+                    String phoneNumber, String email, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.phoneNumber = phoneNumber ;
+        this.phoneNumber = phoneNumber;
+        this.indicatif = indicatif;
         this.email = email;
         this.address = address;
         nextId.getAndIncrement();
 
     }
-    public Contact(String firstName,String lastName,
-    int phoneNumber){
+    public Contact(String firstName,String lastName,int indicatif,
+                   String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.phoneNumber = phoneNumber ;
-        this.email = null;
-        this.address = null;
+        this.phoneNumber = phoneNumber;
+        this.indicatif = indicatif;
         nextId.getAndIncrement();
+
     }
 
 
@@ -55,12 +62,11 @@ public class Contact extends JPanel {
         this.lastName = lastName;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhoneNumber(String phoneNumber) {
     }
 
     public String getEmail() {
@@ -77,5 +83,12 @@ public class Contact extends JPanel {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public int getIndicatif() {
+        return indicatif;
+    }
+
+    public void setIndicatif(int indicatif) {
     }
 }
