@@ -9,6 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class BatteryTask extends TimerTask{
+
     private JLabel batteryPercentage = new JLabel();
 
     public BatteryTask() {

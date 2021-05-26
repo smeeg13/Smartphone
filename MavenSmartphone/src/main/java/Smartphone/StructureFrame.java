@@ -1,6 +1,7 @@
 package Smartphone;
 
 import Smartphone.Contacts.Contacts;
+import Smartphone.Task.BatteryTask;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,6 +37,9 @@ public  class StructureFrame extends JFrame {
     private JLabel time = new JLabel(formatDate.format(maintenant.getTime()) + "   ");
     private int wait = 1000;
 
+    private BatteryTask batteryTask = new BatteryTask();
+    private JLabel batteryLevel;
+
 
 
 
@@ -46,7 +50,7 @@ public  class StructureFrame extends JFrame {
         Dimension tailleBord = new Dimension(5, 750);
 
 
-        bandeHaut.setLayout(new BoxLayout(bandeHaut,BoxLayout.PAGE_AXIS));
+        bandeHaut.setLayout(new BorderLayout());
         JPanel bandeHautConstrain = new JPanel(new GridBagLayout());
         bandeHautConstrain.add(bandeHaut);
         bandeHaut.add(time);
@@ -60,6 +64,15 @@ public  class StructureFrame extends JFrame {
         bandeBas.setPreferredSize(tailleBande);
         bandeBas.setFont(bandeBas.getFont().deriveFont(Font.BOLD));
 
+        //ajout dans le Jpanel du haut le pourcentage de la batterie
+        batteryLevel = batteryTask.getBatteryPercentage();
+        batteryLevel.setForeground(Color.WHITE);
+        bandeHaut.add(batteryLevel,BorderLayout.EAST);
+
+
+
+        bandeHaut.setPreferredSize(tailleBande);
+        bandeHaut.setBackground(Color.BLACK);
 
         panelCont.setLayout(collectionEcrans);
         panelCont.add(menu, "menu");
