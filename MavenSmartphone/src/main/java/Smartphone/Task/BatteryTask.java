@@ -1,18 +1,20 @@
 package Smartphone.Task;
 
+import Smartphone.Errors.BusinessException;
+import Smartphone.Errors.ErrorCodes;
+
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class BatteryTask extends TimerTask{
+public class BatteryTask extends TimerTask {
 
     private JLabel batteryPercentage = new JLabel();
 
-    public BatteryTask() {
+    public BatteryTask() throws BusinessException{
         Timer timer;
         timer = new Timer();
         timer.schedule(this,1000,1000);
@@ -29,40 +31,43 @@ public class BatteryTask extends TimerTask{
     }
 
 
-    @Override
-    public void run() {
+    public void run() {             //method run qui va excéctuer une commande sur un terminal
         String batteryLevel = "";
         Process process = null;
-        try {
-            process = Runtime.getRuntime().exec("pmset -g batt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//        Process process = Runtime.getRuntime().exec("pmset -g batt | grep -Eo \"\\d+%\" | cut -d% -f1");
-        InputStream is = process.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
 
         try {
-            batteryLevel = getPercentageBattery(getResultsBattery(process));
-            setBatteryPercentage(batteryLevel);
-        } catch (IOException e) {
-            e.printStackTrace();
+            process = Runtime.getRuntime().exec("pmset -g batt"); //commande pour vérifier niveau de batterie
+        } catch (IOException ex) {
+            System.err.println(ex.getMessage());
         }
 
 
 
+
+        batteryLevel = getPercentageBattery(getResultsBattery(process));  //recherche du pourcentage avec la méthode getPercentageBattery
+        setBatteryPercentage(batteryLevel);                                //mise à jour du JLabel avec la nouvelle mesure de batterie
 
     }
 
-
-    public String getResultsBattery(Process process) throws IOException {
+    /**
+     *
+     * @param process
+     * @return the whole String with the command line to get the battery Level
+     * @throws IOException
+     */
+    public String getResultsBattery(Process process) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line = "";
         String result = "";
-        while ((line = reader.readLine()) != null) {
-            result += line;
+
+        try{
+            while ((line = reader.readLine()) != null) {
+                result += line;
+            }
+        }catch (IOException e){
+            e.printStackTrace();
         }
+
         return result;
     }
 
