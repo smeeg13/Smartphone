@@ -1,7 +1,9 @@
 package Smartphone;
 
 import Smartphone.Contacts.Contacts;
+import Smartphone.Errors.BusinessException;
 import Smartphone.Task.BatteryTask;
+import Smartphone.Task.ClockTask;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,30 +36,29 @@ public  class StructureFrame extends JFrame {
 
     private DateFormat formatDate = new SimpleDateFormat("HH:mm");
     private Calendar maintenant = Calendar.getInstance();
-    private JLabel time = new JLabel(formatDate.format(maintenant.getTime()) + "   ");
-    private int wait = 1000;
 
-    private BatteryTask batteryTask = new BatteryTask();
-    private JLabel batteryLevel;
+    private BatteryTask batteryTask = new BatteryTask();    //Objet BatteryTask pour trouver le niveau de battery
+    private JLabel batteryLevel;                            //Label pour contenir le niveau de la batterie
 
+    private ClockTask clockTask = new ClockTask();
+    private JLabel time;
 
-
-
-    public StructureFrame(){
+    public StructureFrame() throws BusinessException {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         Dimension tailleBande = new Dimension(500, 30);
         Dimension tailleBord = new Dimension(5, 750);
 
+        //instanciation du début de la tache pour récupérer l'heure
+        time = clockTask.getTime();
+        time.setForeground(Color.WHITE);
+
 
         bandeHaut.setLayout(new BorderLayout());
         JPanel bandeHautConstrain = new JPanel(new GridBagLayout());
         bandeHautConstrain.add(bandeHaut);
-        bandeHaut.add(time);
 
 
-        time.setForeground(Color.WHITE);
-        time.setBackground(Color.YELLOW);
         bandeHaut.setPreferredSize(tailleBande);
         bandeHaut.setBackground(Color.BLACK);
         bandeBas.add(buttonMenu);
@@ -73,6 +74,7 @@ public  class StructureFrame extends JFrame {
 
         bandeHaut.setPreferredSize(tailleBande);
         bandeHaut.setBackground(Color.BLACK);
+        bandeHaut.add(time);
 
         panelCont.setLayout(collectionEcrans);
         panelCont.add(menu, "menu");
@@ -94,12 +96,6 @@ public  class StructureFrame extends JFrame {
         add(bandeHaut,BorderLayout.NORTH);
         add(bandeBas,BorderLayout.SOUTH);
         add(panelCont,BorderLayout.CENTER);
-
-
-        Time time = new Time();
-        Timer timer = new Timer(wait,time);
-        timer.start();
-
 
 
     }
@@ -130,11 +126,4 @@ public  class StructureFrame extends JFrame {
         }
     }
 
-    class Time implements ActionListener{
-        public void actionPerformed(ActionEvent e2) {
-            Calendar maintenant = Calendar.getInstance();
-
-            time.setText(formatDate.format(maintenant.getTime()));
-        }
-    }
 }

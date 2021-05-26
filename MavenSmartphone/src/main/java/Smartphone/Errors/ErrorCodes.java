@@ -3,7 +3,8 @@ package Smartphone.Errors;
 public enum ErrorCodes {
 
 
-    CONTACT_ALREADY_EXIST_ERROR(200);
+    CONTACT_ALREADY_EXIST_ERROR(200),
+    IO_ERROR(301);
 
 
 
