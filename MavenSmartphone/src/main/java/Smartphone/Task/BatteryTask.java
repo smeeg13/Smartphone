@@ -13,6 +13,7 @@ import java.util.TimerTask;
 public class BatteryTask extends TimerTask {
 
     private JLabel batteryPercentage = new JLabel();
+    private String OS = System.getProperty("os.name").toLowerCase();
 
     public BatteryTask() throws BusinessException{
         Timer timer;
@@ -30,18 +31,25 @@ public class BatteryTask extends TimerTask {
         batteryPercentage.setText(batteryLevel);
     }
 
-
     public void run() {             //method run qui va excéctuer une commande sur un terminal
         String batteryLevel = "";
         Process process = null;
 
-        try {
-            process = Runtime.getRuntime().exec("pmset -g batt"); //commande pour vérifier niveau de batterie
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
+        if(isMac()){
+            try {
+                process = Runtime.getRuntime().exec("pmset -g batt"); //commande pour vérifier niveau de batterie
+            } catch (IOException ex) {
+                System.err.println(ex.getMessage());
+            }
         }
 
-
+        if(isWindows()){
+            try {
+                process = Runtime.getRuntime().exec("WMIC PATH Win32_Battery Get EstimatedChargeRemaining"); //commande pour vérifier niveau de batterie
+            } catch (IOException ex) {
+                System.err.println(ex.getMessage());
+            }
+        }
 
 
         batteryLevel = getPercentageBattery(getResultsBattery(process));  //recherche du pourcentage avec la méthode getPercentageBattery
@@ -67,15 +75,55 @@ public class BatteryTask extends TimerTask {
         }catch (IOException e){
             e.printStackTrace();
         }
+        System.out.println(result);
 
         return result;
     }
 
     public String getPercentageBattery(String s) {
         String result = "";
-        s.indexOf("%");
+//        if(isWindows()){
+//            s.indexOf("%");
+//
+//            return result = s.substring(s.indexOf("%") - 3, s.indexOf("%") + 1);
+//        }
 
-        return result = s.substring(s.indexOf("%") - 3, s.indexOf("%") + 1);
+        if(isMac()){
+            s.indexOf("%");
 
+            return result = s.substring(s.indexOf("%") - 3, s.indexOf("%") + 1);
+        }
+
+
+        return result;
+    }
+
+    public boolean isWindows() {
+        return OS.contains("win");
+    }
+
+    public boolean isMac() {
+        return OS.contains("mac");
+    }
+
+    public boolean isUnix() {
+        return (OS.contains("nix") || OS.contains("nux") || OS.contains("aix"));
+    }
+
+    public boolean isSolaris() {
+        return OS.contains("sunos");
+    }
+    public String getOS(){
+        if (isWindows()) {
+            return "win";
+        } else if (isMac()) {
+            return "osx";
+        } else if (isUnix()) {
+            return "uni";
+        } else if (isSolaris()) {
+            return "sol";
+        } else {
+            return "err";
+        }
     }
 }

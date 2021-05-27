@@ -21,8 +21,6 @@ public  class StructureFrame extends JFrame {
     private JPanel bandeBas = new JPanel();
 
 
-
-
     private CardLayout collectionEcrans = new CardLayout();
     private JPanel panelCont = new JPanel();
     private JPanel menu = new Menu();
