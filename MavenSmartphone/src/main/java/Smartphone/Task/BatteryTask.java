@@ -82,15 +82,12 @@ public class BatteryTask extends TimerTask {
 
     public String getPercentageBattery(String s) {
         String result = "";
-//        if(isWindows()){
-//            s.indexOf("%");
-//
-//            return result = s.substring(s.indexOf("%") - 3, s.indexOf("%") + 1);
-//        }
+        if(isWindows()){
+            return result = s.substring(result.length()-3, result.length()) + "%";
+        }
 
         if(isMac()){
             s.indexOf("%");
-
             return result = s.substring(s.indexOf("%") - 3, s.indexOf("%") + 1);
         }
 
