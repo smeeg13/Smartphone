@@ -28,25 +28,23 @@ public class Meteo extends JPanel {
     public Meteo() {
         mainPanel.setLayout(new BorderLayout());
 
+
         //ajout d'une image à un JButton
-        imageSearch = new ImageIcon("src/main/resources/Image/searchLoupe.png");
-//        imageSearch.getImage().getScaledInstance(10,10,Image.SCALE_SMOOTH);
+        imageSearch = new ImageIcon("MavenSmartphone/src/main/java/Smartphone/Images/iconSearch.png");
         Image imagetest = imageSearch.getImage();
-        Image newTest = imagetest.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image newTest = imagetest.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         imageSearch = new ImageIcon(newTest);
         buttonGo = new JButton(imageSearch);
         buttonGo.setBorderPainted(false);
         buttonGo.setFocusPainted(false);
         buttonGo.setContentAreaFilled(false);
-        buttonGo.setPreferredSize(new Dimension(100, 100));
 
 
-//        buttonGo = new JButton(new ImageIcon(new ImageIcon("/src/searchLogo.png").getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)));
-//        buttonGo.setPreferredSize(new Dimension(100,100));
+        //modification du JTextField
+        tfSearchBar.setOpaque(true);
 
-//        buttonGo.setBorderPainted(false);
-//        buttonGo.setFocusPainted(false);
-//        buttonGo.setContentAreaFilled(false);
+
+
 
         //ajout panel au BorderLayout
         searchPanel.add(tfSearchBar);
@@ -54,7 +52,7 @@ public class Meteo extends JPanel {
         mainPanel.add(searchPanel, BorderLayout.NORTH);
 
         panelMeteoInfo.setBackground(Color.cyan);
-        panelMeteoInfo.setPreferredSize(new Dimension(300, 300));
+        panelMeteoInfo.setPreferredSize(new Dimension(380, 400));
 
 
         JScrollPane jScrollPane = new JScrollPane(meteoPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
