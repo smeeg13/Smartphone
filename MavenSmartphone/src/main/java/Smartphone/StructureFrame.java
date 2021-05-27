@@ -1,6 +1,6 @@
 package Smartphone;
 
-import Smartphone.Contacts.Contacts;
+import Smartphone.Contacts.PanelContact;
 import Smartphone.Errors.BusinessException;
 import Smartphone.Meteo.Meteo;
 import Smartphone.Task.BatteryTask;
@@ -26,7 +26,7 @@ public  class StructureFrame extends JFrame {
     private CardLayout collectionEcrans = new CardLayout();
     private JPanel panelCont = new JPanel();
     private JPanel menu = new Menu();
-    private JPanel contacts = new Contacts();
+    private JPanel contacts = new PanelContact();
     private JPanel galerie = new Galerie();
     private JPanel meteo = new Meteo();
 

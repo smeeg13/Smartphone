@@ -12,13 +12,11 @@ public class Contact extends JPanel {
     private String lastName;
     private String phoneNumber;
     private int indicatif;
-
-
-
     private String email;
     private String address;
 
     private boolean favorite = false;
+
 
     //Utilise classe AtomicInteger pour ne pas avoir 2x le même id
     private static AtomicInteger nextId = new AtomicInteger(0);
@@ -90,5 +88,21 @@ public class Contact extends JPanel {
     }
 
     public void setIndicatif(int indicatif) {
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
+    public static AtomicInteger getNextId() {
+        return nextId;
+    }
+
+    public static void setNextId(AtomicInteger nextId) {
+        Contact.nextId = nextId;
     }
 }
