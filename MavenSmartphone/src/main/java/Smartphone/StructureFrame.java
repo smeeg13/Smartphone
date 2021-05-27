@@ -2,6 +2,7 @@ package Smartphone;
 
 import Smartphone.Contacts.Contacts;
 import Smartphone.Errors.BusinessException;
+import Smartphone.Meteo.Meteo;
 import Smartphone.Task.BatteryTask;
 import Smartphone.Task.ClockTask;
 
@@ -27,10 +28,11 @@ public  class StructureFrame extends JFrame {
     private JPanel menu = new Menu();
     private JPanel contacts = new Contacts();
     private JPanel galerie = new Galerie();
+    private JPanel meteo = new Meteo();
 
     private JButton buttonContacts = new JButton("contacts");
     private JButton buttonGalery = new JButton("galery");
-    private JButton buttonOther = new JButton("other");
+    private JButton buttonMeteo = new JButton("meteo");
     private JButton buttonMenu = new JButton("Menu");
     private JPanel panelMenu = new JPanel();
 
@@ -80,14 +82,16 @@ public  class StructureFrame extends JFrame {
         panelCont.add(menu, "menu");
         panelCont.add(contacts,"contacts");
         panelCont.add(galerie, "galery");
+        panelCont.add(meteo, "meteo");
 
         //ajout des boutons sur la page menu
-        menu.add(buttonContacts);menu.add(buttonGalery);menu.add(buttonOther);
+        menu.add(buttonContacts);menu.add(buttonGalery);menu.add(buttonMeteo);
 
         //ajout actionlistener au bouton "galery"
         buttonGalery.addActionListener(new ClicGalery());
         buttonMenu.addActionListener(new ClicMenu());
         buttonContacts.addActionListener(new ClicContacts());
+        buttonMeteo.addActionListener(new ClicMeteo());
 
         collectionEcrans.show(panelCont,"menu");
 
@@ -123,6 +127,14 @@ public  class StructureFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             collectionEcrans.show(panelCont, "contacts");
+        }
+    }
+
+    class ClicMeteo implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            collectionEcrans.show(panelCont, "meteo");
         }
     }
 
