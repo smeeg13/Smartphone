@@ -28,11 +28,19 @@ public  class StructureFrame extends JFrame {
     private JPanel galerie = new Galerie();
     private JPanel meteo = new Meteo();
 
-    private JButton buttonContacts = new JButton("contacts");
-    private JButton buttonGalery = new JButton("galery");
-    private JButton buttonMeteo = new JButton("meteo");
-    private JButton buttonMenu = new JButton("Menu");
+    private ToolBox toolBox = new ToolBox();
+
+    private JButton buttonContacts = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Contact.png",40,40));
+    private JButton buttonGalery = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Galerie.png",40,40));
+    private JButton buttonMeteo = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Meteo.png",40,40));
+    private JButton buttonMenu = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Menu.png",20,20));
     private JPanel panelMenu = new JPanel();
+    private JPanel panelBoutons =new JPanel();
+    private JPanel panelNoms = new JPanel();
+
+    private JLabel labContact = new JLabel("Contact ");
+    private JLabel labGalerie = new JLabel("Galery ");
+    private JLabel labMeteo = new JLabel(  "Meteo   ");
 
     private DateFormat formatDate = new SimpleDateFormat("HH:mm");
     private Calendar maintenant = Calendar.getInstance();
@@ -43,10 +51,14 @@ public  class StructureFrame extends JFrame {
     private ClockTask clockTask = new ClockTask();
     private JLabel time;
 
+
+
+
     public StructureFrame() throws BusinessException {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        Dimension tailleBande = new Dimension(500, 30);
+        Dimension tailleBandeHaut = new Dimension(500, 30);
+        Dimension tailleBande = new Dimension(500, 40);
         Dimension tailleBord = new Dimension(5, 750);
 
         //instanciation du début de la tache pour récupérer l'heure
@@ -59,8 +71,11 @@ public  class StructureFrame extends JFrame {
         bandeHautConstrain.add(bandeHaut);
 
 
-        bandeHaut.setPreferredSize(tailleBande);
+        bandeHaut.setPreferredSize(tailleBandeHaut);
         bandeHaut.setBackground(Color.BLACK);
+        buttonMenu.setBorderPainted(false);
+        buttonMenu.setFocusPainted(false);
+        buttonMenu.setContentAreaFilled(false);
         bandeBas.add(buttonMenu);
         bandeBas.setPreferredSize(tailleBande);
         bandeBas.setFont(bandeBas.getFont().deriveFont(Font.BOLD));
@@ -72,7 +87,6 @@ public  class StructureFrame extends JFrame {
 
 
 
-        bandeHaut.setPreferredSize(tailleBande);
         bandeHaut.setBackground(Color.BLACK);
         bandeHaut.add(time);
 
@@ -83,7 +97,36 @@ public  class StructureFrame extends JFrame {
         panelCont.add(meteo, "meteo");
 
         //ajout des boutons sur la page menu
-        menu.add(buttonContacts);menu.add(buttonGalery);menu.add(buttonMeteo);
+
+
+
+        panelBoutons.setLayout(new FlowLayout(FlowLayout.CENTER,40,3));
+        panelBoutons.setPreferredSize(new Dimension(500,50));
+        panelNoms.setLayout(new FlowLayout(FlowLayout.CENTER,74,3));
+        panelNoms.setPreferredSize(new Dimension(500,50));
+
+
+        buttonContacts.setBorderPainted(false);
+        buttonContacts.setFocusPainted(false);
+        buttonContacts.setContentAreaFilled(false);
+
+        buttonMeteo.setBorderPainted(false);
+        buttonMeteo.setFocusPainted(false);
+        buttonMeteo.setContentAreaFilled(false);
+
+        buttonGalery.setBorderPainted(false);
+        buttonGalery.setFocusPainted(false);
+        buttonGalery.setContentAreaFilled(false);
+
+        panelBoutons.add(buttonContacts);
+        panelBoutons.add(buttonGalery);
+        panelBoutons.add(buttonMeteo);
+        panelNoms.add(labContact);
+        panelNoms.add(labGalerie);
+        panelNoms.add(labMeteo);
+
+        menu.add(panelBoutons);
+        menu.add(panelNoms);
 
         //ajout actionlistener au bouton "galery"
         buttonGalery.addActionListener(new ClicGalery());
