@@ -75,7 +75,6 @@ public class BatteryTask extends TimerTask {
         }catch (IOException e){
             e.printStackTrace();
         }
-        System.out.println(result);
 
         return result;
     }

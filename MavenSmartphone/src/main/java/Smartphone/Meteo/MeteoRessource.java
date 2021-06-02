@@ -35,12 +35,13 @@ public class MeteoRessource extends Meteo {
         return null;
     }
 
-    public String getWeather(String location, String appId) {
+    public String getWeather(String location, String appId, String unit) {
         StringBuilder rt = new StringBuilder();
+
 
         try {
             URL url = new URL("http://api.openweathermap.org/data/2.5/weather"
-                    + "?units=metric"
+                    + "?units="+unit
                     + "&q=" + location
                     + "&appid=" + appId);
 
@@ -67,32 +68,46 @@ public class MeteoRessource extends Meteo {
         return rt.toString();
     }
 
-    public JPanel getSelectedMeteoInfo(String location, String appId) {
+    public JPanel getSelectedMeteoInfo(String location, String appId, String unit) {
         String meteo = "";
         JPanel tPanel;
         JLabel description = new JLabel();
+        JLabel city = new JLabel();
         JLabel country = new JLabel();
         JLabel jlSunrise = new JLabel();
         JLabel jlSunset = new JLabel();
         JLabel jlTempMin = new JLabel();
         JLabel jlTempMax = new JLabel();
-        ImageIcon icon = new ImageIcon();
 
-        meteo = getWeather(location, appId);
+        meteo = getWeather(location, appId, unit);
+        System.out.println(meteo);
 
         JSONObject jsonObject = new JSONObject(meteo);
 
-
+        city.setText("City: " + jsonObject.getString("name"));
         country.setText("Country: " + jsonObject.getJSONObject("sys").getString("country"));
         jlSunrise.setText("Sunrise: " + unixToHourMinute(jsonObject.getJSONObject("sys").getInt("sunrise")));
-        jlSunset.setText("Sunrise: " + unixToHourMinute(jsonObject.getJSONObject("sys").getInt("sunset")));
-        jlTempMin.setText("T° min: " + jsonObject.getJSONObject("main").getInt("temp_min"));
-        jlTempMax.setText("T° max: " + jsonObject.getJSONObject("main").getInt("temp_max"));
+        jlSunset.setText("Sunset: " + unixToHourMinute(jsonObject.getJSONObject("sys").getInt("sunset")));
+
+        if(unit.equals("metric")){
+            jlTempMin.setText("Temp min: " + jsonObject.getJSONObject("main").getInt("temp_min")+" °C");
+            jlTempMax.setText("Temp max: " + jsonObject.getJSONObject("main").getInt("temp_max")+" °C");
+        }
+
+        if(unit.equals("imperial")){
+            jlTempMin.setText("Temp min: " + jsonObject.getJSONObject("main").getInt("temp_min")+" °F");
+            jlTempMax.setText("Temp max: " + jsonObject.getJSONObject("main").getInt("temp_max")+" °F");
+        }
+
+        if(unit.equals("standard")){
+            jlTempMin.setText("Temp min: " + jsonObject.getJSONObject("main").getInt("temp_min")+" K");
+            jlTempMax.setText("Temp max: " + jsonObject.getJSONObject("main").getInt("temp_max")+" K");
+        }
 
 
-        tPanel = new PanelMeteo(country,jlSunrise,jlSunset,jlTempMin,jlTempMax);
 
-        System.out.println(meteo);
+        tPanel = new PanelMeteo(city,country,jlSunrise,jlSunset,jlTempMin,jlTempMax);
+
 
         return tPanel;
     }
