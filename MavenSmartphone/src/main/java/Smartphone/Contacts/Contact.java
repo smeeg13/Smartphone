@@ -17,6 +17,8 @@ public class Contact extends JPanel {
 
     private boolean favorite = false;
 
+    public JList<Contact> contactJList = new JList<Contact>();
+    private Contact[] contacts ;
 
     //Utilise classe AtomicInteger pour ne pas avoir 2x le même id
     private static AtomicInteger nextId = new AtomicInteger(0);
@@ -30,7 +32,9 @@ public class Contact extends JPanel {
         this.indicatif = indicatif;
         this.email = email;
         this.address = address;
+        isFavorite();
         nextId.getAndIncrement();
+
 
     }
     public Contact(String firstName,String lastName,int indicatif,
@@ -39,10 +43,10 @@ public class Contact extends JPanel {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.indicatif = indicatif;
+        isFavorite();
         nextId.getAndIncrement();
 
     }
-
 
     public String getFirstName() {
         return firstName;

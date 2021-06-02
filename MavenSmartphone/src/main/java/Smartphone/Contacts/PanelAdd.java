@@ -22,16 +22,8 @@ public class PanelAdd extends JPanel {
     private JLabel adresseLab = new JLabel("Addresse :  ");
     private JTextField adresseTxt = new JTextField(45);
 
-    public PanelAdd(){
-        setBackground(Color.cyan);
-        panel.setBackground(Color.orange);
-        JLabel lab = new JLabel("Contact adding");
-        panel.add(lab);
-        panel.add(buttonOk, BorderLayout.SOUTH);
-        panel.add(buttonPicture,BorderLayout.NORTH);
+    public PanelAdd() {
 
-        buttonOk.addActionListener(new Listener());
-        add(panel);
     }
 
     class Listener implements ActionListener{

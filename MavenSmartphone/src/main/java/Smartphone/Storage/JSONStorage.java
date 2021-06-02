@@ -5,11 +5,12 @@ package Smartphone.Storage;
 import Smartphone.Contacts.Contact;
 import Smartphone.Errors.BusinessException;
 import Smartphone.Errors.ErrorCodes;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+
 
 import java.io.File;
 import java.io.IOException;
-
+/*
 public class JSONStorage implements Storable {
     @Override
     public Contact[] read(File source) throws BusinessException {
@@ -34,5 +35,7 @@ public class JSONStorage implements Storable {
             throw new BusinessException("failed to save", e, ErrorCodes.IO_ERROR);
         }
     }
-}
+
+ */
+
 

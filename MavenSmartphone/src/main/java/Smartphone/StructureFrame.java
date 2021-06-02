@@ -99,7 +99,6 @@ public  class StructureFrame extends JFrame {
         add(bandeBas,BorderLayout.SOUTH);
         add(panelCont,BorderLayout.CENTER);
 
-
     }
 
 
