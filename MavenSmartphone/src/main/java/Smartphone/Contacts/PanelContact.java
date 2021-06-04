@@ -1,12 +1,16 @@
 package Smartphone.Contacts;
 
+import Smartphone.Errors.BusinessException;
 import Smartphone.Meteo.ClickRecherche;
+import Smartphone.Storage.JSONStorage;
+import Smartphone.Storage.Storable;
 import Smartphone.ToolBox;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class PanelContact extends JPanel  {
     private CardLayout ecran = new CardLayout();
@@ -17,48 +21,58 @@ public class PanelContact extends JPanel  {
             private JPanel PanelHaut = new JPanel(); //Contient bouton add et research
             private JButton buttonAdd ;
             private JButton buttonSearch;
+
+
+    private JLabel labContactList =new JLabel(" My Contact List : ");
+
+
+    private JList<Contact> contactsJList = new JList<>();
+    private Storable storage = new JSONStorage();
+    private ContactList contactList= new ContactList(storage);
+
     //Page ajouter contact
         private JPanel contactAdd = new PanelAdd();
             private JPanel PanelAddHaut = new JPanel();
-                private JLabel labAddPanel = new JLabel("  Contact Adding : ");
+                private JLabel labAddPanel = new JLabel("  Add a Contact  : ");
 
             private JPanel PanelAddCentre = new JPanel();
                 private JPanel panelPicture = new JPanel();
                     private JButton buttonPicture ;
                 private JPanel panelOk = new JPanel();
                     private JButton buttonCancel ;
-                    private JButton buttonOk;
+                    private JButton buttonSave;
+
                 private JPanel panelInfos = new JPanel();
                     private  JLabel nomLab =new JLabel("Nom : ");
                     private  JTextField nameTxt= new JTextField(30);
                     private  JLabel indicatifLab = new JLabel("Indicatif : ");
-                    private  JComboBox  indicChoices= new JComboBox( new Object[]{"+1   ","+32   ","+33   ","+41   ","+44   ","+49   "});
+                    private  JTextField indictxt = new JTextField(5);
                     private  JLabel numLab = new JLabel("Numéro :  ");
                     private JTextField numTxt = new JTextField(10);
                     private JLabel emailLab = new JLabel("Email :  ");
                     private JTextField emailTxt = new JTextField(35);
                     private JLabel adresseLab = new JLabel("Addresse :  ");
                     private JTextField adresseTxt = new JTextField(35);
+                    private JLabel favContactLab = new JLabel("Add contact to favorite : ");
+                    private JCheckBox favCheckBox = new JCheckBox("", false);
         //Page rechercher contact
         private JPanel contactSearch = new PanelSearch();
             private JPanel PanelBack = new JPanel();
-                private JLabel labSearchPanel = new JLabel("Contact Research : ");
+                private JLabel labSearchPanel = new JLabel("Search a Contact : ");
                 private JButton buttonBack ;
             private JPanel PanelCentre = new JPanel();
                 private JTextField rechercheBar = new JTextField(30);
                 private JButton buttonGoSearch;
+            private JPanel PanelBas = new JPanel();
+
 
 
 
     private ToolBox toolBox = new ToolBox();
 
-    private JLabel labContactList =new JLabel("Contact List : ");
 
-    //Limité à 200 contacts pour le test
-    static  final  int MAX_CONTACTS = 200;
-    private Contact[] contacts = new Contact[MAX_CONTACTS];
-
-    // private JList<Contact> contactList = new JList<Contact>(contacts[]);
+    //Fichier de sauvegarde Destination
+    File destinationFile = new File("MavenSmartphone/src/main/java/Smartphone/Storage/ContactList.json");
 
     public PanelContact() {
 /*
@@ -90,6 +104,7 @@ contactPage.setBackground(Color.BLACK);
         buttonSearch.setFocusPainted(false);
         buttonSearch.setContentAreaFilled(false);
         buttonSearch.addActionListener(new Actions());
+
 
     PanelHaut.add(buttonAdd);
     PanelHaut.add(buttonSearch);
@@ -125,14 +140,16 @@ contactPage.setBackground(Color.BLACK);
 
         //panel avec infos à saisir
         PanelAddCentre.add(panelInfos);
-        panelInfos.setPreferredSize(new Dimension(350,352));
-        panelInfos.setLayout(new GridLayout(5,2,5,2));
+        panelInfos.setPreferredSize(new Dimension(350,372));
+        panelInfos.setLayout(new GridLayout(6,2,5,2));
+
         panelInfos.add(nomLab);
         nameTxt.setOpaque(false);
         panelInfos.add(nameTxt);
 
         panelInfos.add(indicatifLab);
-        panelInfos.add(indicChoices);
+        indictxt.setOpaque(false);
+        panelInfos.add(indictxt);
 
         panelInfos.add(numLab);
         numTxt.setOpaque(false);
@@ -146,6 +163,12 @@ contactPage.setBackground(Color.BLACK);
         adresseTxt.setOpaque(false);
         panelInfos.add(adresseTxt);
 
+        //Ajouter contaxt au favori
+        panelInfos.add(favContactLab);
+        favCheckBox.setFocusable(false);
+        panelInfos.add(favCheckBox);
+
+
     //Mise en page Panel du bas
         // avec boutton ok ou annuler
         PanelAddCentre.add(panelOk);
@@ -157,18 +180,20 @@ contactPage.setBackground(Color.BLACK);
         buttonCancel.setContentAreaFilled(false);
         buttonCancel.addActionListener(new Actions());
 
-        buttonOk = new JButton("Save");
-        buttonOk.setBorderPainted(false);
-        buttonOk.setFocusPainted(false);
-        buttonOk.setContentAreaFilled(false);
-        //buttonOk.addActionListener(new Actions());
+        buttonSave = new JButton("Save");
+        buttonSave.setBorderPainted(false);
+        buttonSave.setFocusPainted(false);
+        buttonSave.setContentAreaFilled(false);
+
+buttonSave.addActionListener(new Actions());
 
         panelOk.add(buttonCancel,BorderLayout.EAST);
-        panelOk.add(buttonOk,BorderLayout.WEST);
+        panelOk.add(buttonSave,BorderLayout.WEST);
 
 //PANEL CONTACT SEARCH
     contactSearch.add(PanelBack) ;
     contactSearch.add(PanelCentre);
+    contactSearch.add(PanelBas);
 
     //Mise en page panel Back
         PanelBack.setPreferredSize(new Dimension(400,40));
@@ -192,7 +217,9 @@ contactPage.setBackground(Color.BLACK);
         buttonGoSearch.setBorderPainted(false);
         buttonGoSearch.setFocusPainted(false);
         buttonGoSearch.setContentAreaFilled(false);
+
         // à Ajouté action listener pour lancer recherche
+
         PanelCentre.add(rechercheBar);
         PanelCentre.add(buttonGoSearch);
 
@@ -203,37 +230,83 @@ contactPage.setBackground(Color.BLACK);
     class Actions implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == buttonAdd){
-                ecran.show(mainPanel,"contactAdd");
+            if (e.getSource() == buttonAdd) {
+                ecran.show(mainPanel, "contactAdd");
             }
-            if (e.getSource() == buttonSearch){
-                ecran.show(mainPanel,"contactSearch");
+            if (e.getSource() == buttonSearch) {
+                ecran.show(mainPanel, "contactSearch");
             }
-            if ((e.getSource() == buttonBack) || (e.getSource()==buttonCancel)){
-                ecran.show(mainPanel,"contactPage");
+            if ((e.getSource() == buttonBack) || (e.getSource() == buttonCancel)) {
+                ecran.show(mainPanel, "contactPage");
             }
-            if (e.getSource() == buttonOk){
+            //Sauvergarder d'un contact
+            if (e.getSource() == buttonSave) {
+
+                //saisie = param du constructeur Contact
+                String nom = nameTxt.getText();
+                String indicatif = indictxt.getText();
+                String numero = numTxt.getText();
+                String email = emailTxt.getText();
+                String adresse = adresseTxt.getText();
+
+                //Controle si champs nom et numéro rempli avant d'ajouter
+                if (nom =="" && numero==""){
+                    //Afficher erreur car champs oblig vide
+                    System.err.println("Données contact vides");
+                }
+                else {
+                    //Création nouveau contact
+                    Contact contact = new Contact(nom, indicatif, numero, email, adresse);
+
+                    //Ajout du contact à la liste de contact
+                    try {
+                        contactList.addToContactList(contact);
+                    } catch (BusinessException businessException) {
+                        businessException.printStackTrace();
+                    }
+                    //Sauvegarde de la liste des contacts dans fichiers JSON
+                    //Ajouter a fichier existant
+                    try {
+                        contactList.addToFile(destinationFile);
+                    } catch (BusinessException businessException) {
+                        businessException.printStackTrace();
+                    }
+                    //Savuvegarder les fichiers
+                    try {
+                        contactList.saveToFile(destinationFile);
+                    } catch (BusinessException businessException) {
+                        businessException.printStackTrace();
+                    }
+
+                    //Mise à zéro des champs de saisie
+                    nameTxt.setText("");
+                    numTxt.setText("");
+                    indictxt.setText("");
+                    emailTxt.setText("");
+                    adresseTxt.setText("");
+                }
+            }
+
+
+            //Ajouter photo à un contact
+            if (e.getSource() == buttonPicture) {
 
             }
-            if (e.getSource() == buttonPicture){
 
-            }
-            if (e.getSource() == buttonGoSearch){
 
+            //Recherche d'un contact
+            if (e.getSource() == buttonGoSearch) {
+                String research = "";
+                research = rechercheBar.getText();
+
+                if (contactList.contains(contactList, research) == true) {
+
+                } else {
+
+                }
             }
         }
-    }
-
-    public void load(String json) {
 
     }
-
-    public String save(){
-
-        String ab="abc";
-        return ab;
-    }
-
-
 }
 
