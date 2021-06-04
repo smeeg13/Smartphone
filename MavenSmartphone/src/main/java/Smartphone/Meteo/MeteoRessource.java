@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MeteoRessource extends Meteo {
+
     public Image getIcon(String iconCode) {
         Image tImage;
 

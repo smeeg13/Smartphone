@@ -1,5 +1,6 @@
 package Smartphone;
 
+import Smartphone.Calculatrice.Calculette;
 import Smartphone.Contacts.PanelContact;
 import Smartphone.Errors.BusinessException;
 import Smartphone.Meteo.Meteo;
@@ -10,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,24 +25,38 @@ public  class StructureFrame extends JFrame {
 
     private CardLayout collectionEcrans = new CardLayout();
     private JPanel panelCont = new JPanel();
-    private JPanel menu = new Menu();
+    private JPanel menu;
+
+    {
+        try {
+            menu = new Menu();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private JPanel contacts = new PanelContact();
     private JPanel galerie = new Galerie();
     private JPanel meteo = new Meteo();
+    private JPanel calculette = new Calculette();
 
     private ToolBox toolBox = new ToolBox();
 
-    private JButton buttonContacts = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Contact.png",40,40));
+    private JButton buttonContacts = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Contact2.png",55,55));
     private JButton buttonGalery = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Galerie.png",40,40));
     private JButton buttonMeteo = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Meteo.png",40,40));
     private JButton buttonMenu = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Menu.png",20,20));
+    private JButton buttonCalculette = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Calculette.png",43,43));
     private JPanel panelMenu = new JPanel();
     private JPanel panelBoutons =new JPanel();
     private JPanel panelNoms = new JPanel();
+    private JPanel panelBoutons2 =new JPanel();
+    private JPanel panelNoms2 = new JPanel();
 
-    private JLabel labContact = new JLabel("Contact ");
-    private JLabel labGalerie = new JLabel("Galery ");
+    private JLabel labContact = new JLabel("  Contact");
+    private JLabel labGalerie = new JLabel("Galery");
     private JLabel labMeteo = new JLabel(  "Meteo   ");
+    private JLabel labCalculette = new JLabel("Calculatrice");
 
     private DateFormat formatDate = new SimpleDateFormat("HH:mm");
     private Calendar maintenant = Calendar.getInstance();
@@ -72,7 +88,7 @@ public  class StructureFrame extends JFrame {
 
 
         bandeHaut.setPreferredSize(tailleBandeHaut);
-        bandeHaut.setBackground(Color.BLACK);
+        bandeHaut.setBackground(Color.GRAY);
         buttonMenu.setBorderPainted(false);
         buttonMenu.setFocusPainted(false);
         buttonMenu.setContentAreaFilled(false);
@@ -90,21 +106,30 @@ public  class StructureFrame extends JFrame {
         bandeHaut.setBackground(Color.BLACK);
         bandeHaut.add(time);
 
+
         panelCont.setLayout(collectionEcrans);
         panelCont.add(menu, "menu");
         panelCont.add(contacts,"contacts");
         panelCont.add(galerie, "galery");
         panelCont.add(meteo, "meteo");
+        panelCont.add(calculette, "calculette");
 
         //ajout des boutons sur la page menu
 
-
+        panelBoutons.setOpaque(false);
+        panelNoms.setOpaque(false);
+        panelBoutons2.setOpaque(false);
+        panelNoms2.setOpaque(false);
 
         panelBoutons.setLayout(new FlowLayout(FlowLayout.CENTER,40,3));
         panelBoutons.setPreferredSize(new Dimension(500,50));
         panelNoms.setLayout(new FlowLayout(FlowLayout.CENTER,74,3));
         panelNoms.setPreferredSize(new Dimension(500,50));
 
+        panelBoutons2.setLayout(new FlowLayout(FlowLayout.CENTER,40,3));
+        panelBoutons2.setPreferredSize(new Dimension(500,50));
+        panelNoms2.setLayout(new FlowLayout(FlowLayout.CENTER,74,3));
+        panelNoms2.setPreferredSize(new Dimension(500,50));
 
         buttonContacts.setBorderPainted(false);
         buttonContacts.setFocusPainted(false);
@@ -121,22 +146,50 @@ public  class StructureFrame extends JFrame {
         panelBoutons.add(buttonContacts);
         panelBoutons.add(buttonGalery);
         panelBoutons.add(buttonMeteo);
+
+
+
+
+        Font police = new Font("Arial", Font.BOLD, 14);
+        labContact.setFont(police);
+        labContact.setForeground(Color.black);
+
+        labGalerie.setFont(police);
+        labGalerie.setForeground(Color.black);
+
+        labMeteo.setFont(police);
+        labMeteo.setForeground(Color.black);
         panelNoms.add(labContact);
         panelNoms.add(labGalerie);
         panelNoms.add(labMeteo);
 
+        buttonCalculette.setBorderPainted(false);
+        buttonCalculette.setFocusPainted(false);
+        buttonCalculette.setContentAreaFilled(false);
+
+        panelBoutons2.add(buttonCalculette);
+
+        labCalculette.setFont(police);
+        labCalculette.setForeground(Color.black);
+        panelNoms2.add(labCalculette);
+
+
         menu.add(panelBoutons);
         menu.add(panelNoms);
+        menu.add(panelBoutons2);
+        menu.add(panelNoms2);
 
         //ajout actionlistener au bouton "galery"
         buttonGalery.addActionListener(new ClicGalery());
         buttonMenu.addActionListener(new ClicMenu());
         buttonContacts.addActionListener(new ClicContacts());
         buttonMeteo.addActionListener(new ClicMeteo());
+        buttonCalculette.addActionListener(new ClicCalculette());
+
 
         collectionEcrans.show(panelCont,"menu");
 
-        buttonGalery.addActionListener(new ClicGalery());
+
 
         add(bandeHaut,BorderLayout.NORTH);
         add(bandeBas,BorderLayout.SOUTH);
@@ -175,6 +228,13 @@ public  class StructureFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             collectionEcrans.show(panelCont, "meteo");
+        }
+    }
+    class ClicCalculette implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            collectionEcrans.show(panelCont, "calculette");
         }
     }
 
