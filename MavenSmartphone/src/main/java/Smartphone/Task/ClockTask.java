@@ -15,8 +15,8 @@ public class ClockTask extends TimerTask {
 
 
     public ClockTask(){
-        java.util.Timer timer;
-        timer = new Timer();
+
+        Timer timer = new Timer();
         timer.schedule(this,1000,5000);
 
         run();

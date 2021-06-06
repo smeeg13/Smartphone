@@ -42,7 +42,7 @@ public  class StructureFrame extends JFrame {
 
     private ToolBox toolBox = new ToolBox();
 
-    private JButton buttonContacts = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Contact2.png",55,55));
+    private JButton buttonContacts = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Contact2.png",55,55));
     private JButton buttonGalery = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Galerie.png",40,40));
     private JButton buttonMeteo = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Meteo.png",40,40));
     private JButton buttonMenu = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Menu.png",20,20));
