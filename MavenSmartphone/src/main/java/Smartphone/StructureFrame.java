@@ -3,9 +3,11 @@ package Smartphone;
 import Smartphone.Calculatrice.Calculette;
 import Smartphone.Contacts.PanelContact;
 import Smartphone.Errors.BusinessException;
+import Smartphone.Gallery.UI.PanelGallery;
 import Smartphone.Meteo.Meteo;
 import Smartphone.Task.BatteryTask;
 import Smartphone.Task.ClockTask;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +38,7 @@ public  class StructureFrame extends JFrame {
     }
 
     private JPanel contacts = new PanelContact();
-    private JPanel galerie = new Galerie();
+    private JPanel galerie = new PanelGallery();
     private JPanel meteo = new Meteo();
     private JPanel calculette = new Calculette();
 
