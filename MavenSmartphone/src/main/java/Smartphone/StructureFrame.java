@@ -2,9 +2,11 @@ package Smartphone;
 
 import Smartphone.Contacts.PanelContact;
 import Smartphone.Errors.BusinessException;
+import Smartphone.Gallery.UI.PanelGallery;
 import Smartphone.Meteo.Meteo;
 import Smartphone.Task.BatteryTask;
 import Smartphone.Task.ClockTask;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +27,7 @@ public  class StructureFrame extends JFrame {
     private JPanel panelCont = new JPanel();
     private JPanel menu = new Menu();
     private JPanel contacts = new PanelContact();
-    private JPanel galerie = new Galerie();
+    private JPanel galerie = new PanelGallery();
     private JPanel meteo = new Meteo();
 
     private JButton buttonContacts = new JButton("contacts");
