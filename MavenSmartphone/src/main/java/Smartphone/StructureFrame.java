@@ -227,8 +227,10 @@ public  class StructureFrame extends JFrame {
 
     class ClicMeteo implements ActionListener{
 
+
         @Override
         public void actionPerformed(ActionEvent e) {
+            System.out.println("salut");
             collectionEcrans.show(panelCont, "meteo");
         }
     }
