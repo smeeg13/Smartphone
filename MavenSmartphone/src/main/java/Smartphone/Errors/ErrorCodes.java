@@ -4,6 +4,7 @@ public enum ErrorCodes {
 
 
     CONTACT_ALREADY_EXIST_ERROR(200),
+    CONTACTLIST_FULL(201),
     IO_ERROR(301);
 
 
