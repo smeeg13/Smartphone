@@ -2,6 +2,7 @@ package Smartphone.Task;
 
 import Smartphone.Errors.BusinessException;
 import Smartphone.Errors.ErrorCodes;
+import Smartphone.ToolBox;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -13,7 +14,8 @@ import java.util.TimerTask;
 public class BatteryTask extends TimerTask {
 
     private JLabel batteryPercentage = new JLabel();
-    private String OS = System.getProperty("os.name").toLowerCase();
+
+    private ToolBox tl = new ToolBox();
 
     public BatteryTask() throws BusinessException{
         Timer timer;
@@ -35,7 +37,7 @@ public class BatteryTask extends TimerTask {
         String batteryLevel = "";
         Process process = null;
 
-        if(isMac()){
+        if(tl.isMac()){
             try {
                 process = Runtime.getRuntime().exec("pmset -g batt"); //commande pour vérifier niveau de batterie
             } catch (IOException ex) {
@@ -43,7 +45,7 @@ public class BatteryTask extends TimerTask {
             }
         }
 
-        if(isWindows()){
+        if(tl.isWindows()){
             try {
                 process = Runtime.getRuntime().exec("WMIC PATH Win32_Battery Get EstimatedChargeRemaining"); //commande pour vérifier niveau de batterie
             } catch (IOException ex) {
@@ -52,7 +54,8 @@ public class BatteryTask extends TimerTask {
         }
 
 
-        batteryLevel = getPercentageBattery(getResultsBattery(process));  //recherche du pourcentage avec la méthode getPercentageBattery
+        batteryLevel = getPercentageBattery(getResultsBattery(process));
+       //recherche du pourcentage avec la méthode getPercentageBattery
         setBatteryPercentage(batteryLevel);                                //mise à jour du JLabel avec la nouvelle mesure de batterie
 
     }
@@ -75,20 +78,20 @@ public class BatteryTask extends TimerTask {
         }catch (IOException e){
             e.printStackTrace();
         }
-
+        System.out.println(result);
         return result;
     }
 
     public String getPercentageBattery(String s) {
         String result = "";
 
-        if(isWindows()){
+        if(tl.isWindows()){
             result = s.substring(26,28) + "%";
             result.replaceAll("\\s","");
             return result;
         }
 
-        if(isMac()){
+        if(tl.isMac()){
             s.indexOf("%");
             return result = s.substring(s.indexOf("%") - 3, s.indexOf("%") + 1);
         }
@@ -97,32 +100,5 @@ public class BatteryTask extends TimerTask {
         return result;
     }
 
-    public boolean isWindows() {
-        return OS.contains("win");
-    }
 
-    public boolean isMac() {
-        return OS.contains("mac");
-    }
-
-    public boolean isUnix() {
-        return (OS.contains("nix") || OS.contains("nux") || OS.contains("aix"));
-    }
-
-    public boolean isSolaris() {
-        return OS.contains("sunos");
-    }
-    public String getOS(){
-        if (isWindows()) {
-            return "win";
-        } else if (isMac()) {
-            return "osx";
-        } else if (isUnix()) {
-            return "uni";
-        } else if (isSolaris()) {
-            return "sol";
-        } else {
-            return "err";
-        }
-    }
 }

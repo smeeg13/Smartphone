@@ -14,7 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public  class StructureFrame extends JFrame {
+public class StructureFrame extends JFrame {
 
     //création JPanel pour le borderlayout
     private JPanel bandeHaut = new JPanel();
@@ -43,6 +43,9 @@ public  class StructureFrame extends JFrame {
     private ClockTask clockTask = new ClockTask();
     private JLabel time;
 
+    private ToolBox toolBox = new ToolBox();
+
+
     public StructureFrame() throws BusinessException {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -68,8 +71,7 @@ public  class StructureFrame extends JFrame {
         //ajout dans le Jpanel du haut le pourcentage de la batterie
         batteryLevel = batteryTask.getBatteryPercentage();
         batteryLevel.setForeground(Color.WHITE);
-        bandeHaut.add(batteryLevel,BorderLayout.EAST);
-
+        bandeHaut.add(batteryLevel, BorderLayout.EAST);
 
 
         bandeHaut.setPreferredSize(tailleBande);
@@ -78,12 +80,14 @@ public  class StructureFrame extends JFrame {
 
         panelCont.setLayout(collectionEcrans);
         panelCont.add(menu, "menu");
-        panelCont.add(contacts,"contacts");
+        panelCont.add(contacts, "contacts");
         panelCont.add(galerie, "galery");
         panelCont.add(meteo, "meteo");
 
         //ajout des boutons sur la page menu
-        menu.add(buttonContacts);menu.add(buttonGalery);menu.add(buttonMeteo);
+        menu.add(buttonContacts);
+        menu.add(buttonGalery);
+        menu.add(buttonMeteo);
 
         //ajout actionlistener au bouton "galery"
         buttonGalery.addActionListener(new ClicGalery());
@@ -91,20 +95,19 @@ public  class StructureFrame extends JFrame {
         buttonContacts.addActionListener(new ClicContacts());
         buttonMeteo.addActionListener(new ClicMeteo());
 
-        collectionEcrans.show(panelCont,"menu");
+        collectionEcrans.show(panelCont, "menu");
 
         buttonGalery.addActionListener(new ClicGalery());
 
-        add(bandeHaut,BorderLayout.NORTH);
-        add(bandeBas,BorderLayout.SOUTH);
-        add(panelCont,BorderLayout.CENTER);
+        add(bandeHaut, BorderLayout.NORTH);
+        add(bandeBas, BorderLayout.SOUTH);
+        add(panelCont, BorderLayout.CENTER);
 
 
     }
 
 
-
-    class ClicGalery implements ActionListener{
+    class ClicGalery implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -112,7 +115,7 @@ public  class StructureFrame extends JFrame {
         }
     }
 
-    class ClicMenu implements ActionListener{
+    class ClicMenu implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -120,7 +123,7 @@ public  class StructureFrame extends JFrame {
         }
     }
 
-    class ClicContacts implements ActionListener{
+    class ClicContacts implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -128,12 +131,48 @@ public  class StructureFrame extends JFrame {
         }
     }
 
-    class ClicMeteo implements ActionListener{
+    class ClicMeteo implements ActionListener {
+
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            collectionEcrans.show(panelCont, "meteo");
+            if (isReachableByPing("api.openweathermap.org")) {
+                collectionEcrans.show(panelCont, "meteo");
+            } else {
+                JOptionPane.showMessageDialog(menu, "Ping to host failed", "Internet connection", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+
+        public boolean isReachableByPing(String host) {
+
+            try {
+                String cmd = "";
+                if (toolBox.isWindows()) {
+                    cmd = "ping -n 1 " + host;
+                }
+
+                if (toolBox.isMac()) {
+                    cmd = "ping -c 1 " + host;
+                }
+
+                Process process = Runtime.getRuntime().exec(cmd);
+                process.waitFor();
+
+                if (process.exitValue() == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
         }
     }
+
+
 
 }
