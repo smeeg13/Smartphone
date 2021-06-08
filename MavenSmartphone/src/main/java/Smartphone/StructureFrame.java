@@ -230,10 +230,15 @@ public  class StructureFrame extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("salut");
 
-            collectionEcrans.show(panelCont, "meteo");
+            if(toolBox.isReachableByPing("api.openweathermap.org")){
+                collectionEcrans.show(panelCont, "meteo");
+            }else{
+                JOptionPane.showMessageDialog(menu,"Ping to host failed","Internet conection",JOptionPane.WARNING_MESSAGE);
+            }
         }
+
+
     }
     class ClicCalculette implements ActionListener{
 
