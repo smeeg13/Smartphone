@@ -231,6 +231,7 @@ public  class StructureFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("salut");
+
             collectionEcrans.show(panelCont, "meteo");
         }
     }
