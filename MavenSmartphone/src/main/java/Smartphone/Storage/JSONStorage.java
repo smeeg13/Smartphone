@@ -12,12 +12,14 @@ import com.google.gson.stream.JsonReader;
 
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class JSONStorage implements Storable {
 
 //Méthode pour lire un ficher JSON
     @Override
-    public Contact[] read(File source) throws BusinessException {
+    public ArrayList<Contact> read(File source) throws BusinessException {
 
         //Avec gson
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -30,23 +32,22 @@ public class JSONStorage implements Storable {
             throw new BusinessException("read error", e, ErrorCodes.IO_ERROR);
         }
 
-        return contacts;
+        return new ArrayList<>(Arrays.asList(contacts));
     }
 
 //Méthode pour ecrire dans un ficher JSON
     @Override
-    public void write(File destination, Contact[] contacts) throws BusinessException {
-        //avec Jackson
-        ObjectMapper mapper = new ObjectMapper();
+    public void write(File destination, ArrayList<Contact> contacts) throws BusinessException {
+
         //Avec gson
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 
+
         try (FileWriter writer = new FileWriter(destination)){
             //Avec gson
-            gson.toJson(contacts,writer);
-            //Avec jacskon
-            //     mapper.writeValue(destination, contacts);
+            gson.toJson(contacts.toArray(),writer);
+
         } catch (IOException e) {
             throw new BusinessException("failed to save", e, ErrorCodes.IO_ERROR);
         }

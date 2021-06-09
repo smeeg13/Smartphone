@@ -83,7 +83,7 @@ public class BatteryTask extends TimerTask {
     public String getPercentageBattery(String s) {
         String result = "";
 
-        if(isWindows()){
+        if(toolBox.isWindows()){
             result = s.substring(25,29) + "%";
             result.replaceAll("\\s","");
             return result;

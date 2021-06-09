@@ -44,11 +44,11 @@ public  class StructureFrame extends JFrame {
 
     private ToolBox toolBox = new ToolBox();
 
-    private JButton buttonContacts = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Contact2.png",55,55));
-    private JButton buttonGalery = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Galerie.png",40,40));
-    private JButton buttonMeteo = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Meteo.png",40,40));
+    private JButton buttonContacts = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Contact2.png",55,55));
+    private JButton buttonGalery = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Galerie.png",48,48));
+    private JButton buttonMeteo = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Meteo.png",48,48));
     private JButton buttonMenu = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Menu.png",20,20));
-    private JButton buttonCalculette = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Calculette.png",43,43));
+    private JButton buttonCalculette = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Calculette.png",48,48));
     private JPanel panelMenu = new JPanel();
     private JPanel panelBoutons =new JPanel();
     private JPanel panelNoms = new JPanel();
@@ -129,9 +129,9 @@ public  class StructureFrame extends JFrame {
         panelNoms.setPreferredSize(new Dimension(500,50));
 
         panelBoutons2.setLayout(new FlowLayout(FlowLayout.CENTER,40,3));
-        panelBoutons2.setPreferredSize(new Dimension(500,50));
+        panelBoutons2.setPreferredSize(new Dimension(500,70));
         panelNoms2.setLayout(new FlowLayout(FlowLayout.CENTER,74,3));
-        panelNoms2.setPreferredSize(new Dimension(500,50));
+        panelNoms2.setPreferredSize(new Dimension(500,70));
 
         buttonContacts.setBorderPainted(false);
         buttonContacts.setFocusPainted(false);

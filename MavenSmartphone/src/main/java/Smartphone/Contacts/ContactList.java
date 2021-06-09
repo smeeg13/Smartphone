@@ -25,53 +25,35 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.function.Predicate;
 
 import static com.fasterxml.jackson.databind.MapperFeature.DEFAULT_VIEW_INCLUSION;
 
 public class ContactList {
     //Limité à 200 contacts pour le test
-    public static  final  int MAX_CONTACTS = 200;
 
-    private Contact[] contacts ;
-    private int nbContacts;
+    private ArrayList<Contact> contacts ;
     private Storable storage;
 
     String name;
-    String[] contactsNames = new String[nbContacts];
     Label labErreurSaisie=new Label("");
 
     public ContactList(Storable storage){
-        contacts = new Contact[MAX_CONTACTS];
-        nbContacts =0;
+        contacts = new ArrayList<>();
         this.storage = storage;
     }
 
-    public Contact getContacts(int idx) throws ArrayIndexOutOfBoundsException{
-        if (idx>=nbContacts){
-            throw new ArrayIndexOutOfBoundsException();
-        }
-        return contacts[idx];
-    }
 
-    public int getNbContacts() {
-        return nbContacts;
-    }
 
-    public static int getMaxContacts() {
-        return MAX_CONTACTS;
-    }
-
-    public Contact[] getContacts() {
+    public ArrayList<Contact> getContacts() {
         return contacts;
     }
 
-    public void setContacts(Contact[] contacts) {
+    public void setContacts(ArrayList<Contact> contacts) {
         this.contacts = contacts;
-    }
-
-    public void setNbContacts(int nbContacts) {
-        this.nbContacts = nbContacts;
     }
 
     public Storable getStorage() {
@@ -90,13 +72,6 @@ public class ContactList {
         this.name = name;
     }
 
-    public String[] getContactsNames() {
-        return contactsNames;
-    }
-
-    public void setContactsNames(String[] contactsNames) {
-        this.contactsNames = contactsNames;
-    }
 
     public Label getLabErreurSaisie() {
         return labErreurSaisie;
@@ -109,13 +84,12 @@ public class ContactList {
     //Pour ajouter un nouveau contact à la liste
     public void addToContactList(Contact contact) throws BusinessException{
 
-        contacts[nbContacts] = contact;
-        nbContacts++;
+        contacts.add(contact);
 
     }
 //
-    public void addToFile(File contactList) throws  BusinessException{
-        Contact[] newContact = storage.read(contactList);
+    public void readFromFile(File contactList) throws  BusinessException{
+        ArrayList<Contact> newContact = storage.read(contactList);
 
         for (Contact contact: newContact) {
             addToContactList(contact);
@@ -123,59 +97,58 @@ public class ContactList {
     }
 
     public void saveToFile(File destination) throws BusinessException{
-        Contact[] cont = new Contact[nbContacts];
-        for(int i = 0 ; i<nbContacts ; i++){
-            cont[i] = contacts[i];
-        }
 
-
-        storage.write(destination, cont) ;
+        storage.write(destination, contacts) ;
     }
 
 
 //Méthode pour pouvoir afficher les données de contact des Json dans une JList
-    public String[] getNameArrayFromJSON(File JsonFile) throws BusinessException {
+    public ArrayList<String> getNameArrayFromJSON(File JsonFile) throws BusinessException {
 
         //Récupérer données dans JSON
-        Contact[] contactNames = storage.read(JsonFile);
+        ArrayList<Contact> contactNames = storage.read(JsonFile);
 
-        String[] contactNamesString = new String[contactNames.length];
+        ArrayList<String> contactNamesString = new ArrayList<>();
         //Transformer Contact[] en String[] et en prenant que les noms
-        for (int i = 0 ; i< contactNames.length ; i++){
-            contactNamesString[i] = contactNames[i].getName();
-            i++;
+        for (Contact contact : contactNames){
+            contactNamesString.add(contact.getName());
+
         }
+        contactNamesString.sort(Comparator.naturalOrder());
         return contactNamesString;
+    }
+//Méthode pour pouvoir reprendre infos du contact sélectionné
+    public Contact getContactByName(String nameSelected,File JsonFile) throws BusinessException {
+        ArrayList<Contact> contacts = storage.read(JsonFile);
+         for (Contact c : contacts){
+             if (c.getName().equals(nameSelected))
+                return c ;
+         }
+        return null ;
     }
 
     //Méthode retourne vraie si un contact est existant
-    public boolean containsNameInJson(String valSearched, File JsonFile){
+    public boolean containsNameInJson(String valSearched, File JsonFile) throws BusinessException {
 
-        boolean contactExist = false;
-        Contact[] contacts ;
-        //GSON
-        Gson gson = new GsonBuilder().create();
-        JsonReader reader = null;
+        ArrayList<Contact> contacts = storage.read(JsonFile);
 
-        try {
-            reader = new JsonReader(new FileReader(JsonFile));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        for (Contact c : contacts){
+            if(c.toString().equals(valSearched))
+                return true;
         }
-        contacts = gson.fromJson(reader,Contact[].class);
-
-        for (int i = 0 ; i< nbContacts ; i++){
-            contactExist = contacts[i].toString().contains(valSearched);
-            i++;
-        }
-        return contactExist;
+        return false;
     }
+
+    public void delete(String name){
+        contacts.removeIf(contact -> contact.getName().equals(name));
+    }
+
 
     @Override
     public String toString() {
         String myContacts ="";
-        for (int idx=0; idx<nbContacts; idx++) {
-            myContacts += contacts[idx].toString() + "\n";
+        for (Contact c : contacts) {
+            myContacts += c.toString() + "\n";
         }
         return myContacts;
     }
