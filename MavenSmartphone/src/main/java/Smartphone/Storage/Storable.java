@@ -10,6 +10,6 @@ import java.io.File;
 
 public interface Storable {
     Contact[] read(File source) throws BusinessException;
-    void write(File destination, Contact[] heroes) throws BusinessException ;
+    void write(File destination, Contact[] contacts) throws BusinessException ;
 
 }

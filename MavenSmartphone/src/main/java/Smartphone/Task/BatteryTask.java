@@ -83,7 +83,7 @@ public class BatteryTask extends TimerTask {
         String result = "";
 
         if(isWindows()){
-            result = s.substring(26,28) + "%";
+            result = s.substring(25,29) + "%";
             result.replaceAll("\\s","");
             return result;
         }
