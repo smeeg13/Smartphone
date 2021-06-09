@@ -1,1 +1,20 @@
-[{"name":"Meg","phoneNumber":"0791001010","indicatif":"+41","email":"m@gmail.com","address":"Rte, Sion","photo":null,"addphoto":false,"favContact":false}]
+[
+  {
+    "name": "bruno",
+    "phoneNumber": "43",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": true
+  },
+  {
+    "name": "Wil",
+    "phoneNumber": "98",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": true
+  }
+]

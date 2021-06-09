@@ -1,29 +1,19 @@
 [
   {
-    "name": "Megane",
-    "phoneNumber": "0791223423",
+    "name": "Emilie",
+    "phoneNumber": "34",
     "indicatif": "+41",
     "email": "",
     "address": "",
     "addphoto": false,
     "favContact": false
   },
-
   {
-    "name": "Thomas",
-    "phoneNumber": "0792418318",
+    "name": "Bab",
+    "phoneNumber": "34",
     "indicatif": "+41",
-    "email": "thomas.cheseaux@students.hevs.ch",
-    "address": "Martigny",
-    "addphoto": false,
-    "favContact": false
-  },
-  {
-    "name": "Nathan",
-    "phoneNumber": "0791054802",
-    "indicatif": "+41",
-    "email": "nathan.dely@students.hevs.ch",
-    "address": "Martigny",
+    "email": "",
+    "address": "",
     "addphoto": false,
     "favContact": false
   }
