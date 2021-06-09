@@ -3,9 +3,11 @@ package Smartphone;
 import Smartphone.Calculatrice.Calculette;
 import Smartphone.Contacts.PanelContact;
 import Smartphone.Errors.BusinessException;
+import Smartphone.Gallery.UI.PanelGallery;
 import Smartphone.Meteo.Meteo;
 import Smartphone.Task.BatteryTask;
 import Smartphone.Task.ClockTask;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,13 +38,13 @@ public  class StructureFrame extends JFrame {
     }
 
     private JPanel contacts = new PanelContact();
-    private JPanel galerie = new Galerie();
+    private JPanel galerie = new PanelGallery();
     private JPanel meteo = new Meteo();
     private JPanel calculette = new Calculette();
 
     private ToolBox toolBox = new ToolBox();
 
-    private JButton buttonContacts = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Contact2.png",55,55));
+    private JButton buttonContacts = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Contact2.png",55,55));
     private JButton buttonGalery = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Galerie.png",40,40));
     private JButton buttonMeteo = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Meteo.png",40,40));
     private JButton buttonMenu = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Menu.png",20,20));
@@ -225,8 +227,11 @@ public  class StructureFrame extends JFrame {
 
     class ClicMeteo implements ActionListener{
 
+
         @Override
         public void actionPerformed(ActionEvent e) {
+            System.out.println("salut");
+
             collectionEcrans.show(panelCont, "meteo");
         }
     }
