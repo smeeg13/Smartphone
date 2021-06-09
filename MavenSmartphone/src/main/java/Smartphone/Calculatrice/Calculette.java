@@ -1,7 +1,6 @@
 package Smartphone.Calculatrice;
 
 import Smartphone.ToolBox;
-import org.apache.maven.shared.utils.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,211 +13,181 @@ public class Calculette extends JPanel {
 
     ToolBox toolBox = new ToolBox();
 
-    // create a Label
-    private JLabel ecran = new JLabel();
-    private JLabel ecranResult = new JLabel();
-
-    // create number buttons
-    JButton b0 = new JButton("0");
-    JButton b1 = new JButton("1");
-    JButton b2 = new JButton("2");
-    JButton b3 = new JButton("3");
-    JButton b4 = new JButton("4");
-    JButton b5 = new JButton("5");
-    JButton b6 = new JButton("6");
-    JButton b7 = new JButton("7");
-    JButton b8 = new JButton("8");
-    JButton b9 = new JButton("9");
-
-    // equals button
-    JButton begal = new JButton("=");
-
-    // create operator buttons
-    JButton baddition = new JButton("+");
-    JButton bsoustraction = new JButton("-");
-    JButton bdivision = new JButton("/");
-    JButton bmultiplication = new JButton("*");
-    JButton bpourcent = new JButton("%");
-    JButton bsupprimer = new JButton("C");
-    JButton bRevenirde1 = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Fleche_Back.png", 20, 20));
-    JButton bplusmoins = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_PlusMoins.png", 25, 25));
-
-    // create . button
-    JButton bpoint = new JButton(".");
-
     // create a panel
-    JPanel paneltexte = new JPanel();
-    JPanel panelCalcul = new JPanel();
-    JPanel panelButton = new JPanel();
-    JPanel panelResult = new JPanel();
+    private  JPanel mainpanel = new JPanel();
+    private  JPanel paneltexte = new JPanel();
+    private JPanel panelButton = new JPanel();
 
-    private String operateur = "";
-    private boolean update = false, clickOperateur = false, point = false;
-    private double chiffre1;
+    JTextField textField;
+    JButton[] numberButtons = new JButton[10];
+    JButton[] functionButtons = new JButton[10];
+    JButton addBut, subBut, mulBut,divBut;
+    JButton decBut,percBut, negBut, equBut, delBut, clrBut ;
 
+    Font myFont = new Font("Tahoma", Font.BOLD, 16);
+
+    double num1 = 0, num2 = 0,result = 0;
+    char operator;
 
     // default constructor
     public Calculette() {
 
         setBackground(Color.lightGray);
+
+        mainpanel.setLayout(new BoxLayout (mainpanel, BoxLayout.Y_AXIS));
+        mainpanel.setBackground(Color.lightGray);
+        mainpanel.setPreferredSize(new Dimension(400,533));
+
+
         paneltexte.setBackground(Color.lightGray);
-
-        // Mise en page panel calculette
-        panelCalcul.setBackground(Color.lightGray);
-        panelCalcul.setPreferredSize(new Dimension(189, 40));
-        ecran.setBounds(5, 11, 100, 40);
-        ecran.setFont(new Font("Tahoma",Font.BOLD,15));
-        panelCalcul.add(ecran);
-
-        panelResult.setBackground(Color.lightGray);
-        panelResult.setPreferredSize(new Dimension(189,40));
-        ecranResult.setBounds(70,11,50,40);
-        ecranResult.setFont(new Font("Tahoma",Font.BOLD,15));
-        panelResult.add(ecranResult);
-
+        paneltexte.setLayout(null);
+        panelButton.setPreferredSize(new Dimension(350,350));
         panelButton.setBackground(Color.lightGray);
-        panelButton.setLayout(new GridLayout(5, 4, 15, 15));
-        panelButton.setPreferredSize(new Dimension(380, 473));
+        panelButton.setLayout(new GridLayout(5, 4, 13, 13));
 
+        textField = new JTextField();
+        textField.setBounds(50,20,300,45);
 
-        paneltexte.setLayout(new BoxLayout (paneltexte, BoxLayout.X_AXIS));
-        paneltexte.add(panelCalcul);
-        paneltexte.add(panelResult);
+        textField.setFont(new Font("Tahoma", Font.BOLD, 18));
+        textField.setEditable(false);
+        paneltexte.add(textField);
 
-//Ajout des boutons
-        bRevenirde1.setFont(new Font("Tahoma", Font.BOLD, 16));
-        bRevenirde1.setBorderPainted(false);
-        panelButton.add(bRevenirde1);
+        addBut = new JButton("+");
+        subBut = new JButton("-");
+        mulBut = new JButton("*");
+        divBut = new JButton("/");
+        decBut = new JButton(".");
+        percBut = new JButton("%");
+        negBut = new JButton("+/-");
+        equBut = new JButton("=");
+        delBut = new JButton("Del");
+        clrBut = new JButton("C");
 
-        bsupprimer.setFont(new Font("Tahoma", Font.BOLD, 16));
-        bsupprimer.setBorderPainted(false);
-        panelButton.add(bsupprimer);
+        functionButtons[0] = addBut;
+        functionButtons[1] = subBut;
+        functionButtons[2] = mulBut;
+        functionButtons[3] = divBut;
+        functionButtons[4] = decBut;
+        functionButtons[5] = percBut;
+        functionButtons[6] = negBut;
+        functionButtons[7] = equBut;
+        functionButtons[8] = delBut;
+        functionButtons[9] = clrBut;
 
-        bpourcent.setFont(new Font("Tahoma", Font.BOLD, 16));
-        bpourcent.setBorderPainted(false);
-        panelButton.add(bpourcent);
+        for (int i = 0 ; i < 10 ; i++){
+            functionButtons[i].addActionListener(new Listener());
+            functionButtons[i].setFont(myFont);
+            functionButtons[i].setFocusable(false);
+        }
 
-        bdivision.setFont(new Font("Tahoma", Font.BOLD, 16));
-        bdivision.setBorderPainted(false);
-        panelButton.add(bdivision);
+        for (int i = 0 ; i < 10; i++){
+            numberButtons[i] = new JButton(String.valueOf(i));
+            numberButtons[i].addActionListener(new Listener());
+            numberButtons[i].setFont(myFont);
+            numberButtons[i].setFocusable(false);
+        }
 
-        b7.setFont(new Font("Tahoma", Font.BOLD, 16));
-        b7.setBorderPainted(false);
-        panelButton.add(b7);
+        panelButton.add(delBut);
+        panelButton.add(clrBut);
+        panelButton.add(percBut);
+        panelButton.add(divBut);
 
-        b8.setFont(new Font("Tahoma", Font.BOLD, 16));
-        b8.setBorderPainted(false);
-        panelButton.add(b8);
+        panelButton.add(numberButtons[7]);
+        panelButton.add(numberButtons[8]);
+        panelButton.add(numberButtons[9]);
+        panelButton.add(mulBut);
 
-        b9.setFont(new Font("Tahoma", Font.BOLD, 16));
-        b9.setBorderPainted(false);
-        panelButton.add(b9);
+        panelButton.add(numberButtons[4]);
+        panelButton.add(numberButtons[5]);
+        panelButton.add(numberButtons[6]);
+        panelButton.add(subBut);
 
-        bmultiplication.setFont(new Font("Tahoma", Font.BOLD, 16));
-        bmultiplication.setBorderPainted(false);
-        panelButton.add(bmultiplication);
+        panelButton.add(numberButtons[1]);
+        panelButton.add(numberButtons[2]);
+        panelButton.add(numberButtons[3]);
+        panelButton.add(addBut);
 
-        b4.setFont(new Font("Tahoma", Font.BOLD, 16));
-        b4.setBorderPainted(false);
-        panelButton.add(b4);
+        panelButton.add(negBut);
+        panelButton.add(numberButtons[0]);
+        panelButton.add(decBut);
+        panelButton.add(equBut);
 
-        b5.setFont(new Font("Tahoma", Font.BOLD, 16));
-        b5.setBorderPainted(false);
-        panelButton.add(b5);
+        mainpanel.add(paneltexte);
+        mainpanel.add(panelButton);
 
-        b6.setFont(new Font("Tahoma", Font.BOLD, 16));
-        b6.setBorderPainted(false);
-        panelButton.add(b6);
-
-        bsoustraction.setFont(new Font("Tahoma", Font.BOLD, 16));
-        bsoustraction.setBorderPainted(false);
-        panelButton.add(bsoustraction);
-
-        b1.setFont(new Font("Tahoma", Font.BOLD, 16));
-        b1.setBorderPainted(false);
-        panelButton.add(b1);
-
-        b2.setFont(new Font("Tahoma", Font.BOLD, 16));
-        b2.setBorderPainted(false);
-        panelButton.add(b2);
-
-        b3.setFont(new Font("Tahoma", Font.BOLD, 16));
-        b3.setBorderPainted(false);
-        panelButton.add(b3);
-
-        baddition.setFont(new Font("Tahoma", Font.BOLD, 16));
-        baddition.setBorderPainted(false);
-        panelButton.add(baddition);
-
-        bplusmoins.setFont(new Font("Tahoma", Font.BOLD, 16));
-        bplusmoins.setBorderPainted(false);
-        panelButton.add(bplusmoins);
-
-        b0.setFont(new Font("Tahoma", Font.BOLD, 16));
-        b0.setBorderPainted(false);
-        panelButton.add(b0);
-
-        bpoint.setFont(new Font("Tahoma", Font.BOLD, 16));
-        bpoint.setBorderPainted(false);
-        panelButton.add(bpoint);
-
-        begal.setFont(new Font("Tahoma", Font.BOLD, 16));
-        begal.setBorderPainted(false);
-        panelButton.add(begal);
-
-
-        bRevenirde1.addActionListener(new Listener());
-        bsupprimer.addActionListener(new Listener());
-        bpourcent.addActionListener(new Listener());
-        bdivision.addActionListener(new Listener());
-        b7.addActionListener(new Listener());
-        b8.addActionListener(new Listener());
-        b9.addActionListener(new Listener());
-        bmultiplication.addActionListener(new Listener());
-        b4.addActionListener(new Listener());
-        b5.addActionListener(new Listener());
-        b6.addActionListener(new Listener());
-        bsoustraction.addActionListener(new Listener());
-        b1.addActionListener(new Listener());
-        b2.addActionListener(new Listener());
-        b3.addActionListener(new Listener());
-        baddition.addActionListener(new Listener());
-        bplusmoins.addActionListener(new Listener());
-        b0.addActionListener(new Listener());
-        bpoint.addActionListener(new Listener());
-        begal.addActionListener(new Listener());
-
-        add(paneltexte);
-        add(panelButton);
-
+        add(mainpanel);
     }
     class Listener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
-            String command = e.getActionCommand();
-
-            Object source = e.getSource();
-            if (bsupprimer.equals(source)) {
-                ecran.setText("");
-                ecranResult.setText("");
-            } else if (bRevenirde1.equals(source)) {
-                String str = " " + ecran.getText();
-                if (str.length() == 1) {
-                    str = ".";
-                    ecran.setText(str);
-                } else {
-                    str = str.substring(0, str.length() - 1);
-                    ecran.setText(str);
+            for (int i = 0; i < 10; i++) {
+                if (e.getSource() == numberButtons[i]) {
+                    textField.setText(textField.getText().concat(String.valueOf(i)));
                 }
-            } else if (begal.equals(source)) {
-                ecranResult.setText(evaluate(ecran.getText()));
-            } else if (bplusmoins.equals(source)) {
-                command = "(-)";
-                ecran.setText("-" + ecran.getText());
-            } else {
-                ecran.setText(ecran.getText() + command);
             }
+            if (e.getSource() == decBut) {
+                textField.setText(textField.getText().concat("."));
+            }
+            if (e.getSource() == addBut) {
+                num1 = Double.parseDouble(textField.getText());
+                operator = '+';
+                textField.setText("");
+            }
+            if (e.getSource() == subBut) {
+                num1 = Double.parseDouble(textField.getText());
+                operator = '-';
+                textField.setText("");
+            }
+            if (e.getSource() == mulBut) {
+                num1 = Double.parseDouble(textField.getText());
+                operator = '*';
+                textField.setText("");
+            }
+            if (e.getSource() == divBut) {
+                num1 = Double.parseDouble(textField.getText());
+                operator = '/';
+                textField.setText("");
+            }
+            if (e.getSource() == equBut){
+                num2 = Double.parseDouble(textField.getText());
 
+                switch (operator){
+                    case '+':
+                        result = num1 + num2;
+                        break;
+                    case '-':
+                        result = num1 - num2;
+                        break;
+                    case '*':
+                        result = num1 * num2;
+                        break;
+                    case '/':
+                        result = num1 / num2;
+                        break;
+                }
+                textField.setText(String.valueOf(result));
+                num1 = result;
+            }
+            if (e.getSource() == clrBut) {
+                textField.setText("");
+            }
+            if (e.getSource() == delBut) {
+                String str = textField.getText();
+                textField.setText("");
+                for (int i = 0; i<str.length()-1; i++){
+                    textField.setText(textField.getText()+str.charAt(i));
+                }
+            }
+            if (e.getSource() == negBut) {
+                double temp = Double.parseDouble(textField.getText());
+                temp*=-1;
+                textField.setText(String.valueOf(temp));
+            }
+            if (e.getSource() == percBut) {
+                double temp = Double.parseDouble(textField.getText());
+                temp/=100;
+                textField.setText(String.valueOf(temp));
+            }
         }
     }
 
