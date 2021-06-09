@@ -1,5 +1,7 @@
 package Smartphone.Meteo;
 
+import Smartphone.Errors.BusinessException;
+import Smartphone.Errors.ErrorCodes;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
