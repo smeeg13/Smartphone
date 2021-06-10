@@ -1,18 +1,9 @@
 package Smartphone.Contacts;
 
-import Smartphone.Errors.BusinessException;
-import Smartphone.Errors.ErrorCodes;
-import Smartphone.Storage.Views;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.google.gson.annotations.Expose;
-
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Contact {
-
-   @JsonView(Views.NameOnly.class)
-    @Expose
     private String name = "";
 
     private String phoneNumber;
@@ -44,8 +35,6 @@ public class Contact {
         this.addphoto = addphoto;
         this.favContact = favContact;
     }
-
-
 
     public String getName() {
         return name;
