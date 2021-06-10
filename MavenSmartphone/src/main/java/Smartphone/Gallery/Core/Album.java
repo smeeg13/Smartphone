@@ -1,5 +1,7 @@
 package Smartphone.Gallery.Core;
 
+import Smartphone.Errors.BusinessException;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.nio.file.Path;
@@ -11,18 +13,20 @@ public class Album {
     private List<Picture> pictureList;
     private List<Album> albumList;
     private Path path;
+    private Album parent;
 
-    public Album(Path path) throws Exception {
+    public Album(Path path,Album parent) throws BusinessException {
         File file = path.toFile();
         this.path = path;
+        this.parent=parent;
         if (!file.exists()){
             boolean created = file.mkdir();
-            if(!created)throw new Exception("file not created");
+            if(!created)throw new BusinessException("file not created");
             pictureList = new ArrayList<>();
             albumList = new ArrayList<>();
         } else {
             pictureList = discoverImages(path);
-            albumList = discoverAlbums(path);
+            albumList = discoverAlbums(path,this);
         }
 
     }
@@ -31,7 +35,7 @@ public class Album {
         List<Picture> pictureList = new ArrayList<>();
         File folder = path.toFile();
         String[] EXTENSIONS = new String[]{
-                "gif", "png", "bmp", "jpg","jpeg"
+                "gif", "png", "bmp", "jpg","jpeg","PNG"
         };
         // filter to identify images based on their extensions
         FilenameFilter IMAGE_FILTER = new FilenameFilter() {
@@ -52,12 +56,12 @@ public class Album {
         return pictureList;
     }
 
-    private static List<Album> discoverAlbums(Path path) throws Exception {
+    private static List<Album> discoverAlbums(Path path,Album parent) throws BusinessException {
         List<Album> albumList = new ArrayList<>();
         File folder = path.toFile();
         for (File f:folder.listFiles()) {
             if(f.isDirectory()){
-                albumList.add(new Album(f.toPath()));
+                albumList.add(new Album(f.toPath(),parent));
             }
         }
         return albumList;
@@ -89,17 +93,18 @@ public class Album {
 
     public void addImage(Picture p){
         pictureList.add(p);
-        
     }
     
     public void deleteImage(Picture p) {
         if(!pictureList.contains(p))return;
         p.deletePicture();
+        pictureList.remove(p);
     }
 
     public void addAlbum(Album a) {
         albumList.add(a);
     }
+
     public void deleteAlbum(Album a){
 
         if(!albumList.contains(a))return;
@@ -125,6 +130,21 @@ public class Album {
     public String getName(){return path.toFile().getName();}
 
     public void renameAlbum(String name){
+        File file = path.toFile();
+        File dest = new File(parent.getPath().toString()+"/" + name);
+        file.renameTo(dest);
+    }
+
+    public int numberOfElements(){
+        return pictureList.size()+albumList.size();
+    }
+
+    public int numberOfRows(){
+        int temp = numberOfElements();
+        int numberOfRows = temp/3;
+        if(temp%3!=0)
+            numberOfRows += 1;
+        return numberOfRows;
     }
 
 
@@ -136,6 +156,23 @@ public class Album {
         }
         for (Picture p:pictureList) {
             System.out.println(p.getName());
+        }
+    }
+
+    public Album getParent() {
+        return parent;
+    }
+
+    public Path getPath() {
+        return path;
+    }
+
+    public void refresh(){
+        try {
+            albumList = discoverAlbums(path,this);
+            pictureList = discoverImages(path);
+        } catch (BusinessException e) {
+            e.printStackTrace();
         }
     }
 }

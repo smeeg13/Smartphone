@@ -4,7 +4,9 @@ public class main2 {
     public static void main(String[] args) throws Exception {
 
 
-        Gallery g1 = new Gallery();
+        System.out.println(System.getenv("SmartphoneGallery"));
+
+
 
 //        g1.getRoot().deleteAlbum(g1.getRoot().getAlbumList().get(0));
 //        g1.print();
