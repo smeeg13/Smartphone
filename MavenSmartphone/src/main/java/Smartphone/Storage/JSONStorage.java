@@ -6,34 +6,48 @@ import Smartphone.Contacts.Contact;
 import Smartphone.Errors.BusinessException;
 import Smartphone.Errors.ErrorCodes;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class JSONStorage implements Storable {
 
 //Méthode pour lire un ficher JSON
     @Override
-    public Contact[] read(File source) throws BusinessException {
-        ObjectMapper mapper = new ObjectMapper();
+    public ArrayList<Contact> read(File source) throws BusinessException {
+
+        //Avec gson
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Contact[] contacts;
 
-        try {
-            contacts = mapper.readValue(source, Contact[].class);
+        try (JsonReader reader = new JsonReader(new FileReader(source))){
+            contacts = gson.fromJson(reader, Contact[].class);
+
         } catch (IOException e) {
             throw new BusinessException("read error", e, ErrorCodes.IO_ERROR);
         }
 
-        return contacts;
+        return new ArrayList<>(Arrays.asList(contacts));
     }
 
-//Méthode pour lire un ficher JSON
+//Méthode pour ecrire dans un ficher JSON
     @Override
-    public void write(File destination, Contact[] contacts) throws BusinessException {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            mapper.writeValue(destination, contacts);
+    public void write(File destination, ArrayList<Contact> contacts) throws BusinessException {
+
+        //Avec gson
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+
+
+        try (FileWriter writer = new FileWriter(destination)){
+            //Avec gson
+            gson.toJson(contacts.toArray(),writer);
+
         } catch (IOException e) {
             throw new BusinessException("failed to save", e, ErrorCodes.IO_ERROR);
         }

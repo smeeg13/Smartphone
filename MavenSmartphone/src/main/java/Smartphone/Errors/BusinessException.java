@@ -1,7 +1,7 @@
 package Smartphone.Errors;
 
 public class BusinessException extends Exception{
-    private static final long serialVersionUID = -446022369330950597L;
+
 
     private ErrorCodes errorCode;
 

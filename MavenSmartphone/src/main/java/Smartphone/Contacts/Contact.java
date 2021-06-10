@@ -1,14 +1,11 @@
 package Smartphone.Contacts;
 
-import Smartphone.Errors.BusinessException;
-import Smartphone.Errors.ErrorCodes;
-
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Contact {
-
     private String name = "";
+
     private String phoneNumber;
     private String indicatif;
     private String email;
@@ -27,7 +24,7 @@ public class Contact {
     public Contact(){}
 
     public Contact(String name, String indicatif, String phoneNumber,
-                   String email, String address) {
+                   String email, String address, boolean addphoto,boolean favContact) {
         setName(name);
         this.phoneNumber = phoneNumber;
         this.indicatif = indicatif;
@@ -35,45 +32,8 @@ public class Contact {
         this.address = address;
         nextId.getAndIncrement();
 
-        if (isAddphoto() == true) {
-            setPhoto(photo);
-        }
-        isFavContact();
-    }
-
-    public Contact(String name,String indicatif,
-                   String phoneNumber) {
-        this.name=name;
-        this.phoneNumber = phoneNumber;
-        this.indicatif = indicatif;
-        nextId.getAndIncrement();
-
-        if (isAddphoto() == true) {
-            setPhoto(photo);
-        }
-        isFavContact();
-    }
-
-    public Contact(String name, String indicatif, String phoneNumber, String email) {
-        setName(name);
-        this.phoneNumber = phoneNumber;
-        this.indicatif = indicatif;
-        this.email = email;
-        nextId.getAndIncrement();
-
-        if (isAddphoto() == true) {
-            setPhoto(photo);
-        }
-        isFavContact();
-    }
-
-
-    public ImageIcon getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(ImageIcon photo) {
-        this.photo = photo;
+        this.addphoto = addphoto;
+        this.favContact = favContact;
     }
 
     public String getName() {
@@ -91,6 +51,15 @@ public class Contact {
     }
 
     public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getIndicatif() {
+        return indicatif;
+    }
+
+    public void setIndicatif(String indicatif) {
+        this.indicatif = indicatif;
     }
 
     public String getEmail() {
@@ -109,19 +78,12 @@ public class Contact {
         this.address = address;
     }
 
-    public String getIndicatif() {
-        return indicatif;
+    public ImageIcon getPhoto() {
+        return photo;
     }
 
-    public void setIndicatif(String indicatif) {
-    }
-
-    public static AtomicInteger getNextId() {
-        return nextId;
-    }
-
-    public static void setNextId(AtomicInteger nextId) {
-        Contact.nextId = nextId;
+    public void setPhoto(ImageIcon photo) {
+        this.photo = photo;
     }
 
     public boolean isAddphoto() {
@@ -140,9 +102,17 @@ public class Contact {
         this.favContact = favContact;
     }
 
+    public static AtomicInteger getNextId() {
+        return nextId;
+    }
+
+    public static void setNextId(AtomicInteger nextId) {
+        Contact.nextId = nextId;
+    }
+
     @Override
     public String toString() {
-        return name + ", +" + indicatif + "  " + phoneNumber
+        return name + ", " + indicatif + "  " + phoneNumber
                 + ", email "+ email+", addresse "+address;
     }
 
