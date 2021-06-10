@@ -286,10 +286,11 @@ public class PanelGallery extends JPanel {
                 JFileChooser fileChooser=new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("gif", "png", "bmp", "jpg","jpeg","PNG");
                 fileChooser.setFileFilter(filter);
-                int returnVal = fileChooser.showOpenDialog(null);
+                fileChooser.showOpenDialog(null);
                 File file = fileChooser.getSelectedFile();
                 File dest= new File(currentAlbum.getPath().toString()+"/" + file.getName());
                 file.renameTo(dest);
+                currentAlbum.refresh();
                 showAlbum(currentAlbum);
             });
 

@@ -17,7 +17,7 @@ public class Gallery extends Album{
 
     public static Path getGalleryPath(){
 
-        File file = new File("../Gallery");
+        File file = new File("./Gallery");
         return file.toPath();
     }
 }
