@@ -199,8 +199,6 @@ public  class StructureFrame extends JFrame {
 
     }
 
-
-
     class ClicGalery implements ActionListener{
 
         @Override
@@ -240,6 +238,7 @@ public  class StructureFrame extends JFrame {
 
 
     }
+
     class ClicCalculette implements ActionListener{
 
         @Override
