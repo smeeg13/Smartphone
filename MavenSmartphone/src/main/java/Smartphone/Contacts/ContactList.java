@@ -95,7 +95,6 @@ public class ContactList {
 //Méthode pour pouvoir reprendre infos du contact sélectionné
     public Contact getContactByName(String nameSelected,File JsonFile) throws BusinessException {
         ArrayList<Contact> contacts = storage.read(JsonFile);
-        System.out.println(nameSelected);
          for (Contact c : contacts){
              if (c.getName().equals(nameSelected))
                 return c ;
@@ -109,7 +108,7 @@ public class ContactList {
         ArrayList<Contact> contacts = storage.read(JsonFile);
 
         for (Contact c : contacts){
-            if(c.toString().equals(valSearched))
+            if(c.getName().equals(valSearched))
                 return true;
         }
         return false;
@@ -119,12 +118,8 @@ public class ContactList {
         contacts.removeIf(contact -> contact.getName().equals(name));
     }
 
-    //Retourne le contact à modifier
-    public void edit(String name){
+    public void search(String name, File jsonFile){
 
-        //Recréer un avec nouvelle info
-
-        //Resauvegarder dans Json
 
     }
 

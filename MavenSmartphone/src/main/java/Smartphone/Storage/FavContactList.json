@@ -9,21 +9,21 @@
     "favContact": true
   },
   {
-    "name": "Nathan",
-    "phoneNumber": "0791054802",
-    "indicatif": "+41",
-    "email": "nathan.dely@students.hevs.ch",
-    "address": "Martigny",
-    "addphoto": false,
-    "favContact": true
-  },
-  {
     "name": "Meg",
     "phoneNumber": "789",
     "indicatif": "+41",
     "email": "",
     "address": "",
     "addphoto": false,
+    "favContact": true
+  },
+  {
+    "name": "Nathan",
+    "phoneNumber": "0791054802",
+    "indicatif": "+41",
+    "email": "nathan.dely@students.hevs.ch",
+    "address": "Martigny",
+    "addphoto": true,
     "favContact": true
   }
 ]

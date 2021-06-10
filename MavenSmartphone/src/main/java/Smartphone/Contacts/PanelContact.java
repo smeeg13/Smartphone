@@ -7,12 +7,15 @@ import Smartphone.Storage.JSONStorage;
 import Smartphone.Storage.Storable;
 import Smartphone.ToolBox;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 
 public class PanelContact extends JPanel {
@@ -43,6 +46,7 @@ public class PanelContact extends JPanel {
             private JPanel PContactAddPicture = new JPanel();
                 private JButton buttonPicturePContactAdd;
                 private ImageIcon photoContact;
+                private Image photochoisie;
                 private ImageIcon appareilPhoto = new ImageIcon(new ImageIcon("MavenSmartphone/src/main/java/Smartphone/Icones/icone_AddPicture.png").getImage().getScaledInstance(55, 55, Image.SCALE_DEFAULT));
 
             private JPanel PContactAddInfos = new JPanel();
@@ -77,6 +81,7 @@ public class PanelContact extends JPanel {
     private JButton buttonGoSearch;
     private JPanel PanelBas = new JPanel();
     private JLabel LabelErreurRecherche = new JLabel();
+    private JButton buttonContactfind = new JButton("Enter above the contact you want to find");
     private JPanel contactShow = new PanelContactShow();
 
     //Page Contact selectionné
@@ -138,6 +143,7 @@ public class PanelContact extends JPanel {
     private JButton buttonSaveChanges;
 
     private ToolBox toolBox = new ToolBox();
+
     private boolean contactOK = false;
 
     //Fichier de sauvegarde Destination
@@ -360,7 +366,6 @@ contactPage.setBackground(Color.BLACK);
 
         panelDeleteEdit.add(buttonDelete);
 
-
         //Mise en page Panel du bas
         // avec boutton ok ou annuler
         PanelEditCentre.add(panelOkEdit, BorderLayout.SOUTH);
@@ -380,7 +385,6 @@ contactPage.setBackground(Color.BLACK);
 
         panelOkEdit.add(buttonCancelEdit, BorderLayout.EAST);
         panelOkEdit.add(buttonSaveChanges, BorderLayout.WEST);
-
 
 //PANEL CONTACT ADD
         PContactAdd.add(PContactAddHaut, BorderLayout.NORTH);
@@ -452,13 +456,11 @@ contactPage.setBackground(Color.BLACK);
         buttonCancel.setFocusPainted(false);
         buttonCancel.setContentAreaFilled(false);
         buttonCancel.addActionListener(new Actions());
-
         buttonSave = new JButton("Save");
         buttonSave.setBorderPainted(false);
         buttonSave.setFocusPainted(false);
         buttonSave.setContentAreaFilled(false);
         buttonSave.addActionListener(new Actions());
-
         panelOk.add(buttonCancel, BorderLayout.EAST);
         panelOk.add(buttonSave, BorderLayout.WEST);
 
@@ -470,7 +472,6 @@ contactPage.setBackground(Color.BLACK);
         //Mise en page panel Back
         PanelBack.setPreferredSize(new Dimension(400, 40));
         PanelBack.setLayout(new FlowLayout(FlowLayout.LEFT));
-
         buttonBack = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Back2.1.png", 30, 30));
         buttonBack.setBorderPainted(false);
         buttonBack.setFocusPainted(false);
@@ -489,12 +490,18 @@ contactPage.setBackground(Color.BLACK);
         buttonGoSearch.setFocusPainted(false);
         buttonGoSearch.setContentAreaFilled(false);
         buttonGoSearch.addActionListener(new Actions());
-
         PanelCentre.add(rechercheBar);
         PanelCentre.add(buttonGoSearch);
 
         PanelBas.setPreferredSize(new Dimension(400, 435));
-        PanelBas.add(contactShow, "contactshow");
+        buttonContactfind.setPreferredSize(new Dimension(340,40));
+        buttonContactfind.setBorderPainted(true);
+        buttonContactfind.setBorder(BorderFactory.createLineBorder(Color.black));
+        buttonContactfind.setFocusPainted(false);
+        buttonContactfind.setContentAreaFilled(false);
+        buttonContactfind.setEnabled(false);
+        buttonContactfind.addActionListener(new Actions());
+        PanelBas.add(buttonContactfind);
 
         add(mainPanel);
     }
@@ -506,18 +513,14 @@ contactPage.setBackground(Color.BLACK);
             Contact contactSelec;
             ecran.show(mainPanel,"contactselected");
             try {
-
-                System.out.println("contact list");
                 if (e.getSource() == JListContacts) {
                     selectedContact = (String) JListContacts.getSelectedValue();
                     contactSelec = contactList.getContactByName(selectedContact, fileContactList);
-
                 }
                 else {
                     selectedContact = (String) JListFavContact.getSelectedValue();
                     contactSelec = favContactList.getContactByName(selectedContact, fileFavContactList);
                 }
-                System.out.println(contactSelec);
                     // Si le contact n'existe pas, ne rien mettre à jour
                     if (contactSelec == null) return;
                     //Ajouter les infos du contact sélectionné à la page d'info du contact
@@ -527,10 +530,13 @@ contactPage.setBackground(Color.BLACK);
                     emailTxtContSelec.setText(contactSelec.getEmail());
                     adresseTxtContSelec.setText(contactSelec.getAddress());
 
-                    if (contactSelec.isAddphoto() == true) {
-                        buttonPictureContSelec.setText(" ");
-                    } else
+                    if (contactSelec.isAddphoto() == false) {
+                        buttonPicturePContactAdd.setIcon(contactSelec.getPhoto());
                         buttonPictureContSelec.setText("");
+                    } else
+                        //Reprendre photo du contact si existe
+                    //    buttonPictureContSelec.setIcon(contactSelec.getPhoto());
+                        buttonPictureContSelec.setText(" ");
 
                     if (contactSelec.isFavContact() == true)
                         favCheckBoxContSelec.setSelected(true);
@@ -541,7 +547,6 @@ contactPage.setBackground(Color.BLACK);
             }
         }
     }
-
     class Actions implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -653,22 +658,37 @@ contactPage.setBackground(Color.BLACK);
                 rechercheBar.setText("");
                 LabelErreurRecherche.setVisible(false);
                 labErreurSaisie.setText(" ");
+                buttonContactfind.setText("Enter above the name of the contact you want to find");
+                buttonContactfind.setBorder(BorderFactory.createLineBorder(Color.black));
             }
             //Ajouter photo au contact
-            if (e.getSource() == buttonPicturePContactAdd) {
-//CODE A FAIRE
+            if (e.getSource() == buttonPicturePContactAdd || e.getSource() == buttonPictureEdit) {
                 //Ouverture de fenetre pour choisir photo
-                //modifier image du bouton avec la photo choisie
+                JFileChooser fileChooser=new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("gif", "png", "bmp", "jpg","jpeg","PNG");
+                fileChooser.setFileFilter(filter);
+                int returnVal = fileChooser.showOpenDialog(null);
+                //Photo choisie
+                File file = fileChooser.getSelectedFile();
                 //variable : "photoContact" = photo choisie
-                //photoContact= new ImageIcon(new ImageIcon("").getImage().getScaledInstance(55, 55, Image.SCALE_DEFAULT));
-                //ajout photo choisie sur le bouton
-                //buttonPicture.setIcon(photoContact);
-                //Set texte du boutton si photo ajoutée
-                buttonPicturePContactAdd.setText("  ");
-            }
-            //Modif de la photo du contact
-            if (e.getSource() == buttonPictureEdit){
-//CODE A FAIRE
+                try {
+                    Image photochoisie = ImageIO.read(file);
+                    photoContact = new ImageIcon((new ImageIcon(photochoisie).getImage().getScaledInstance(56, 56, Image.SCALE_DEFAULT)));
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                if (e.getSource() == buttonPicturePContactAdd) {
+                    //modifier bouton avec la photo choisie
+                    buttonPicturePContactAdd.setIcon(photoContact);
+                    //Set texte du boutton si photo ajoutée
+                    buttonPicturePContactAdd.setText("  ");
+                }
+                if (e.getSource() == buttonPictureEdit){
+                    //modifier bouton avec la photo choisie
+                    buttonPictureEdit.setIcon(photoContact);
+                    //Set texte du boutton si photo ajoutée
+                    buttonPictureEdit.setText("  ");
+                }
             }
             //Sauvergarde d'un contact
             if (e.getSource() == buttonSave) {
@@ -712,10 +732,10 @@ contactPage.setBackground(Color.BLACK);
                                 //Création nouveau contact
                                 Contact contact = new Contact(nom, indicatif, numero, email, adresse, addphoto, favContact);
                                 //ajout de la photo liée
-                                if (addphoto == true)
+                                if (contact.isAddphoto())
                                     contact.setPhoto(photoContact);
                                 //Si contact favori ajout à liste des contacts fav aussi
-                                if (favContact == true) {
+                                if (contact.isFavContact()) {
                                         //Ajouter à la liste
                                         favContactList.addToContactList(contact);
                                         //Save file
@@ -749,32 +769,63 @@ contactPage.setBackground(Color.BLACK);
                     }
             } while (contactOK=false);
         }
-
             //Recherche d'un contact
             if (e.getSource() == buttonGoSearch) {
                 String research = "";
                 research = rechercheBar.getText();
+                try {
+                    if (contactList.containsNameInJson(research,fileContactList) ==true) {
+                        Contact searchedCont = contactList.getContactByName(research,fileContactList);
+                        buttonContactfind.setText(searchedCont.getName());
+                        buttonContactfind.setEnabled(true);
+                        buttonContactfind.setBorder(BorderFactory.createTitledBorder("Contact Find"));
+                    } else {
+                        //Msg erreur car rien trouvé
+                        System.err.println("Contact not found");
+                        LabelErreurRecherche.setText("Contact not found");
 
-                /*
-                if () {
-                    ecran.show(PanelBas,"contactShow");
-
-                    //Et affichage des infos du contact choisi
-
-                } else {
-
-                    System.err.println("Contact not found");
-                    LabelErreurRecherche.setText("Contact not found");
-
-                    LabelErreurRecherche.setVisible(true);
-                    PanelBas.add(LabelErreurRecherche);
-                    //Msg erreur car rien trouvé
+                        LabelErreurRecherche.setVisible(true);
+                        PanelBas.add(LabelErreurRecherche);
+                    }
+                } catch (BusinessException businessException) {
+                    businessException.printStackTrace();
                 }
                 rechercheBar.setText("");
-                 */
+            }
+            if (e.getSource() == buttonContactfind){
+                String selectedContact;
+                Contact contactSelec;
+                ecran.show(mainPanel,"contactselected");
+                try {
+                        selectedContact = (String) JListContacts.getSelectedValue();
+                        contactSelec = contactList.getContactByName(selectedContact, fileContactList);
+
+                    // Si le contact n'existe pas, ne rien mettre à jour
+                    if (contactSelec == null) return;
+                    //Ajouter les infos du contact sélectionné à la page d'info du contact
+                    nameTxtContSelec.setText(contactSelec.getName());
+                    indicChoiceContSelec.setText(contactSelec.getIndicatif());
+                    numTxtContSelec.setText(contactSelec.getPhoneNumber());
+                    emailTxtContSelec.setText(contactSelec.getEmail());
+                    adresseTxtContSelec.setText(contactSelec.getAddress());
+
+                    if (contactSelec.isAddphoto() == false) {
+                        buttonPicturePContactAdd.setIcon(contactSelec.getPhoto());
+                        buttonPictureContSelec.setText("");
+                    } else
+                        //Reprendre photo du contact si existe
+                        //    buttonPictureContSelec.setIcon(contactSelec.getPhoto());
+                        buttonPictureContSelec.setText(" ");
+
+                    if (contactSelec.isFavContact() == true)
+                        favCheckBoxContSelec.setSelected(true);
+                    else
+                        favCheckBoxContSelec.setSelected(false);
+                } catch (BusinessException businessException) {
+                    businessException.printStackTrace();
+                }
             }
         }
-
     }
 }
 

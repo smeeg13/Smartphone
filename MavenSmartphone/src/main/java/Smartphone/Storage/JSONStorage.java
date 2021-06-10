@@ -40,8 +40,6 @@ public class JSONStorage implements Storable {
         //Avec gson
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-
-
         try (FileWriter writer = new FileWriter(destination)){
             //Avec gson
             gson.toJson(contacts.toArray(),writer);
