@@ -25,6 +25,8 @@ public class Picture {
         return file.getName();
     }
 
+    public String getPath() { return path;}
+
     public void deletePicture(){
         file.delete();
     }
