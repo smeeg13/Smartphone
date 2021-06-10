@@ -120,13 +120,12 @@ public class ContactList {
     }
 
     //Retourne le contact à modifier
-    public Contact edit(String name){
-        for (int i = 0 ; i<contacts.size() ; i++){
-            if (contacts.get(i).getName().equals(name)){
-                return contacts.get(i);
-            }
-        }
-        return null;
+    public void edit(String name){
+
+        //Recréer un avec nouvelle info
+
+        //Resauvegarder dans Json
+
     }
 
     @Override

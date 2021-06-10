@@ -582,20 +582,44 @@ contactPage.setBackground(Color.BLACK);
                     favCheckBoxEdit.setSelected(false);
             }
             if (e.getSource() == buttonSaveChanges){
-                //Controle si champs on été modifié
-                if (nameTxtEdit.getText().equals(nameTxtContSelec.getText()) ||
-                    numTxt3Edit.getText().equals(numTxtContSelec) ||
-                    indicChoiceEdit.getSelectedItem().equals(indicChoiceContSelec.getText()) ||
-                    emailTxtEdit.getText().equals(emailLabContSelec.getText()) ||
-                    adresseTxtEdit.getText().equals(adresseTxtContSelec.getText()) ||
-                    favCheckBoxEdit.isSelected() == favCheckBoxContSelec.isSelected() ||
-                            buttonPictureEdit.getText().equals(buttonPictureContSelec.getText()))
-                {
-                    System.err.println("Aucune modification faite");
-                }
-                else {
+                    //Supprimer le contact
+                    contactList.delete(nameTxtContSelec.getText());
+                    favContactList.delete(nameTxtContSelec.getText());
+                    boolean addphoto;
+                    //Ajouter photo à un contact
+                    if (buttonPictureEdit.getText() == "  ")
+                        addphoto = true;
+                    else
+                        addphoto = false;
 
-                }
+                    boolean favContact;
+                    if (favCheckBoxEdit.isSelected() == true)
+                        favContact = true;
+                    else
+                        favContact = false;
+                    //Recréer contact avec changement
+                    Contact contact = new Contact(nameTxtEdit.getText(), (String) indicChoiceEdit.getSelectedItem(),numTxt3Edit.getText(),
+                                                    emailTxtEdit.getText(),adresseTxtEdit.getText(),addphoto,favContact);
+                    if (contact.isFavContact() ==true) {
+                        try {
+                            favContactList.addToContactList(contact);
+                            favContactList.saveToFile(fileFavContactList);
+                        } catch (BusinessException businessException){
+                            businessException.printStackTrace();
+                        }
+                    }
+                    try {
+                        contactList.addToContactList(contact);
+                        contactList.saveToFile(fileContactList);
+                        JListContacts.removeAll();
+                        JListContacts.setListData(contactList.getNameArrayFromJSON(fileContactList).toArray());
+                        JListFavContact.removeAll();
+                        JListFavContact.setListData(favContactList.getNameArrayFromJSON(fileFavContactList).toArray());
+                    } catch (BusinessException businessException) {
+                        businessException.printStackTrace();
+                    }
+                    ecran.show(mainPanel,"contactPage");
+                    updateUI();
             }
             if (e.getSource() == buttonCancelEdit){
                 ecran.show(mainPanel,"contactselected");
@@ -668,7 +692,7 @@ contactPage.setBackground(Color.BLACK);
 
                 do {
                 //Controle si champs nom et numéro rempli avant d'ajouter
-                if (nameTxt.getText().isEmpty() == true || numTxt.getText().isEmpty() == true) {
+                if (nameTxt.getText().isEmpty()  || numTxt.getText().isEmpty()) {
                     //Afficher erreur car champs oblig vide
                     System.err.println("Données contact vides");
                     try {
@@ -680,13 +704,9 @@ contactPage.setBackground(Color.BLACK);
                 }
                 else {
                         try {
-                            if (contactList.containsNameInJson(nameTxt.getText(), fileContactList) == true) {
-                                try {
-                                    throw new BusinessException("Contact already exist", ErrorCodes.CONTACT_ALREADY_EXIST_ERROR);
-                                } catch (BusinessException businessException) {
-                                    businessException.printStackTrace();
-                                }
+                            if (contactList.containsNameInJson(nameTxt.getText(), fileContactList)) {
                                 labErreurSaisie.setText("Contact Already exist !");
+                                throw new BusinessException("Contact already exist", ErrorCodes.CONTACT_ALREADY_EXIST_ERROR);
                                 }
                              else {
                                 //Création nouveau contact
@@ -696,28 +716,21 @@ contactPage.setBackground(Color.BLACK);
                                     contact.setPhoto(photoContact);
                                 //Si contact favori ajout à liste des contacts fav aussi
                                 if (favContact == true) {
-                                    try {
                                         //Ajouter à la liste
                                         favContactList.addToContactList(contact);
                                         //Save file
                                         favContactList.saveToFile(fileFavContactList);
                                         JListFavContact.removeAll();
                                         JListFavContact.setListData(contactList.getNameArrayFromJSON(fileFavContactList).toArray());
-                                    } catch (BusinessException businessException) {
-                                        businessException.printStackTrace();
-                                    }
                                 }
-                                try {
                                     //Ajout du contact à la liste de contact
                                     contactList.addToContactList(contact);
                                     //Savuvegarder les fichiers
                                     contactList.saveToFile(fileContactList);
                                     JListContacts.removeAll();
                                     JListContacts.setListData(contactList.getNameArrayFromJSON(fileContactList).toArray());
-                                } catch (BusinessException businessException) {
-                                    businessException.printStackTrace();
-                                }
                                 updateUI();
+
                                 //Mise à zéro des champs de saisie
                                 nameTxt.setText("");
                                 numTxt.setText("");

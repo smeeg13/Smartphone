@@ -16,5 +16,14 @@
     "address": "Martigny",
     "addphoto": false,
     "favContact": true
+  },
+  {
+    "name": "Meg",
+    "phoneNumber": "789",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": true
   }
 ]
