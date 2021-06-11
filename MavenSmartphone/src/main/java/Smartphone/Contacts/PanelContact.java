@@ -82,11 +82,9 @@ public class PanelContact extends JPanel {
     private JPanel PanelBas = new JPanel();
     private JLabel LabelErreurRecherche = new JLabel();
     private JButton buttonContactfind = new JButton("Enter above the contact you want to find");
-    private JPanel contactShow = new PanelContactShow();
 
     //Page Contact selectionné
     private JPanel contactSelected = new PanelContactSelected();
-
     private JPanel PanelSelectCentre = new JPanel();
     private JPanel panelPictureContSelec = new JPanel();
     private JButton buttonPictureContSelec;
@@ -97,7 +95,6 @@ public class PanelContact extends JPanel {
     private JLabel nomLabContSelec = new JLabel("Nom : ");
     private JLabel nameTxtContSelec = new JLabel("");
     private JLabel indicatifLabContSelec = new JLabel("Indicatif : ");
-    private final String[] indicatifs2 = {"+41","+1", "+31", "+39"};
     private JLabel indicChoiceContSelec = new JLabel("");
     private JLabel numLabContSelec = new JLabel("Numéro :  ");
     private JLabel numTxtContSelec = new JLabel("");
@@ -143,8 +140,6 @@ public class PanelContact extends JPanel {
     private JButton buttonSaveChanges;
 
     private ToolBox toolBox = new ToolBox();
-
-    private boolean contactOK = false;
 
     //Fichier de sauvegarde Destination
     File fileContactList = new File("MavenSmartphone/src/main/java/Smartphone/Storage/ContactList.json");
@@ -205,7 +200,7 @@ contactPage.setBackground(Color.BLACK);
         panelfavcont.setPreferredSize(new Dimension(390,108));
         panelfavcont.setLayout(new BoxLayout (panelfavcont, BoxLayout.Y_AXIS));
 
-        JListFavContact = new JList();//Ajouter liste de contact fav a partir de fichier JSON
+        //Ajouter liste de contact fav a partir de fichier JSON
         try {
             JListFavContact = new JList(contactList.getNameArrayFromJSON(fileFavContactList).toArray());
         } catch (BusinessException e) {
@@ -535,7 +530,7 @@ contactPage.setBackground(Color.BLACK);
                         buttonPictureContSelec.setText("");
                     } else
                         //Reprendre photo du contact si existe
-                    //    buttonPictureContSelec.setIcon(contactSelec.getPhoto());
+                        //    buttonPictureContSelec.setIcon(contactSelec.getPhoto());
                         buttonPictureContSelec.setText(" ");
 
                     if (contactSelec.isFavContact() == true)
@@ -651,8 +646,8 @@ contactPage.setBackground(Color.BLACK);
                 indicChoice.setSelectedIndex(0);
                 emailTxt.setText("");
                 adresseTxt.setText("");
+                //Remet apareil photo sur bouton et texte empty
                 buttonPicturePContactAdd.setText("");
-                //Remettre photo de base
                 buttonPicturePContactAdd.setIcon(appareilPhoto);
                 favCheckBox.setSelected(false);
                 rechercheBar.setText("");
@@ -710,6 +705,7 @@ contactPage.setBackground(Color.BLACK);
                 else
                     favContact = false;
 
+                boolean contactOK = false;
                 do {
                 //Controle si champs nom et numéro rempli avant d'ajouter
                 if (nameTxt.getText().isEmpty()  || numTxt.getText().isEmpty()) {
@@ -757,8 +753,9 @@ contactPage.setBackground(Color.BLACK);
                                 indicChoice.setSelectedIndex(0);
                                 emailTxt.setText("");
                                 adresseTxt.setText("");
+                                //Remet apareil photo sur bouton et texte empty
                                 buttonPicturePContactAdd.setText("");
-                                buttonPicturePContactAdd.setIcon(appareilPhoto); //Remettre photo de base
+                                buttonPicturePContactAdd.setIcon(appareilPhoto);
                                 favCheckBox.setSelected(false);
                                 contactOK = true;
                                 ecran.show(mainPanel, "contactPage"); //Retour sur page des contacts
@@ -767,7 +764,7 @@ contactPage.setBackground(Color.BLACK);
                             businessException.printStackTrace();
                         }
                     }
-            } while (contactOK=false);
+            } while (contactOK =false);
         }
             //Recherche d'un contact
             if (e.getSource() == buttonGoSearch) {
@@ -780,12 +777,12 @@ contactPage.setBackground(Color.BLACK);
                         buttonContactfind.setEnabled(true);
                         buttonContactfind.setBorder(BorderFactory.createTitledBorder("Contact Find"));
                     } else {
+
                         //Msg erreur car rien trouvé
                         System.err.println("Contact not found");
-                        LabelErreurRecherche.setText("Contact not found");
-
-                        LabelErreurRecherche.setVisible(true);
-                        PanelBas.add(LabelErreurRecherche);
+                        buttonContactfind.setText("Contact not found");
+                        buttonContactfind.setBorder(BorderFactory.createLineBorder(Color.black));
+                        buttonContactfind.setEnabled(false);
                     }
                 } catch (BusinessException businessException) {
                     businessException.printStackTrace();
@@ -797,7 +794,7 @@ contactPage.setBackground(Color.BLACK);
                 Contact contactSelec;
                 ecran.show(mainPanel,"contactselected");
                 try {
-                        selectedContact = (String) JListContacts.getSelectedValue();
+                        selectedContact = buttonContactfind.getText();
                         contactSelec = contactList.getContactByName(selectedContact, fileContactList);
 
                     // Si le contact n'existe pas, ne rien mettre à jour
@@ -827,6 +824,7 @@ contactPage.setBackground(Color.BLACK);
             }
         }
     }
+
 }
 
 
