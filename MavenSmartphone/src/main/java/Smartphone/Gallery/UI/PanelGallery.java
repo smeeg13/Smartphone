@@ -204,7 +204,8 @@ public class PanelGallery extends JPanel {
             panel.setLayout(showContents);
             for (Album al:a.getAlbumList()) {
                 JPanel albums = new JPanel();
-                JButton albumContents = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_albumsContent.PNG",100,100));
+
+                JButton albumContents = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Plus.png")).getImage().getScaledInstance(100,100,Image.SCALE_SMOOTH)));
                 albumContents = setTheIcon(albumContents);
                 albumContents.addActionListener(e -> showAlbum(al));
                 albums.add(albumContents);

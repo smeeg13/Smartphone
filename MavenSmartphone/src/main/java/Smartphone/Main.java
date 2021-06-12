@@ -3,9 +3,53 @@ package Smartphone;
 import Smartphone.Errors.BusinessException;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.SQLOutput;
 
 public class Main {
-    public static void main(String[] args) throws BusinessException {
+    public static void main(String[] args) throws BusinessException, IOException {
+
+
+        String str = System.getenv("HOME") + "/contacts";
+        File contactFolder = new File(str);
+        contactFolder.mkdir();
+        File fileContactList = new File(System.getenv("HOME") + "/contacts/ContactList.json");
+        File fileFavContactList = new File(System.getenv("HOME") + "/contacts/FavContactList.json");
+        if (!fileContactList.exists()) {
+            fileContactList.createNewFile();
+
+            String str1 = "[]";
+
+            Path path = Paths.get(String.valueOf(fileContactList));
+            byte[] strToBytes = str1.getBytes();
+
+            Files.write(path, strToBytes);
+
+            System.out.println("File has been created.");
+        } else {
+
+            System.out.println("File already exists.");
+        }
+
+        if (!fileFavContactList.exists()) {
+            fileFavContactList.createNewFile();
+            String str2 = "[]";
+
+            Path path = Paths.get(String.valueOf(fileFavContactList));
+            byte[] strToBytes = str2.getBytes();
+
+            Files.write(path, strToBytes);
+            System.out.println("File has been created.");
+        } else {
+            System.out.println("File already exists.");
+        }
+
 
         JFrame frame = new StructureFrame();
 
@@ -13,5 +57,10 @@ public class Main {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setResizable(false);
+
+
+
+
+
     }
 }

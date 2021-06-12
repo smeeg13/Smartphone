@@ -77,7 +77,6 @@ public class PanelContact extends JPanel {
     private JButton buttonGoSearch;
     private JPanel PanelBas = new JPanel();
     private JLabel LabelErreurRecherche = new JLabel();
-    private JPanel contactShow = new PanelContactShow();
 
     //Page Contact selectionné
     private JPanel contactSelected = new PanelContactSelected();
@@ -141,8 +140,8 @@ public class PanelContact extends JPanel {
     private boolean contactOK = false;
 
     //Fichier de sauvegarde Destination
-    File fileContactList = new File("MavenSmartphone/src/main/java/Smartphone/Storage/ContactList.json");
-    File fileFavContactList = new File("MavenSmartphone/src/main/java/Smartphone/Storage/FavContactList.json");
+    File fileContactList = new File(System.getenv("HOME") + "/contacts/ContactList.json");
+    File fileFavContactList = new File(System.getenv("HOME") + "/contacts/FavContactList.json");
 
     public PanelContact() {
 /*
@@ -462,7 +461,7 @@ contactPage.setBackground(Color.BLACK);
         panelOk.add(buttonCancel, BorderLayout.EAST);
         panelOk.add(buttonSave, BorderLayout.WEST);
 
-//PANEL CONTACT SEARCH
+        //PANEL CONTACT SEARCH
         contactSearch.add(PanelBack);
         contactSearch.add(PanelCentre);
         contactSearch.add(PanelBas);
@@ -494,7 +493,6 @@ contactPage.setBackground(Color.BLACK);
         PanelCentre.add(buttonGoSearch);
 
         PanelBas.setPreferredSize(new Dimension(400, 435));
-        PanelBas.add(contactShow, "contactshow");
 
         add(mainPanel);
     }

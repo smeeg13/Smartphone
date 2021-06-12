@@ -1,7 +1,6 @@
 package Smartphone.Storage;
 
 
-
 import Smartphone.Contacts.Contact;
 import Smartphone.Errors.BusinessException;
 import Smartphone.Errors.ErrorCodes;
@@ -19,19 +18,55 @@ public class JSONStorage implements Storable {
     @Override
     public ArrayList<Contact> read(File source) throws BusinessException {
 
-        //Avec gson
+
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Contact[] contacts;
-
         try (JsonReader reader = new JsonReader(new FileReader(source))){
             contacts = gson.fromJson(reader, Contact[].class);
-
         } catch (IOException e) {
             throw new BusinessException("read error", e, ErrorCodes.IO_ERROR);
         }
 
         return new ArrayList<>(Arrays.asList(contacts));
     }
+
+//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//        ArrayList<Contact> contacts = new ArrayList<>();
+//
+//        try (JsonReader reader = new JsonReader(new FileReader(source))){
+//            contacts.add(gson.fromJson(reader, Contact[].class));
+//        } catch (IOException e) {
+//            throw new BusinessException("read error", e, ErrorCodes.IO_ERROR);
+//        }
+//
+//
+//        return contacts;
+
+
+
+
+
+
+
+//        //Avec gson
+//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//        Contact[] contacts ;
+//
+//        try (JsonReader reader = new JsonReader(new FileReader(source))){
+//            contacts = gson.fromJson(reader, Contact[].class);
+//
+//            if(contacts.length!=0){
+//                return new ArrayList<>(Arrays.asList(contacts));
+//            }else{
+//                return new ArrayList<>();
+//            }
+//
+//        } catch (IOException e) {
+//            throw new BusinessException("read error", e, ErrorCodes.IO_ERROR);
+//        }
+
+
+
 
 //Méthode pour ecrire dans un ficher JSON
     @Override
@@ -50,7 +85,5 @@ public class JSONStorage implements Storable {
             throw new BusinessException("failed to save", e, ErrorCodes.IO_ERROR);
         }
     }
-
-
 }
 

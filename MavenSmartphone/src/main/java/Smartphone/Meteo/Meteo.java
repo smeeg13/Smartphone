@@ -45,7 +45,9 @@ public class Meteo extends JPanel {
         northPanel.setLayout(new BoxLayout(northPanel,BoxLayout.PAGE_AXIS));
 
         //searchPanel
-        buttonGo = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Search.png",30,30));
+
+
+        buttonGo = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Search.png")).getImage().getScaledInstance(30,30,Image.SCALE_SMOOTH)));
         buttonGo.setBorderPainted(false);
         buttonGo.setFocusPainted(false);
         buttonGo.setContentAreaFilled(false);
@@ -72,7 +74,7 @@ public class Meteo extends JPanel {
 
         mainPanel.add(northPanel, BorderLayout.NORTH);
 
-        panelMeteoInfo.setBackground(Color.cyan);
+//        panelMeteoInfo.setBackground(Color.cyan);
         panelMeteoInfo.setPreferredSize(new Dimension(380, 400));
 
 

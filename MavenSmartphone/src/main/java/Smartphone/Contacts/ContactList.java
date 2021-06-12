@@ -16,6 +16,7 @@ public class ContactList {
     String name;
     Label labErreurSaisie=new Label("");
 
+
     public ContactList(Storable storage){
         contacts = new ArrayList<>();
         this.storage = storage;
@@ -85,10 +86,11 @@ public class ContactList {
 
         ArrayList<String> contactNamesString = new ArrayList<>();
         //Transformer Contact[] en String[] et en prenant que les noms
+
         for (Contact contact : contactNames){
             contactNamesString.add(contact.getName());
-
         }
+
         contactNamesString.sort(Comparator.naturalOrder());
         return contactNamesString;
     }
