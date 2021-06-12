@@ -11,9 +11,13 @@ public class ClockTask extends TimerTask {
     private DateFormat formatDate = new SimpleDateFormat("HH:mm");
     private Calendar maintenant = Calendar.getInstance();
     private JLabel time = new JLabel(formatDate.format(maintenant.getTime()) + "   ");
-    private int wait = 1000;
 
 
+    /**
+     * This constructor initialize the timer
+     * delay is the second before starting
+     * period is the waiting for each running
+     */
     public ClockTask(){
 
         Timer timer = new Timer();
@@ -22,11 +26,18 @@ public class ClockTask extends TimerTask {
         run();
     }
 
+    /**
+     * This method get the time in the JLabel
+     * @return the JLabel with the current time
+     */
     public JLabel getTime(){
         return time;
     }
 
 
+    /**
+     * This method executed the code specified.
+     */
     @Override
     public void run() {
         Calendar maintenant = Calendar.getInstance();

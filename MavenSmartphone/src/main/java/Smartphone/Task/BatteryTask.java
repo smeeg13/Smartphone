@@ -1,5 +1,6 @@
 package Smartphone.Task;
 
+
 import Smartphone.Errors.BusinessException;
 import Smartphone.Errors.ErrorCodes;
 import Smartphone.ToolBox;
@@ -15,8 +16,14 @@ public class BatteryTask extends TimerTask {
 
     private JLabel batteryPercentage = new JLabel();
     private ToolBox toolBox = new ToolBox();
+    private final String commandBatteryOS = "pmset -g batt";
+    private final String commandBatteryWIN = "WMIC PATH Win32_Battery Get EstimatedChargeRemaining";
 
-    public BatteryTask() throws BusinessException{
+
+    /**
+     * This constructor initialize the BatteryTask and then run
+     */
+    public BatteryTask() {
         Timer timer;
         timer = new Timer();
         timer.schedule(this,1000,1000);
@@ -24,21 +31,34 @@ public class BatteryTask extends TimerTask {
         run();
     }
 
+
+    /**
+     * This method get the batteryPercentenage
+     * @return the JLabel
+     */
     public JLabel getBatteryPercentage(){
         return batteryPercentage;
     }
 
+    /**
+     * This method set the batterpPercentage
+     * @param batteryLevel
+     */
     public void setBatteryPercentage(String batteryLevel){
         batteryPercentage.setText(batteryLevel);
     }
 
-    public void run() {             //method run qui va excéctuer une commande sur un terminal
+    /**
+     * This method executed the code specified.
+     * It check if the laptop is a mac or a windows
+     */
+    public void run() {
         String batteryLevel = "";
         Process process = null;
 
         if(toolBox.isMac()){
             try {
-                process = Runtime.getRuntime().exec("pmset -g batt"); //commande pour vérifier niveau de batterie
+                process = Runtime.getRuntime().exec(commandBatteryOS);
             } catch (IOException ex) {
                 System.err.println(ex.getMessage());
             }
@@ -46,7 +66,7 @@ public class BatteryTask extends TimerTask {
 
         if(toolBox.isWindows()){
             try {
-                process = Runtime.getRuntime().exec("WMIC PATH Win32_Battery Get EstimatedChargeRemaining"); //commande pour vérifier niveau de batterie
+                process = Runtime.getRuntime().exec(commandBatteryWIN);
             } catch (IOException ex) {
                 System.err.println(ex.getMessage());
             }
@@ -59,10 +79,9 @@ public class BatteryTask extends TimerTask {
     }
 
     /**
-     *
-     * @param process
+     * @param process is the result of the terminal command to get the battery percentage
      * @return the whole String with the command line to get the battery Level
-     * @throws IOException
+     * @throws IOException which means it has been a problem with the reading of the process
      */
     public String getResultsBattery(Process process) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -80,6 +99,11 @@ public class BatteryTask extends TimerTask {
         return result;
     }
 
+    /**
+     * This method get the percentage of the battery from the String s
+     * @param s is the String with the result from the terminal command
+     * @return a String with the level of the battery percentage
+     */
     public String getPercentageBattery(String s) {
         String result = "";
 
@@ -91,7 +115,6 @@ public class BatteryTask extends TimerTask {
         }
 
         if(toolBox.isMac()){
-            s.indexOf("%");
             return result = s.substring(s.indexOf("%") - 3, s.indexOf("%") + 1);
         }
 

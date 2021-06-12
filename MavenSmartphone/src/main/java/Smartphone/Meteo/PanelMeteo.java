@@ -10,6 +10,15 @@ public class PanelMeteo extends JPanel{
     private JLabel jlSunrise;
     private JLabel jlSunset ;
 
+    /**
+     * This constructor build the JPanel for the weather display
+     * @param city location we want to show
+     * @param country country of the city
+     * @param sunrise time of the Sunrise
+     * @param sunset time of the Sunset
+     * @param tempMin temperature minimal of the day
+     * @param tempMax temperature maximal of the day
+     */
     public PanelMeteo(JLabel city, JLabel country, JLabel sunrise, JLabel sunset, JLabel tempMin, JLabel tempMax){
         setLayout(null);
         ToolBox tb = new ToolBox();

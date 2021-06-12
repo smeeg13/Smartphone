@@ -1,90 +1,99 @@
 package Smartphone.Meteo;
 
+import Smartphone.Errors.BusinessException;
 import Smartphone.ToolBox;
+import lombok.SneakyThrows;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Locale;
+
 
 public class Meteo extends JPanel {
-    private static final String apiKey = "282e58d6c4f45693bc47da6aa566cab5";
 
-    //variable pour la searchPanel
+    private static final String apiKey = "282e58d6c4f45693bc47da6aa566cab5";
+    private final int IMAGE_WIDTH = 30;
+    private final int IMAGE_HEIGHT = 30;
+
+
     private JButton buttonGo;
-    private CheckboxGroup cbg = new CheckboxGroup();
+    private CheckboxGroup cbg = new CheckboxGroup(); //object contening the future checkBox
     private JTextField rechecherBar = new JTextField(15);
-    private JPanel searchPanel = new JPanel();       //panel qui contient bouton, textfield, checkbox
+    private JPanel searchPanel = new JPanel();       //panel which contain searchPanel,CheckBox,Jtextfield
     private JPanel northPanel = new JPanel();
+
 
     private JPanel checkBoxPanel = new JPanel();
 
-    private JPanel meteoPanel = new JPanel();   //panel pour contenir les infos quotidienne
-    private JPanel panelMeteoInfo = new JPanel(); //panel pour
+
+    private JPanel meteoWeekPanel = new JPanel();   //panel for the weekly meteo info
+    private JPanel panelMeteoInfo = new JPanel(); //panel who contains the meteoPanel
+
 
     private JPanel mainPanel = new JPanel();
 
-    private JPanel jpCityInfo;      // panel pour les infos quotidienne
+
+    private JPanel jpCityInfo;      //panel pour les infos quotidienne
     private JPanel jpCityWeek;      //panel pour les infos de la semaine
 
-    private int idxLine = 1;
 
-    private ToolBox toolBox = new ToolBox();
-
-
+    /**
+     * This constructor provides the meteo display
+     */
     public Meteo() {
         mainPanel.setLayout(new BorderLayout());
-        meteoPanel.setLayout(null);
+        meteoWeekPanel.setLayout(null);
 
-        //
         ClickRecherche clicRecherche = new ClickRecherche(rechecherBar);
         rechecherBar.addFocusListener(clicRecherche);
 
-        //northPanel
-        northPanel.setLayout(new BoxLayout(northPanel,BoxLayout.PAGE_AXIS));
 
-        //searchPanel
-        buttonGo = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Search.png",30,30));
+        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.PAGE_AXIS));
+
+
+        ToolBox toolBox = new ToolBox();
+        buttonGo = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Search.png")).getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+        buttonGo.addActionListener(new ClicGo());
         buttonGo.setBorderPainted(false);
         buttonGo.setFocusPainted(false);
         buttonGo.setContentAreaFilled(false);
-        rechecherBar.setOpaque(false);        //modification du JTextField
+        rechecherBar.setOpaque(false);
         searchPanel.add(rechecherBar);
         searchPanel.add(buttonGo);
 
-        //ajout des JCheckbox au checkbox group
-        checkBoxPanel.add(new Checkbox("metric",cbg,true));
-        checkBoxPanel.add(new Checkbox("imperial",cbg,false));
-        checkBoxPanel.add(new Checkbox("standard",cbg,false));
+
+        checkBoxPanel.add(new Checkbox("metric", cbg, true));
+        checkBoxPanel.add(new Checkbox("imperial", cbg, false));
+        checkBoxPanel.add(new Checkbox("standard", cbg, false));
 
 
-        //ajout au northPanel
         northPanel.add(searchPanel);
         northPanel.add(checkBoxPanel);
 
-        //définition du format du JTextField de la recherche
+
         Font policeRecherche = new Font("Arial", Font.PLAIN, 18);
         rechecherBar.setFont(policeRecherche);
 
 
-
-
         mainPanel.add(northPanel, BorderLayout.NORTH);
 
-        panelMeteoInfo.setBackground(Color.cyan);
+
         panelMeteoInfo.setPreferredSize(new Dimension(380, 400));
 
 
-        buttonGo.addActionListener(new ClicGo());
         mainPanel.add(panelMeteoInfo, BorderLayout.CENTER);
-        mainPanel.add(meteoPanel, BorderLayout.SOUTH);
+        mainPanel.add(meteoWeekPanel, BorderLayout.SOUTH);
         add(mainPanel);
-
 
     }
 
-    public String checkBoxSelected(){
+    /**
+     * This method look which checkBox is selected
+     *
+     * @return a String with the information like (imperial,standard,metric)ß
+     */
+    public String checkBoxSelected() {
         Checkbox checkbox;
 
         checkbox = cbg.getSelectedCheckbox();
@@ -92,33 +101,45 @@ public class Meteo extends JPanel {
         return checkbox.getLabel();
     }
 
-    class ClicGo implements ActionListener {
+
+    /**
+     * This class is used for the JButton ClicGo to get information about
+     * the weekly and daily weather info
+     */
+    class ClicGo implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
             String unit = "";
             String lieu = "";
-            lieu = rechecherBar.getText();
             MeteoRessource mr = new MeteoRessource();
 
+            lieu = rechecherBar.getText();
             unit = checkBoxSelected();
 
-            jpCityInfo = mr.getSelectedMeteoInfo(lieu, Meteo.apiKey,unit);
+            try {
+                jpCityInfo = mr.getSelectedMeteoInfo(lieu, Meteo.apiKey, unit);
+            } catch (BusinessException businessException) {
+                businessException.printStackTrace();
+            }
 
-            jpCityWeek = mr.getSelectedForecastInfo(lieu, Meteo.apiKey);
-
+            try {
+                jpCityWeek = mr.getSelectedForecastInfo(lieu, Meteo.apiKey);
+            } catch (BusinessException businessException) {
+                businessException.printStackTrace();
+            }
 
             panelMeteoInfo.removeAll();
-            meteoPanel.removeAll();
-            mainPanel.revalidate();
-            mainPanel.repaint();
+            meteoWeekPanel.removeAll();
 
-            meteoPanel.setLayout(new BoxLayout(meteoPanel,BoxLayout.PAGE_AXIS));
+            meteoWeekPanel.setLayout(new BoxLayout(meteoWeekPanel, BoxLayout.PAGE_AXIS));
+
             panelMeteoInfo.add(jpCityInfo);
-            meteoPanel.add(jpCityWeek);
+            meteoWeekPanel.add(jpCityWeek);
             mainPanel.revalidate();
             mainPanel.repaint();
 
         }
+
     }
 }

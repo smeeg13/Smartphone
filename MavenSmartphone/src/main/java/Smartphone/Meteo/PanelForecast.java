@@ -4,6 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PanelForecast extends JPanel{
+
+    /**
+     * This constructor build the weekly forecast
+     * @param tempOfTheDay the temperature of the day
+     * @param dayOfTheWeek the day of the week
+     * @param iconDayWeather the icon for the day
+     */
     public PanelForecast(JLabel tempOfTheDay, JLabel dayOfTheWeek, JLabel iconDayWeather){
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         add(dayOfTheWeek);
