@@ -1,5 +1,5 @@
 package Smartphone.Gallery.Core;
-
+import Smartphone.*;
 import Smartphone.Errors.BusinessException;
 
 import java.io.File;
@@ -138,15 +138,6 @@ public class Album {
     public int numberOfElements(){
         return pictureList.size()+albumList.size();
     }
-
-    public int numberOfRows(){
-        int temp = numberOfElements();
-        int numberOfRows = temp/3;
-        if(temp%3!=0)
-            numberOfRows += 1;
-        return numberOfRows;
-    }
-
 
     public void print(){
         for (Album a:albumList) {
