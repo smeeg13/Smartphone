@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Contact {
     private String name = "";
-
     private String phoneNumber;
     private String indicatif;
     private String email;

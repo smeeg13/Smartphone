@@ -11,13 +11,12 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-
-
 public class PanelContact extends JPanel {
     private CardLayout ecran = new CardLayout();
     //Page base
@@ -146,28 +145,19 @@ public class PanelContact extends JPanel {
     File fileFavContactList = new File("MavenSmartphone/src/main/java/Smartphone/Storage/FavContactList.json");
 
     public PanelContact() {
-/*
-setBackground(Color.RED);
-mainPanel.setBackground(Color.yellow);
-contactPage.setBackground(Color.BLACK);
- */
         try {
             contactList.readFromFile(fileContactList);
             favContactList.readFromFile(fileFavContactList);
         } catch (BusinessException e) {
             e.printStackTrace();
         }
-
         mainPanel.setPreferredSize(new Dimension(400, 650));
         mainPanel.setLayout(ecran);
-
         mainPanel.add(PcontactPage, "contactPage");
         mainPanel.add(PContactAdd, "contactAdd");
         mainPanel.add(contactSearch, "contactSearch");
-        //Panel contactSelected s'affiche quand un contact de la liste est sélectionné
         mainPanel.add(contactSelected, "contactselected");
         mainPanel.add(contactEdit,"contactedit");
-        // mainPanel.add(contactShow,"contactShow");
 
 //PANEL CONTACT PAGE
         //Mise en page panel haut
@@ -185,23 +175,19 @@ contactPage.setBackground(Color.BLACK);
         buttonSearch.setFocusPainted(false);
         buttonSearch.setContentAreaFilled(false);
         buttonSearch.addActionListener(new Actions());
-
         PContactPageHaut.add(labContactList);
         PContactPageHaut.add(buttonAdd);
         PContactPageHaut.add(buttonSearch);
-
         //Mise en page panel base
         PcontactPage.add(PContactPageBase);
         PContactPageBase.setPreferredSize(new Dimension(400, 498));
-//PContactPageBase.setBackground(Color.yellow);
 
         //Panel LISTE CONTACT FAVORI
         PContactPageBase.add(panelfavcont);
         panelfavcont.setPreferredSize(new Dimension(390,108));
         panelfavcont.setLayout(new BoxLayout (panelfavcont, BoxLayout.Y_AXIS));
 
-        //Ajouter liste de contact fav a partir de fichier JSON
-        try {
+        try { //Ajouter liste de contact fav a partir de fichier JSON
             JListFavContact = new JList(contactList.getNameArrayFromJSON(fileFavContactList).toArray());
         } catch (BusinessException e) {
             e.printStackTrace();
@@ -210,9 +196,9 @@ contactPage.setBackground(Color.BLACK);
         JListFavContact.setVisibleRowCount(3);
         JListFavContact.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JListFavContact.addListSelectionListener(new ListSelectionListener());
-
         JScrollPane jScrollPaneFav = new JScrollPane(JListFavContact);
         JLabel ListeFav = new JLabel("Favorite contact ");
+        ListeFav.setSize(400,20);
         panelfavcont.add(ListeFav);
         panelfavcont.add(jScrollPaneFav);
 
@@ -220,9 +206,7 @@ contactPage.setBackground(Color.BLACK);
         PContactPageBase.add(panelcont);
         panelcont.setPreferredSize(new Dimension(390,350));
         panelcont.setLayout(new BoxLayout (panelcont, BoxLayout.Y_AXIS));
-
-        //Ajouter liste de contact a partir de fichier JSON
-        try {
+        try { //Ajouter liste de contact a partir de fichier JSON
             JListContacts = new JList(contactList.getNameArrayFromJSON(fileContactList).toArray());
         } catch (BusinessException e) {
             e.printStackTrace();
@@ -231,9 +215,9 @@ contactPage.setBackground(Color.BLACK);
         JListContacts.setVisibleRowCount(10);
         JListContacts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JListContacts.addListSelectionListener(new ListSelectionListener());
-
         JScrollPane jScrollPane = new JScrollPane(JListContacts);
         JLabel ListeCont = new JLabel("Contacts ");
+        ListeCont.setSize(400,20);
         panelcont.add(ListeCont);
         panelcont.add(jScrollPane);
 
@@ -243,7 +227,6 @@ contactPage.setBackground(Color.BLACK);
         PanelSelectCentre.setPreferredSize(new Dimension(350, 518));
         // panel avec boutton pour photo du contact
         PanelSelectCentre.add(panelPictureContSelec);
-
         buttonPictureContSelec = new JButton("", appareilPhotoContSelec);
         buttonPictureContSelec.setSize(55, 55);
         buttonPictureContSelec.setBorderPainted(false);
@@ -278,14 +261,12 @@ contactPage.setBackground(Color.BLACK);
         adresseTxtContSelec.setOpaque(false);
         panelInfosContSelec.add(adresseTxtContSelec);
 
-        //Ajouter contaxt au favori
         panelInfosContSelec.add(favContactLabContSelec);
         favCheckBoxContSelec.setFocusable(false);
         favCheckBoxContSelec.setEnabled(false); //Ne peut pas être modifier à ce moment-là
         panelInfosContSelec.add(favCheckBoxContSelec);
 
         //Mise en page Panel du bas
-        // avec boutton ok ou annuler
         PanelSelectCentre.add(panelOkContSelec, BorderLayout.SOUTH);
         panelOkContSelec.setPreferredSize(new Dimension(400, 35));
         panelOkContSelec.setLayout(new GridLayout(1, 2));
@@ -301,17 +282,13 @@ contactPage.setBackground(Color.BLACK);
         buttonEdit.setFocusPainted(false);
         buttonEdit.setContentAreaFilled(false);
         buttonEdit.addActionListener(new Actions());
-
         panelOkContSelec.add(buttonCancelContSelec, BorderLayout.EAST);
         panelOkContSelec.add(buttonEdit, BorderLayout.WEST);
 
 //PANEL CONTACT EDIT
         contactEdit.add(PanelEditCentre, BorderLayout.EAST);
-
         //Mise en page panel centre
         PanelEditCentre.setPreferredSize(new Dimension(350, 518));
-
-        // panel avec boutton pour photo du contact
         PanelEditCentre.add(panelPictureEdit);
 
         buttonPictureEdit = new JButton("", appareilPhoto3);
@@ -320,7 +297,6 @@ contactPage.setBackground(Color.BLACK);
         buttonPictureEdit.setFocusPainted(false);
         buttonPictureEdit.setContentAreaFilled(false);
         buttonPictureEdit.addActionListener(new Actions());
-
         panelPictureEdit.add(buttonPictureEdit);
 
         //panel avec infos à saisir
@@ -348,7 +324,6 @@ contactPage.setBackground(Color.BLACK);
         adresseTxtEdit.setOpaque(false);
         panelInfosEdit.add(adresseTxtEdit);
 
-        //Ajouter contaxt au favori
         panelInfosEdit.add(favContactLabEdit);
         favCheckBoxEdit.setFocusable(false);
         panelInfosEdit.add(favCheckBoxEdit);
@@ -358,11 +333,9 @@ contactPage.setBackground(Color.BLACK);
         buttonDelete.setFocusPainted(false);
         buttonDelete.setContentAreaFilled(false);
         buttonDelete.addActionListener(new Actions());
-
         panelDeleteEdit.add(buttonDelete);
 
         //Mise en page Panel du bas
-        // avec boutton ok ou annuler
         PanelEditCentre.add(panelOkEdit, BorderLayout.SOUTH);
         panelOkEdit.setPreferredSize(new Dimension(400, 35));
         panelOkEdit.setLayout(new GridLayout(1, 2));
@@ -377,7 +350,6 @@ contactPage.setBackground(Color.BLACK);
         buttonSaveChanges.setFocusPainted(false);
         buttonSaveChanges.setContentAreaFilled(false);
         buttonSaveChanges.addActionListener(new Actions());
-
         panelOkEdit.add(buttonCancelEdit, BorderLayout.EAST);
         panelOkEdit.add(buttonSaveChanges, BorderLayout.WEST);
 
@@ -388,13 +360,9 @@ contactPage.setBackground(Color.BLACK);
         PContactAddHaut.setPreferredSize(new Dimension(400, 30));
         PContactAddHaut.setLayout(new FlowLayout(FlowLayout.LEFT));
         PContactAddHaut.add(labAddPanel);
-
         //Mise en page panel centre
         PContactAddCentre.setPreferredSize(new Dimension(350, 498));
-
-        // panel avec boutton pour photo du contact
         PContactAddCentre.add(PContactAddPicture);
-
         buttonPicturePContactAdd = new JButton("", appareilPhoto);
         buttonPicturePContactAdd.setSize(55, 55);
         buttonPicturePContactAdd.setBorderPainted(false);
@@ -440,9 +408,7 @@ contactPage.setBackground(Color.BLACK);
         labErreurSaisie.setVisible(true);
         panelErreur.add(labErreurSaisie);
 
-
         //Mise en page Panel du bas
-        // avec boutton ok ou annuler
         PContactAddCentre.add(panelOk,BorderLayout.SOUTH);
         panelOk.setPreferredSize(new Dimension(400, 35));
         panelOk.setLayout(new GridLayout(1, 2));
@@ -463,7 +429,6 @@ contactPage.setBackground(Color.BLACK);
         contactSearch.add(PanelBack);
         contactSearch.add(PanelCentre);
         contactSearch.add(PanelBas);
-
         //Mise en page panel Back
         PanelBack.setPreferredSize(new Dimension(400, 40));
         PanelBack.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -545,7 +510,6 @@ contactPage.setBackground(Color.BLACK);
     class Actions implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-
             if (e.getSource() == buttonAdd) {
                 ecran.show(mainPanel, "contactAdd");
             }
@@ -611,6 +575,7 @@ contactPage.setBackground(Color.BLACK);
                     try {
                         contactList.addToContactList(contact);
                         contactList.saveToFile(fileContactList);
+                        favContactList.saveToFile(fileFavContactList);
                         JListContacts.removeAll();
                         JListContacts.setListData(contactList.getNameArrayFromJSON(fileContactList).toArray());
                         JListFavContact.removeAll();
@@ -765,7 +730,7 @@ contactPage.setBackground(Color.BLACK);
                         }
                     }
             } while (contactOK =false);
-        }
+            }
             //Recherche d'un contact
             if (e.getSource() == buttonGoSearch) {
                 String research = "";
@@ -777,7 +742,6 @@ contactPage.setBackground(Color.BLACK);
                         buttonContactfind.setEnabled(true);
                         buttonContactfind.setBorder(BorderFactory.createTitledBorder("Contact Find"));
                     } else {
-
                         //Msg erreur car rien trouvé
                         System.err.println("Contact not found");
                         buttonContactfind.setText("Contact not found");
@@ -796,7 +760,6 @@ contactPage.setBackground(Color.BLACK);
                 try {
                         selectedContact = buttonContactfind.getText();
                         contactSelec = contactList.getContactByName(selectedContact, fileContactList);
-
                     // Si le contact n'existe pas, ne rien mettre à jour
                     if (contactSelec == null) return;
                     //Ajouter les infos du contact sélectionné à la page d'info du contact
@@ -824,7 +787,6 @@ contactPage.setBackground(Color.BLACK);
             }
         }
     }
-
 }
 
 

@@ -1,23 +1,5 @@
 [
   {
-    "name": "Mégane",
-    "phoneNumber": "0791223423",
-    "indicatif": "+41",
-    "email": "megane.solliard@students.hevs.ch",
-    "address": "Savièse",
-    "addphoto": false,
-    "favContact": true
-  },
-  {
-    "name": "Gaetan Mottet",
-    "phoneNumber": "0786143522",
-    "indicatif": "+41",
-    "email": "gaetan.mottet@students.hevs.ch",
-    "address": "Savièse",
-    "addphoto": false,
-    "favContact": false
-  },
-  {
     "name": "Thomas",
     "phoneNumber": "0792418318",
     "indicatif": "+41",
@@ -34,5 +16,185 @@
     "address": "Martigny",
     "addphoto": false,
     "favContact": true
+  },
+  {
+    "name": "Gaetan",
+    "phoneNumber": "0786143522",
+    "indicatif": "+41",
+    "email": "gaetan.mottet@students.hevs.ch",
+    "address": "Savièse",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Abdullah",
+    "phoneNumber": "0796153832",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Mégane",
+    "phoneNumber": "0791223423",
+    "indicatif": "+41",
+    "email": "megane.solliard@students.hevs.ch",
+    "address": "Savièse",
+    "addphoto": false,
+    "favContact": true
+  },
+  {
+    "name": "Daniel",
+    "phoneNumber": "0762680762",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Donovan",
+    "phoneNumber": "0795173641",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Dorianne",
+    "phoneNumber": "0798945409",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Emilie",
+    "phoneNumber": "0788170812",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Igor",
+    "phoneNumber": "0794890671",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Nicolas",
+    "phoneNumber": "0799104361",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Simon",
+    "phoneNumber": "0765738700",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Daniel Pinto",
+    "phoneNumber": "0766839130",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Eric",
+    "phoneNumber": "0774431341",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Massimo",
+    "phoneNumber": "0786092064",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Hugo",
+    "phoneNumber": "0786892946",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Ramy",
+    "phoneNumber": "0788104297",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Theo",
+    "phoneNumber": "0791787055",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Benjamin",
+    "phoneNumber": "0791977537",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Fabio",
+    "phoneNumber": "0788754885",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Cristiana",
+    "phoneNumber": "0797868443",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
+  },
+  {
+    "name": "Tony",
+    "phoneNumber": "0798996700",
+    "indicatif": "+41",
+    "email": "",
+    "address": "",
+    "addphoto": false,
+    "favContact": false
   }
 ]
