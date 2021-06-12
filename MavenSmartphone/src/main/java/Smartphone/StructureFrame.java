@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public  class StructureFrame extends JFrame {
 
@@ -49,7 +50,6 @@ public  class StructureFrame extends JFrame {
     private JButton buttonMeteo = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Meteo.png",48,48));
     private JButton buttonMenu = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Menu.png",20,20));
     private JButton buttonCalculette = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Calculette.png",48,48));
-    private JPanel panelMenu = new JPanel();
     private JPanel panelBoutons =new JPanel();
     private JPanel panelNoms = new JPanel();
     private JPanel panelBoutons2 =new JPanel();
@@ -70,6 +70,17 @@ public  class StructureFrame extends JFrame {
     private JLabel time;
 
 
+
+
+    private JPanel PageVerouillage = new PageVerouillage();
+    private ClockTask clockTaskVerouillage = new ClockTask();
+    private JLabel timeVerouillage;
+    private JLabel labelDate;
+    DateFormat dateFormat = new SimpleDateFormat("EEE dd MMM yyyy");
+    Date date = new Date();
+
+    private JButton buttonDeverouiller ;
+    private JButton buttonVerouiller;
 
 
     public StructureFrame() throws BusinessException {
@@ -97,6 +108,13 @@ public  class StructureFrame extends JFrame {
         bandeBas.add(buttonMenu);
         bandeBas.setPreferredSize(tailleBande);
         bandeBas.setFont(bandeBas.getFont().deriveFont(Font.BOLD));
+//bouton pour vérouiller
+buttonVerouiller = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Verrou.png",25,25));
+buttonVerouiller.setBorderPainted(false);
+buttonVerouiller.setFocusPainted(false);
+buttonVerouiller.setContentAreaFilled(false);
+buttonVerouiller.addActionListener(new ClicVerrouillage());
+bandeHaut.add(buttonVerouiller);
 
         //ajout dans le Jpanel du haut le pourcentage de la batterie
         batteryLevel = batteryTask.getBatteryPercentage();
@@ -106,7 +124,7 @@ public  class StructureFrame extends JFrame {
 
 
         bandeHaut.setBackground(Color.BLACK);
-        bandeHaut.add(time);
+        bandeHaut.add(time,BorderLayout.WEST);
 
 
         panelCont.setLayout(collectionEcrans);
@@ -115,6 +133,7 @@ public  class StructureFrame extends JFrame {
         panelCont.add(galerie, "galery");
         panelCont.add(meteo, "meteo");
         panelCont.add(calculette, "calculette");
+        panelCont.add(PageVerouillage, "EcranVerrouillage");
 
         //ajout des boutons sur la page menu
 
@@ -189,13 +208,34 @@ public  class StructureFrame extends JFrame {
         buttonCalculette.addActionListener(new ClicCalculette());
 
 
-        collectionEcrans.show(panelCont,"menu");
+    //    collectionEcrans.show(panelCont,"menu");
+        collectionEcrans.show(panelCont,"EcranVerrouillage");
 
 
 
         add(bandeHaut,BorderLayout.NORTH);
         add(bandeBas,BorderLayout.SOUTH);
         add(panelCont,BorderLayout.CENTER);
+
+//Page Verouillage
+        PageVerouillage.setLayout(null);
+        Font fontTime = new Font("Tahoma", Font.BOLD,38);
+        Font fontDate = new Font("Tahoma", Font.BOLD,15);
+        timeVerouillage = clockTaskVerouillage.getTime();
+        timeVerouillage.setFont(fontTime);
+        timeVerouillage.setBounds(140,100, 120,60);
+        PageVerouillage.add(timeVerouillage);
+        labelDate = new JLabel(dateFormat.format(date));
+        labelDate.setFont(fontDate);
+        labelDate.setBounds(127,160,140,40);
+        PageVerouillage.add(labelDate);
+        buttonDeverouiller = new JButton("Clic here to unlock");
+        buttonDeverouiller.setBorderPainted(true);
+        buttonDeverouiller.setFocusPainted(false);
+        buttonDeverouiller.setContentAreaFilled(false);
+        buttonDeverouiller.setBounds(3, 440, 380,100);
+        buttonDeverouiller.addActionListener(new ClicDeverouillage());
+        PageVerouillage.add(buttonDeverouiller);
 
     }
 
@@ -243,6 +283,20 @@ public  class StructureFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             collectionEcrans.show(panelCont, "calculette");
+        }
+    }
+    class ClicVerrouillage implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            collectionEcrans.show(panelCont, "EcranVerrouillage");
+        }
+    }
+    class ClicDeverouillage implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            collectionEcrans.show(panelCont, "menu");
         }
     }
 
