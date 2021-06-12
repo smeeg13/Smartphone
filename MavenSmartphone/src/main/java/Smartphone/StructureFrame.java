@@ -45,11 +45,17 @@ public  class StructureFrame extends JFrame {
 
     private ToolBox toolBox = new ToolBox();
 
-    private JButton buttonContacts = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Contact2.png",55,55));
-    private JButton buttonGalery = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Galerie.png",48,48));
-    private JButton buttonMeteo = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Meteo.png",48,48));
-    private JButton buttonMenu = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Menu.png",20,20));
-    private JButton buttonCalculette = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Calculette.png",48,48));
+    private JButton buttonContacts = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_Contact2.png")).getImage().getScaledInstance(55,55,Image.SCALE_SMOOTH)));
+    private JButton buttonGalery = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_Galerie.png")).getImage().getScaledInstance(48,48,Image.SCALE_SMOOTH)));
+    private JButton buttonMeteo = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Meteo.png")).getImage().getScaledInstance(48,48,Image.SCALE_SMOOTH)));
+    private JButton buttonMenu = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_Menu.png")).getImage().getScaledInstance(20,20,Image.SCALE_SMOOTH)));
+    private JButton buttonCalculette = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Calculette.png")).getImage().getScaledInstance(48,48,Image.SCALE_SMOOTH)));
+
+   // private JButton buttonContacts = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Contact2.png",55,55));
+   // private JButton buttonGalery = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Galerie.png",48,48));
+   // private JButton buttonMeteo = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Meteo.png",48,48));
+   // private JButton buttonMenu = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Menu.png",20,20));
+   // private JButton buttonCalculette = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Calculette.png",48,48));
     private JPanel panelBoutons =new JPanel();
     private JPanel panelNoms = new JPanel();
     private JPanel panelBoutons2 =new JPanel();
