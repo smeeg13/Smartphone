@@ -8,12 +8,26 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class provides the code for an album in a gallery.
+ *
+ * @author Nathan Dély
+ * @version
+ */
+
 public class Album {
 
     private List<Picture> pictureList;
     private List<Album> albumList;
     private Path path;
     private Album parent;
+
+    /**
+     * This constructor create or detect an album.
+     * @param path – a String containing the album path in the computer
+     * @param parent – the parent Album
+     * @throws BusinessException
+     */
 
     public Album(Path path,Album parent) throws BusinessException {
         File file = path.toFile();
@@ -30,6 +44,13 @@ public class Album {
         }
 
     }
+
+    /**
+     *This method provides a picture List
+     *
+     * @param path – a String containing the album path in the computer
+     * @return – a List<Picture> containing all the pictures in this Album
+     */
 
     private static List<Picture> discoverImages(Path path){
         List<Picture> pictureList = new ArrayList<>();
@@ -135,7 +156,7 @@ public class Album {
         file.renameTo(dest);
     }
 
-    public int numberOfElements(){
+    public int elementsNumber(){
         return pictureList.size()+albumList.size();
     }
 

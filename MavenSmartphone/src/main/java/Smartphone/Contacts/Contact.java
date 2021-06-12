@@ -1,18 +1,22 @@
 package Smartphone.Contacts;
 
+import Smartphone.Errors.BusinessException;
+import Smartphone.Errors.ErrorCodes;
+
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Contact {
+
     private String name = "";
     private String phoneNumber;
     private String indicatif;
     private String email;
     private String address;
+    private String pathForImage;
 
     //Par défaut il n'y a pas de photo
     private ImageIcon photo;
-    private boolean addphoto=false;
 
     //Fav contact par défaut false
     private boolean favContact = false;
@@ -20,19 +24,35 @@ public class Contact {
     private static AtomicInteger nextId = new AtomicInteger(0);
 
     //Constructeur par défaut
-    public Contact(){}
+    public Contact(String path){}
 
     public Contact(String name, String indicatif, String phoneNumber,
-                   String email, String address, boolean addphoto,boolean favContact) {
+                   String email, String address, String pathForImage,boolean favContact) {
         setName(name);
         this.phoneNumber = phoneNumber;
         this.indicatif = indicatif;
         this.email = email;
         this.address = address;
         nextId.getAndIncrement();
-
-        this.addphoto = addphoto;
         this.favContact = favContact;
+        this.pathForImage=pathForImage;
+    }
+
+
+    public void setPathForImage(String pathForImage) {
+        this.pathForImage = pathForImage;
+    }
+
+    public String getPathForImage() {
+        return pathForImage;
+    }
+
+    public ImageIcon getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(ImageIcon photo) {
+        this.photo = photo;
     }
 
     public String getName() {
@@ -50,15 +70,6 @@ public class Contact {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getIndicatif() {
-        return indicatif;
-    }
-
-    public void setIndicatif(String indicatif) {
-        this.indicatif = indicatif;
     }
 
     public String getEmail() {
@@ -77,28 +88,11 @@ public class Contact {
         this.address = address;
     }
 
-    public ImageIcon getPhoto() {
-        return photo;
+    public String getIndicatif() {
+        return indicatif;
     }
 
-    public void setPhoto(ImageIcon photo) {
-        this.photo = photo;
-    }
-
-    public boolean isAddphoto() {
-        return addphoto;
-    }
-
-    public void setAddphoto(boolean addphoto) {
-        this.addphoto = addphoto;
-    }
-
-    public boolean isFavContact() {
-        return favContact;
-    }
-
-    public void setFavContact(boolean favContact) {
-        this.favContact = favContact;
+    public void setIndicatif(String indicatif) {
     }
 
     public static AtomicInteger getNextId() {
@@ -109,9 +103,17 @@ public class Contact {
         Contact.nextId = nextId;
     }
 
+    public boolean isFavContact() {
+        return favContact;
+    }
+
+    public void setFavContact(boolean favContact) {
+        this.favContact = favContact;
+    }
+
     @Override
     public String toString() {
-        return name + ", " + indicatif + "  " + phoneNumber
+        return name + ", +" + indicatif + "  " + phoneNumber
                 + ", email "+ email+", addresse "+address;
     }
 
