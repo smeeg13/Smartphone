@@ -7,7 +7,7 @@ public class ToolBox {
 
     private String OS = System.getProperty("os.name").toLowerCase();
 
-    public ImageIcon addImageIconJButton(String path, int width, int height) {
+    public ImageIcon addImageIconJButton(String path,int width, int height){
         ImageIcon imageSearch;
         imageSearch = new ImageIcon(path);
         Image imagetest = imageSearch.getImage();
@@ -23,38 +23,24 @@ public class ToolBox {
         return OS.contains("mac");
     }
 
-//    public boolean isUnix() {
-//        return (OS.contains("nix") || OS.contains("nux") || OS.contains("aix"));
-//    }
-
-//    public boolean isSolaris() {
-//        return OS.contains("sunos");
-//    }
-
-    public boolean isReachableByPing(String host) {
-        try {
-            String cmd = "";
-            if (isWindows()) {
-                // For Windows
-                cmd = "ping -n 1 " + host;
-            }
-            if (isMac()) {
-                cmd = "ping -c 1 " + host;
-            }
-
-            Process pingProcess = Runtime.getRuntime().exec(cmd);
-            pingProcess.waitFor();
-
-            if (pingProcess.exitValue() == 0) {
-                return true;
-            } else {
-                return false;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public boolean isUnix() {
+        return (OS.contains("nix") || OS.contains("nux") || OS.contains("aix"));
     }
 
+    public boolean isSolaris() {
+        return OS.contains("sunos");
+    }
+    public String getOS(){
+        if (isWindows()) {
+            return "win";
+        } else if (isMac()) {
+            return "osx";
+        } else if (isUnix()) {
+            return "uni";
+        } else if (isSolaris()) {
+            return "sol";
+        } else {
+            return "err";
+        }
+    }
 }

@@ -13,13 +13,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public  class StructureFrame extends JFrame {
+public class StructureFrame extends JFrame {
 
     //création JPanel pour le borderlayout
     private JPanel bandeHaut = new JPanel();
@@ -45,15 +44,11 @@ public  class StructureFrame extends JFrame {
 
     private ToolBox toolBox = new ToolBox();
 
-//    ClassLoader classLoader = getClass().getClassLoader();
-
-    private JButton buttonContacts = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_Contact2.png")).getImage().getScaledInstance(55,55,Image.SCALE_SMOOTH)));
-    private JButton buttonGalery = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_Galerie.png")).getImage().getScaledInstance(48,48,Image.SCALE_SMOOTH)));
-    private JButton buttonMeteo = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Meteo.png")).getImage().getScaledInstance(48,48,Image.SCALE_SMOOTH)));
-    private JButton buttonMenu = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_Menu.png")).getImage().getScaledInstance(20,20,Image.SCALE_SMOOTH)));
-    private JButton buttonCalculette = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Calculette.png")).getImage().getScaledInstance(48,48,Image.SCALE_SMOOTH)));
-
-
+    private JButton buttonContacts = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Contact2.png",55,55));
+    private JButton buttonGalery = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Galerie.png",40,40));
+    private JButton buttonMeteo = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Meteo.png",40,40));
+    private JButton buttonMenu = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Menu.png",20,20));
+    private JButton buttonCalculette = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Calculette.png",43,43));
     private JPanel panelMenu = new JPanel();
     private JPanel panelBoutons =new JPanel();
     private JPanel panelNoms = new JPanel();
@@ -78,7 +73,6 @@ public  class StructureFrame extends JFrame {
 
 
     public StructureFrame() throws BusinessException {
-
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         Dimension tailleBandeHaut = new Dimension(500, 30);
@@ -107,8 +101,7 @@ public  class StructureFrame extends JFrame {
         //ajout dans le Jpanel du haut le pourcentage de la batterie
         batteryLevel = batteryTask.getBatteryPercentage();
         batteryLevel.setForeground(Color.WHITE);
-        bandeHaut.add(batteryLevel,BorderLayout.EAST);
-
+        bandeHaut.add(batteryLevel, BorderLayout.EAST);
 
 
         bandeHaut.setBackground(Color.BLACK);
@@ -117,7 +110,7 @@ public  class StructureFrame extends JFrame {
 
         panelCont.setLayout(collectionEcrans);
         panelCont.add(menu, "menu");
-        panelCont.add(contacts,"contacts");
+        panelCont.add(contacts, "contacts");
         panelCont.add(galerie, "galery");
         panelCont.add(meteo, "meteo");
         panelCont.add(calculette, "calculette");
@@ -135,9 +128,9 @@ public  class StructureFrame extends JFrame {
         panelNoms.setPreferredSize(new Dimension(500,50));
 
         panelBoutons2.setLayout(new FlowLayout(FlowLayout.CENTER,40,3));
-        panelBoutons2.setPreferredSize(new Dimension(500,70));
+        panelBoutons2.setPreferredSize(new Dimension(500,50));
         panelNoms2.setLayout(new FlowLayout(FlowLayout.CENTER,74,3));
-        panelNoms2.setPreferredSize(new Dimension(500,70));
+        panelNoms2.setPreferredSize(new Dimension(500,50));
 
         buttonContacts.setBorderPainted(false);
         buttonContacts.setFocusPainted(false);
@@ -195,17 +188,18 @@ public  class StructureFrame extends JFrame {
         buttonCalculette.addActionListener(new ClicCalculette());
 
 
-        collectionEcrans.show(panelCont,"menu");
+        collectionEcrans.show(panelCont, "menu");
 
 
 
-        add(bandeHaut,BorderLayout.NORTH);
-        add(bandeBas,BorderLayout.SOUTH);
-        add(panelCont,BorderLayout.CENTER);
+        add(bandeHaut, BorderLayout.NORTH);
+        add(bandeBas, BorderLayout.SOUTH);
+        add(panelCont, BorderLayout.CENTER);
 
     }
 
-    class ClicGalery implements ActionListener{
+
+    class ClicGalery implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -213,16 +207,15 @@ public  class StructureFrame extends JFrame {
         }
     }
 
-    class ClicMenu implements ActionListener{
+    class ClicMenu implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println(ClassLoader.getSystemResource("Icone_Contact2.png").getPath());
             collectionEcrans.show(panelCont, "menu");
         }
     }
 
-    class ClicContacts implements ActionListener{
+    class ClicContacts implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -230,22 +223,47 @@ public  class StructureFrame extends JFrame {
         }
     }
 
-    class ClicMeteo implements ActionListener{
+    class ClicMeteo implements ActionListener {
 
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
-            if(toolBox.isReachableByPing("api.openweathermap.org")){
+            if (isReachableByPing("api.openweathermap.org")) {
                 collectionEcrans.show(panelCont, "meteo");
-            }else{
-                JOptionPane.showMessageDialog(menu,"Ping to host failed","Internet conection",JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(menu, "Ping to host failed", "Internet connection", JOptionPane.ERROR_MESSAGE);
             }
+
         }
 
+        public boolean isReachableByPing(String host) {
 
+            try {
+                String cmd = "";
+                if (toolBox.isWindows()) {
+                    cmd = "ping -n 1 " + host;
+                }
+
+                if (toolBox.isMac()) {
+                    cmd = "ping -c 1 " + host;
+                }
+
+                Process process = Runtime.getRuntime().exec(cmd);
+                process.waitFor();
+
+                if (process.exitValue() == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+        }
     }
-
     class ClicCalculette implements ActionListener{
 
         @Override
@@ -253,5 +271,7 @@ public  class StructureFrame extends JFrame {
             collectionEcrans.show(panelCont, "calculette");
         }
     }
+
+
 
 }
