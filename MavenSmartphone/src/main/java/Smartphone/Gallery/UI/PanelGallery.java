@@ -14,12 +14,19 @@ import Smartphone.Contacts.Contact;
 import Smartphone.Errors.BusinessException;
 import Smartphone.Gallery.Core.*;
 
+/**
+ * This class provides graphical implementations for a gallery using {@link javax.swing}  and {@link java.awt}.
+ *
+ * It use all sub-classes in {@link Smartphone.Gallery.Core}.
+ * @author Nathan Dély
+ * @version
+ */
 
 public class PanelGallery extends JPanel {
 
-    public final int IMAGE_SIZE = 350;
+    private final int IMAGE_SIZE = 350;
     private final int IMAGE_SIZE_ON_BUTTON = 100;
-    private final int IMAGE_SIZE_ON_APPBAR = 25;
+    private final int IMAGE_SIZE_IN_APPBAR = 25;
     private final int PICTURE_NAME_LENGTH = 15;
     private final int ALBUM_NAME_LENGTH = 10;
     private final int TEXTFIELD_SIZE = 10;
@@ -43,6 +50,12 @@ public class PanelGallery extends JPanel {
     private JPanel addPanel = new JPanel();
     private JPanel allPicturePanel = new JPanel();
 
+    /**
+     * This constructor provides the gallery display.
+     * @throws BusinessException – if the gallery isn't generate by the {@code file.mkdir() in the Gallery class.}
+     *
+     */
+
     public PanelGallery() throws BusinessException {
         //création d'une galerie vierge
         currentAlbum =new Gallery();
@@ -58,27 +71,50 @@ public class PanelGallery extends JPanel {
         showAlbum(currentAlbum);
 
         add(mainPanel);
-
     }
+
+    /**
+     * This constructor set the gallery display on another class (by a panel).
+     * @param panel – the JPanel to add the gallery JPanel
+     * @param cardLayout – the CardLayout needed for {@code showAllPicture()}
+     * @param picture – the Picture needed for {@code showAllPicture()}
+     * @throws BusinessException – if the gallery isn't generate by the {@code file.mkdir() in the Gallery class.}
+     */
     //constructeur pour l'ajout d'une photo au contact
-    public PanelGallery(JPanel panel, CardLayout cardLayout, Contact contact) throws BusinessException{
+    public PanelGallery(JPanel panel, CardLayout cardLayout, Picture picture) throws BusinessException{
         currentAlbum =new Gallery();
 
         panel.add(allPicturePanel,"galleryPanel");
-        showAllPicture(currentAlbum,panel,cardLayout,contact);
+        showAllPicture(currentAlbum,panel,cardLayout,picture);
     }
 
-    public void showAllPicture(Album a, JPanel panel, CardLayout cardLayout,Contact contact){
+    /**
+     * This method shows all the pictures on the display.
+     * @param a – the current Album (current location).
+     * @param panel – the JPanel needed for {@code showAllPicture()}.
+     * @param cardLayout – the CardLayout needed for {@code showAllPicture()}.
+     * @param picture – the Picture needed for {@code showAllPicture()}.
+     */
+
+    public void showAllPicture(Album a, JPanel panel, CardLayout cardLayout,Picture picture){
         allPicturePanel.add(createAppBarAllPicture(a,panel,cardLayout),BorderLayout.NORTH);
-        allPicturePanel.add(fillGridAllPicture(a,panel, cardLayout,contact));
+        allPicturePanel.add(fillGridAllPicture(a,panel, cardLayout,picture));
     }
+
+    /**
+     * This method create an app bar to choose a picture.
+     * @param a – the current Album (current location)
+     * @param panel – the JPanel to return in the other class using the gallery if they press on back
+     * @param cardLayout – the CardLayout to return in the other class using the gallery if they press on back
+     * @return – the JPanel containing the appbar
+     */
 
     public JPanel createAppBarAllPicture(Album a, JPanel panel, CardLayout cardLayout){
         JPanel appBarAllPicture = new JPanel();
         appBarAllPicture.setPreferredSize(new Dimension(WIDTH_OF_SCREEN,HEIGHT_OF_APPBAR));
         appBarAllPicture.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        JButton backToContact = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Back.png",IMAGE_SIZE_ON_APPBAR,IMAGE_SIZE_ON_APPBAR));
+        JButton backToContact = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Fleche_Back.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
         backToContact = setTheIcon(backToContact);
         backToContact.addActionListener(e -> cardLayout.show(panel, "contactedit"));
 
@@ -90,18 +126,28 @@ public class PanelGallery extends JPanel {
         return appBarAllPicture;
     }
 
-    public JScrollPane fillGridAllPicture(Album a,JPanel mPanel, CardLayout cardLayout,Contact contact){
+    /**
+     * This method provides the all picture list and to choose one to set the Contact contact photo.
+     * @param a – the current Album(current location)
+     * @param mPanel – the JPanel to return on the other class using the gallery after that the contact get the picture path
+     * @param cardLayout – the CardLayout to return on the other class using the gallery after that the contact get the picture path
+     * @param picture – the Picture in the PanelContact to set the photo
+     * @return – the JScrollPane containing a GridLayout with a picture in each cells
+     */
+
+    public JScrollPane fillGridAllPicture(Album a, JPanel mPanel, CardLayout cardLayout, Picture picture){
         JPanel panel = new JPanel();
-        panel.setPreferredSize(new Dimension(WIDTH_OF_SCREEN-2* GRID_GAP_WIDTH,numberOfRows(a.getAllPictureList().size())*SIZE_OF_ROW));
+        panel.setPreferredSize(new Dimension(WIDTH_OF_SCREEN - 2 * GRID_GAP_WIDTH, rowsLength(a.getAllPictureList().size())*SIZE_OF_ROW));
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        GridLayout showContents = new GridLayout(numberOfRows(a.getAllPictureList().size()), GRID_COLUMN_LENGTH, GRID_GAP_HEIGHT, GRID_GAP_WIDTH); //nombre d'élément /3
+        GridLayout showContents = new GridLayout(rowsLength(a.getAllPictureList().size()), GRID_COLUMN_LENGTH, GRID_GAP_HEIGHT, GRID_GAP_WIDTH); //nombre d'élément /3
         panel.setLayout(showContents);
         for (Picture p:a.getAllPictureList()){
             JButton pictureContents = new JButton(addImageIconJButton(a.getPath().toString() + "/" + p.getName(),IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON));
             pictureContents = setTheIcon(pictureContents);
             pictureContents.addActionListener(e -> {
-                contact.setPathForImage(p.getPath());
+                picture.setPath((p.getPath()));
                 cardLayout.show(mPanel, "contactedit");
+                System.out.println(picture.getPath());
             });
             panel.add(pictureContents);
         }
@@ -110,7 +156,10 @@ public class PanelGallery extends JPanel {
         return scroll;
     }
 
-    //gère le picturePanel
+    /**
+     * Show the picture display (picturePanel in the CardLayout).
+     * @param picture – the Picture that appears in the JPanel picturePanel
+     */
 
     public void showPicture(Picture picture){
         picturePanel.removeAll();
@@ -120,6 +169,12 @@ public class PanelGallery extends JPanel {
         picturePanel.repaint();
         screen.show(mainPanel, "picturePanel");
     }
+
+    /**
+     * Create a new app bar of the picture display.
+     * @param picture – Picture to set the name of this on the app bar
+     * @return – the JPanel containing the app bar
+     */
 
     public JPanel createAppBarPicture(Picture picture){
 
@@ -138,28 +193,27 @@ public class PanelGallery extends JPanel {
         appBarPicture.add(renameAppBarPicture,"renameAppBarPicture");
 
 
-        JButton backPicture = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Fleche_Back.png",IMAGE_SIZE_ON_APPBAR,IMAGE_SIZE_ON_APPBAR));
+        JButton backPicture = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Fleche_Back.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
         backPicture = setTheIcon(backPicture);
         backPicture.addActionListener(e -> showAlbum(currentAlbum));
 
-        JButton renamePicture = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_rename.png",IMAGE_SIZE_ON_APPBAR,IMAGE_SIZE_ON_APPBAR));
+        JButton renamePicture = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_rename.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
         renamePicture = setTheIcon(renamePicture);
         renamePicture.addActionListener(e -> appBarPictureLayout.show(appBarPicture, "renameAppBarPicture"));
 
-        JButton deletePicture = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Delete.png",IMAGE_SIZE_ON_APPBAR,IMAGE_SIZE_ON_APPBAR));
+        JButton deletePicture = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Delete.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
         deletePicture = setTheIcon(deletePicture);
         deletePicture.addActionListener(e -> {
             currentAlbum.deleteImage(picture);
             showAlbum(currentAlbum);
         });
 
-        //gére le panel de rename
-        JButton cancelRename = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Cancel.png", IMAGE_SIZE_ON_APPBAR, IMAGE_SIZE_ON_APPBAR));
+        JButton cancelRename = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Cancel.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
         cancelRename = setTheIcon(cancelRename);
         cancelRename.addActionListener(e -> appBarPictureLayout.show(appBarPicture, "defaultAppBarPicture"));
 
         JTextField newNameOfThePicture = new JTextField(TEXTFIELD_SIZE);
-        JButton acceptRename = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Validate.png", IMAGE_SIZE_ON_APPBAR, IMAGE_SIZE_ON_APPBAR));
+        JButton acceptRename = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Validate.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
         acceptRename = setTheIcon(acceptRename);
         acceptRename.addActionListener(e -> {
             picture.rename(newNameOfThePicture.getText());
@@ -181,6 +235,12 @@ public class PanelGallery extends JPanel {
         return appBarPicture;
     }
 
+    /**
+     * This method creates the content of the picture display. (shows the picture).
+     * @param picture – the Picture displayed
+     * @return – the JPanel showing the picture
+     */
+
     public JPanel createShowPicture(Picture picture){
         ImageIcon icon = addPictureIcon(picture.getPath(),IMAGE_SIZE,IMAGE_SIZE);
         JPanel showPicture = new JPanel();
@@ -189,7 +249,11 @@ public class PanelGallery extends JPanel {
         return showPicture;
     }
 
-    //gère le galleryPanel
+    /**
+     * This method provides the album display.
+     * @param album – the next Album
+     */
+
     public void showAlbum(Album album){
         currentAlbum=album;
         galleryPanel.removeAll();
@@ -200,6 +264,11 @@ public class PanelGallery extends JPanel {
         galleryPanel.repaint();
         screen.show(mainPanel, "galleryPanel");
     }
+
+    /**
+     * Create the gallery app bar.
+     * @return – the JPanel containing the app bar
+     */
 
     public JPanel createAppBar(){
 
@@ -224,12 +293,12 @@ public class PanelGallery extends JPanel {
 
         if(currentAlbum.getParent()!=null){
 
-            JButton cancelRename = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Cancel.png", IMAGE_SIZE_ON_APPBAR, IMAGE_SIZE_ON_APPBAR));
+            JButton cancelRename = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Cancel.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
             cancelRename = setTheIcon(cancelRename);
             cancelRename.addActionListener(e -> appBarGalleryLayout.show(appBarGallery, "defaultAppBarGallery"));
 
             JTextField newNameOfTheAlbum = new JTextField(TEXTFIELD_SIZE);
-            JButton acceptRename = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Validate.png", IMAGE_SIZE_ON_APPBAR, IMAGE_SIZE_ON_APPBAR));
+            JButton acceptRename = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Validate.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
             acceptRename = setTheIcon(acceptRename);
             acceptRename.addActionListener(e -> {
                 currentAlbum.renameAlbum(newNameOfTheAlbum.getText());
@@ -241,11 +310,11 @@ public class PanelGallery extends JPanel {
             renameAppBarGallery.add(cancelRename);
             renameAppBarGallery.add(acceptRename);
 
-            JButton cancelDelete = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Cancel.png", IMAGE_SIZE_ON_APPBAR, IMAGE_SIZE_ON_APPBAR));
+            JButton cancelDelete = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Cancel.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
             cancelDelete = setTheIcon(cancelDelete);
             cancelDelete.addActionListener(e -> appBarGalleryLayout.show(appBarGallery, "defaultAppBarGallery"));
 
-            JButton acceptDelete = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Validate.png", IMAGE_SIZE_ON_APPBAR, IMAGE_SIZE_ON_APPBAR));
+            JButton acceptDelete = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Validate.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
             acceptDelete = setTheIcon(acceptDelete);
             acceptDelete.addActionListener(e -> {
                 Album a = currentAlbum.getParent();
@@ -260,16 +329,17 @@ public class PanelGallery extends JPanel {
             deleteAppBarGallery.add(cancelDelete);
             deleteAppBarGallery.add(acceptDelete);
 
-            JButton renameAlbum = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_rename.png", IMAGE_SIZE_ON_APPBAR, IMAGE_SIZE_ON_APPBAR));
+            JButton renameAlbum = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_rename.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
             renameAlbum = setTheIcon(renameAlbum);
             renameAlbum.addActionListener(e -> appBarGalleryLayout.show(appBarGallery, "renameAppBarGallery"));
 
-            JButton deleteAlbum = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Delete.png", IMAGE_SIZE_ON_APPBAR, IMAGE_SIZE_ON_APPBAR));
+            JButton deleteAlbum = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Delete.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
+
             deleteAlbum = setTheIcon(deleteAlbum);
             deleteAlbum.addActionListener(e -> appBarGalleryLayout.show(appBarGallery, "deleteAppBarGallery"));
 
 
-            JButton backAlbum = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Fleche_Back.png", IMAGE_SIZE_ON_APPBAR, IMAGE_SIZE_ON_APPBAR));
+            JButton backAlbum = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Fleche_Back.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
             backAlbum = setTheIcon(backAlbum);
             backAlbum.addActionListener(e -> showAlbum(currentAlbum.getParent()));
 
@@ -281,7 +351,7 @@ public class PanelGallery extends JPanel {
             defaultAppBarGallery.add(deleteAlbum);
         }
 
-        JButton add = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Plus.png", IMAGE_SIZE_ON_APPBAR, IMAGE_SIZE_ON_APPBAR));
+        JButton add = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Plus.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
         add = setTheIcon(add);
         add.addActionListener(e -> screen.show(mainPanel, "addPanel"));
         defaultAppBarGallery.add(add);
@@ -289,37 +359,48 @@ public class PanelGallery extends JPanel {
         return appBarGallery;
     }
 
+    /**
+     * Creates the GridLayout with the albumList and the pictureList of the current Album.
+     * @param a – the current Album
+     * @return – the JScrollPane containing a GridLayout with an Album or an Picture in each cells
+     */
+
     public JScrollPane fillGridLayout(Album a){
         JPanel panel = new JPanel();
-        panel.setPreferredSize(new Dimension(WIDTH_OF_SCREEN-2* GRID_GAP_WIDTH,numberOfRows(a.numberOfElements())*SIZE_OF_ROW));
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        GridLayout showContents = new GridLayout(numberOfRows(a.numberOfElements()), GRID_COLUMN_LENGTH, GRID_GAP_HEIGHT, GRID_GAP_WIDTH); //nombre d'élément /3
+        panel.setPreferredSize(new Dimension(WIDTH_OF_SCREEN-(GRID_COLUMN_LENGTH-1)* GRID_GAP_WIDTH, rowsLength(a.elementsNumber())*SIZE_OF_ROW));
+        panel.setLayout(new FlowLayout(FlowLayout.TRAILING));
+        GridLayout showContents = new GridLayout(rowsLength(a.elementsNumber()), GRID_COLUMN_LENGTH, GRID_GAP_HEIGHT, GRID_GAP_WIDTH); //elementNumber /3
         panel.setLayout(showContents);
         for (Album al:a.getAlbumList()) {
             JPanel albums = new JPanel();
-            JButton albumContents = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_albumsContent.PNG",IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON));
+            JButton albumContents = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_albumsContent.PNG")).getImage().getScaledInstance(IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON,Image.SCALE_SMOOTH)));
             albumContents = setTheIcon(albumContents);
             albumContents.addActionListener(e -> showAlbum(al));
             albums.add(albumContents);
-            JLabel nameOfElement = new JLabel(checkAlbumName(al) + " (" + al.numberOfElements() + ")");
+            JLabel nameOfElement = new JLabel(checkAlbumName(al) + " (" + al.elementsNumber() + ")");
             albums.add(nameOfElement,BorderLayout.SOUTH);
             panel.add(albums);
         }
         for (Picture p:a.getPictureList()){
             JPanel pictures = new JPanel();
-            JButton pictureContents = new JButton(addImageIconJButton(a.getPath().toString() + "/" + p.getName(),IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON));
+            pictures.setPreferredSize(new Dimension(WIDTH_OF_SCREEN-(GRID_COLUMN_LENGTH-1)* GRID_GAP_WIDTH,SIZE_OF_ROW));
+            JButton pictureContents = new JButton(addPictureIcon(a.getPath().toString() + "/" + p.getName(),IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON));
             pictureContents = setTheIcon(pictureContents);
             pictureContents.addActionListener(e -> showPicture(p));
-            pictures.add(pictureContents, BorderLayout.NORTH);
+            pictures.add(pictureContents, BorderLayout.CENTER);
             JLabel nameOfElement = new JLabel(checkPictureName(p));
-            pictures.add(nameOfElement,BorderLayout.SOUTH);
-            panel.add(pictures);
+            pictures.add(nameOfElement,BorderLayout.CENTER);
+            panel.add(pictures,BorderLayout.SOUTH);
         }
 
         JScrollPane scroll = new JScrollPane(panel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setPreferredSize(new Dimension(WIDTH_OF_SCREEN,HEIGT_OF_CONTENTS));
         return scroll;
     }
+
+    /**
+     * Create the add panel to add Picture and Album to our Gallery.
+     */
 
     public void createAddPanel(){
         JPanel defaultAppBarAdd = new JPanel(); // l'app bar présente par défaut
@@ -336,7 +417,7 @@ public class PanelGallery extends JPanel {
         defaultAppBarAdd.setPreferredSize(new Dimension(WIDTH_OF_SCREEN,HEIGHT_OF_APPBAR));
         defaultAppBarAdd.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        JButton backAdd = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Fleche_Back.png",IMAGE_SIZE_ON_APPBAR,IMAGE_SIZE_ON_APPBAR));
+        JButton backAdd = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Fleche_Back.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
         backAdd = setTheIcon(backAdd);
         backAdd.addActionListener(e -> screen.show(mainPanel,"galleryPanel"));
 
@@ -344,13 +425,13 @@ public class PanelGallery extends JPanel {
 
         appBarNewAlbum.setPreferredSize(new Dimension(WIDTH_OF_SCREEN,HEIGHT_OF_APPBAR));
         appBarNewAlbum.setLayout(new FlowLayout(FlowLayout.CENTER));
-        JButton cancelAlbum = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Cancel.png",IMAGE_SIZE_ON_APPBAR,IMAGE_SIZE_ON_APPBAR));
+        JButton cancelAlbum = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Cancel.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
         cancelAlbum = setTheIcon(cancelAlbum);
         cancelAlbum.addActionListener(e -> appBarAddLayout.show(appBarPanel,"defaultAppBarAdd"));
 
         JTextField newNameOfTheAlbum = new JTextField(TEXTFIELD_SIZE);
 
-        JButton acceptAlbum = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Validate.png",IMAGE_SIZE_ON_APPBAR,IMAGE_SIZE_ON_APPBAR));
+        JButton acceptAlbum = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Validate.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
         acceptAlbum = setTheIcon(acceptAlbum);
         acceptAlbum.addActionListener(e -> {
             try {
@@ -372,7 +453,7 @@ public class PanelGallery extends JPanel {
         addContents.setPreferredSize(new Dimension(WIDTH_OF_SCREEN,HEIGT_OF_CONTENTS));
         addContents.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        JButton addAPicture = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Photo.jpg",IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON));
+        JButton addAPicture = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Photo.jpg")).getImage().getScaledInstance(IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON,Image.SCALE_SMOOTH)));
         addAPicture = setTheIcon(addAPicture);
         addAPicture.addActionListener(e -> {
             JFileChooser fileChooser=new JFileChooser();
@@ -386,7 +467,7 @@ public class PanelGallery extends JPanel {
             showAlbum(currentAlbum);
         });
 
-        JButton addAAlbum = new JButton(addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Album.jpg",IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON));
+        JButton addAAlbum = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Album.jpg")).getImage().getScaledInstance(IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON,Image.SCALE_SMOOTH)));
         addAAlbum = setTheIcon(addAAlbum);
         addAAlbum.addActionListener(e -> appBarAddLayout.show(appBarPanel,"appBarNewAlbum"));
 
@@ -394,12 +475,24 @@ public class PanelGallery extends JPanel {
         addContents.add(addAAlbum);
     }
 
-    public int numberOfRows(int a){
-        int numberOfRows = a / GRID_ROW_LENGTH;
+    /**
+     * This method indicate the rows number to a GridLayout.
+     * @param a – the int is divided by the wishing column length
+     * @return – the int indicating the rows number in the GridLayout
+     */
+
+    public int rowsLength(int a){
+        int rowsLength = a / GRID_ROW_LENGTH;
         if(a % GRID_ROW_LENGTH != 0)
-            numberOfRows += 1;
-        return numberOfRows;
+            rowsLength += 1;
+        return rowsLength;
     }
+
+    /**
+     * Shorten the String displayed if it is too long.
+     * @param p – the concerned Picture
+     * @return – the whole or partial String
+     */
 
     public String checkPictureName(Picture p){
         String str;
@@ -409,6 +502,12 @@ public class PanelGallery extends JPanel {
             return p.getName()+" ";
     }
 
+    /**
+     * Shorten the String displayed if it is too long.
+     * @param a – the concerned Album
+     * @return – the whole or partial String
+     */
+
     public String checkAlbumName(Album a){
         if(a.getName().length()>= ALBUM_NAME_LENGTH)
             return a.getName().substring(0, ALBUM_NAME_LENGTH)+"...";
@@ -416,6 +515,12 @@ public class PanelGallery extends JPanel {
             return a.getName()+" ";
 
     }
+
+    /**
+     * This method test the String with prohibited characters in files'name.
+     * @param string – the String to test
+     * @return – Boolean
+     */
 
     public boolean testString(String string){
         return  string.contains("\\")||
