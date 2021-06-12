@@ -83,6 +83,8 @@ public class BatteryTask extends TimerTask {
     public String getPercentageBattery(String s) {
         String result = "";
 
+        if(s.length()==0) return "100%";
+
         if(toolBox.isWindows()){
             result = s.substring(25,29) + "%";
             result.replaceAll("\\s","");
@@ -95,7 +97,11 @@ public class BatteryTask extends TimerTask {
         }
 
 
-        return result;
+        if(result.equals("Aucune instance disponible")){
+            return result = "100%";
+        }else{
+            return result;
+        }
     }
 
 
