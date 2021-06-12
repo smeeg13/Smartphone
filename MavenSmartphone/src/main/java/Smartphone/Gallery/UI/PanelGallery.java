@@ -101,7 +101,7 @@ public class PanelGallery extends JPanel {
             pictureContents = setTheIcon(pictureContents);
             pictureContents.addActionListener(e -> {
                 contact.setPhoto(addImageIconJButton(p.getPath(),56,56));
-                contact.setPathForImage(p.getPath());
+//                contact.setPathForImage(p.getPath());
                 cardLayout.show(mPanel, "contactedit");
             });
             panel.add(pictureContents);

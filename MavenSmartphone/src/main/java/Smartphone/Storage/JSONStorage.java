@@ -22,15 +22,13 @@ public class JSONStorage implements Storable {
         //Avec gson
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Contact[] contacts;
-
         try (JsonReader reader = new JsonReader(new FileReader(source))){
             contacts = gson.fromJson(reader, Contact[].class);
-
         } catch (IOException e) {
             throw new BusinessException("read error", e, ErrorCodes.IO_ERROR);
         }
-
         return new ArrayList<>(Arrays.asList(contacts));
+
     }
 
 //Méthode pour ecrire dans un ficher JSON
