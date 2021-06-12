@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,12 +17,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class MeteoRessource extends Meteo {
+public class MeteoRessource extends Meteo{
 
-    public Image getIcon(String iconCode) {
-        Image tImage;
+    private int responseCode;
+
+    /**
+     * This method get the icon for the weekly or daily weather
+     * @param iconCode iconName of the icon on openweathermap
+     * @return an Image to add then to a JLabel and then to a JPanel
+     */
+    public Image getIcon(String iconCode) throws BusinessException {
 
         try {
+
             URL url = new URL("http://openweathermap.org/img/wn/" + iconCode + "@2x.png");
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -30,17 +38,24 @@ public class MeteoRessource extends Meteo {
             int responseCode = conn.getResponseCode();
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                return tImage = ImageIO.read(url);
+                return ImageIO.read(url);
             }
         } catch (Exception ex) {
-            System.err.println("Request error: " + ex.getMessage());
+            throw new BusinessException("Request error to openweathermap.org",ex, ErrorCodes.REQUEST_FAIL);
         }
+
         return null;
     }
 
-    public String getWeather(String location, String appId, String unit) {
+    /**
+     *
+     * @param location for the city to search
+     * @param appId allows to use the website openweathermap
+     * @param unit determine the unit to show
+     * @return a String with the information of the daily weather
+     */
+    public String getWeather(String location, String appId, String unit) throws BusinessException{
         StringBuilder rt = new StringBuilder();
-
 
         try {
             URL url = new URL("http://api.openweathermap.org/data/2.5/weather"
@@ -51,7 +66,7 @@ public class MeteoRessource extends Meteo {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
 
-            int responseCode = conn.getResponseCode();
+            responseCode = conn.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
@@ -66,15 +81,59 @@ public class MeteoRessource extends Meteo {
                 System.err.println("Wrong response code: " + responseCode);
             }
         } catch (Exception ex) {
-            System.err.println("Request error: " + ex.getMessage());
+            throw new BusinessException("Request error to openweathermap.org",ex, ErrorCodes.REQUEST_FAIL);
         }
         return rt.toString();
     }
 
-    public JPanel getSelectedMeteoInfo(String location, String appId, String unit) {
+    /**
+     * This method get the weekly forecast on openweathermap
+     * @param location for the city to search
+     * @param appId allows to use the website openweathermap
+     * @return a String with all the 5 daily forecast
+     */
+    public String getForecast(String location, String appId) throws BusinessException{
+        StringBuilder rt = new StringBuilder();
+
+        try {
+            URL urlForecast = new URL("http://api.openweathermap.org/data/2.5/forecast?q=" + location + "&appid=" + appId);
+
+            HttpURLConnection conn = (HttpURLConnection) urlForecast.openConnection();
+            conn.setRequestMethod("GET");
+            responseCode = conn.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                String readLine;
+
+                while ((readLine = in.readLine()) != null) {
+                    rt.append(readLine);
+                }
+
+                in.close();
+            } else {
+                System.err.println("Wrong response code: " + responseCode);
+            }
+        } catch (Exception ex) {
+            throw new BusinessException("Request error to openweathermap.org",ex, ErrorCodes.REQUEST_FAIL);
+        }
+
+
+        return rt.toString();
+    }
+
+    /**
+     * This method choose the selected daily meteo Info with the string getting from the method getWeather
+     * @param location for the city to search
+     * @param appId allows to use the website openweathermap
+     * @param unit determine the unit to show (metric,imperial,standard)
+     * @return return a JPanel to add to the weather display
+     * @throws BusinessException with the error code that request failed
+     */
+    public JPanel getSelectedMeteoInfo(String location, String appId, String unit) throws BusinessException {
         String meteo = "";
         JPanel tPanel;
-        JLabel description = new JLabel();
         JLabel city = new JLabel();
         JLabel country = new JLabel();
         JLabel jlSunrise = new JLabel();
@@ -83,7 +142,6 @@ public class MeteoRessource extends Meteo {
         JLabel jlTempMax = new JLabel();
 
         meteo = getWeather(location, appId, unit);
-        System.out.println(meteo);
 
         JSONObject jsonObject = new JSONObject(meteo);
 
@@ -108,45 +166,19 @@ public class MeteoRessource extends Meteo {
         }
 
 
-
         tPanel = new PanelMeteo(city,country,jlSunrise,jlSunset,jlTempMin,jlTempMax);
 
 
         return tPanel;
     }
 
-    public String getForecast(String location, String appId) {
-        StringBuilder rt = new StringBuilder();
-
-        try {
-            URL urlForecast = new URL("http://api.openweathermap.org/data/2.5/forecast?q=" + location + "&appid=" + appId);
-
-            HttpURLConnection conn = (HttpURLConnection) urlForecast.openConnection();
-            conn.setRequestMethod("GET");
-
-            int responseCode = conn.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-                String readLine;
-
-                while ((readLine = in.readLine()) != null) {
-                    rt.append(readLine);
-                }
-
-                in.close();
-            } else {
-                System.err.println("Wrong response code: " + responseCode);
-            }
-        } catch (Exception ex) {
-            System.err.println("Request error: " + ex.getMessage());
-        }
-//        System.out.println(rt);
-
-        return rt.toString();
-    }
-
-    public JPanel getSelectedForecastInfo(String location, String appId) {
+    /**
+     * This method choose the selected weekly meteo Info with the string getting from the method getWeather
+     * @param location for the city to search
+     * @param appId allows to use the website openweathermap
+     * @return return a JPanel to add to the weather display
+     */
+    public JPanel getSelectedForecastInfo(String location, String appId) throws BusinessException {
         JPanel tPanel = new JPanel();
         JPanel tPanelWeek = new JPanel();
         tPanelWeek.setLayout(new FlowLayout());
@@ -181,11 +213,13 @@ public class MeteoRessource extends Meteo {
 
             if (unixToHour(person.getInt("dt")).toUpperCase(Locale.ROOT).equals(firstHour)) {
                 dayOfTheWeek = new JLabel();
-                tempOfTheDay = new JLabel();
                 dayOfTheWeek.setFont(new Font("Serif", Font.PLAIN, 12));
-                tempOfTheDay.setFont(new Font("Serif", Font.PLAIN, 12));
                 dayOfTheWeek.setText(unixToDate(person.getInt("dt")).toUpperCase(Locale.ROOT));
-                tempOfTheDay.setText(convertToString(convertFahToCel(person.getJSONObject("main").getInt("temp"))));
+
+                tempOfTheDay = new JLabel();
+                tempOfTheDay.setFont(new Font("Serif", Font.PLAIN, 12));
+                tempOfTheDay.setText(convertToString(convertFahToCel(person.getJSONObject("main").getInt("temp"))).toString());
+
                 JSONArray weatherArray = person.getJSONArray("weather");
                 iconDayWeather.setImage(getIcon(weatherArray.getJSONObject(0).getString("icon")));
                 JLabel iconDayWeatherLabel = new JLabel(resize(iconDayWeather, 40, 40));
@@ -203,16 +237,25 @@ public class MeteoRessource extends Meteo {
         return tPanel;
     }
 
+    /**
+     * This method convert the number in unixSeconds in human Date
+     * @param unixSeconds is given by then String on openweathermap
+     * @return a String with the new format of date
+     */
     public String unixToDate(int unixSeconds) {
         Date date = new java.util.Date(unixSeconds * 1000L);
-//        SimpleDateFormat sdf1 = new java.text.SimpleDateFormat("HH:mm"); // convert seconds to miliseconds
-        SimpleDateFormat sdf = new java.text.SimpleDateFormat("EEE");                       // the format of your date
-        sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+2"));                                   // give a timezone reference for formatting (see comment at the bottom)
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("EEE");  // the format of your date
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+2"));             // give a timezone reference for formatting (see comment at the bottom)
         String formattedDate = sdf.format(date);
 
         return formattedDate;
     }
 
+    /**
+     * This method convert the number in unixSecond in human Hour
+     * @param unixSeconds is given by then String on openweathermap
+     * @return a String with the new format of hour
+     */
     public String unixToHour(int unixSeconds) {
         Date date = new java.util.Date(unixSeconds * 1000L);                                          // convert seconds to miliseconds
         SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH");                       // the format of your date
@@ -220,7 +263,11 @@ public class MeteoRessource extends Meteo {
         String formattedDate = sdf.format(date);
         return formattedDate;
     }
-
+    /**
+     * This method convert the number in unixSecond in human Hour/Minute
+     * @param unixSeconds is given by then String on openweathermap
+     * @return a String with the new format of hour/minute
+     */
     public String unixToHourMinute(int unixSeconds) {
         Date date = new java.util.Date(unixSeconds * 1000L);                                          // convert seconds to miliseconds
         SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");                       // the format of your date
@@ -229,20 +276,38 @@ public class MeteoRessource extends Meteo {
         return formattedDate;
     }
 
+    /**
+     * This method convert the temperature variable fah in celsius
+     * @param fah is the temperature
+     * @return the new value of temperature in celsius
+     */
     public double convertFahToCel(double fah) {
         double res;
         res = Math.round(((5.0 / 9.0) * (fah - 32) / 10) * 10d) / 10d;
         return res;
     }
 
+    /**
+     * This method convert the variable cel into a String
+     * @param cel new temperature
+     * @return a String
+     */
     public String convertToString(double cel) {
         return Double.toString(cel);
     }
 
+    /**
+     * This method resize the icon we get from openweathermap
+     * @param img is the icon from the weather website
+     * @param w is the width we want to have
+     * @param h is the height we want to have
+     * @return an ImageIcon
+     */
     public ImageIcon resize(ImageIcon img, int w, int h) {
         Image image = img.getImage(); // transform it
         Image newimg = image.getScaledInstance(w, h, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
         return img = new ImageIcon(newimg);  // transform it back
     }
+
 
 }
