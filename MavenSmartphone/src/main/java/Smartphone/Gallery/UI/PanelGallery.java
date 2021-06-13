@@ -176,13 +176,11 @@ public class PanelGallery extends JPanel {
         acceptRename.addActionListener(e -> {
             try {
                 String newName = newNameOfThePicture.getText();
-                if(testString(newName))throw new BusinessException(RENAME_ERROR);
-                currentAlbum.renameAlbum(newName);
-                currentAlbum.getParent().refresh();
-                showAlbum(currentAlbum.getParent());
+                if(testString(newName))throw new BusinessException(RENAME_ERROR,mainPanel);
+                picture.rename(newName);
+                showAlbum(currentAlbum);
             } catch (BusinessException businessException) {
                 businessException.printStackTrace();
-                JOptionPane.showMessageDialog(mainPanel,RENAME_ERROR,"NAME ERROR",JOptionPane.WARNING_MESSAGE);
             }
         });
 
@@ -268,13 +266,12 @@ public class PanelGallery extends JPanel {
             acceptRename.addActionListener(e -> {
                 try {
                     String newName = newNameOfTheAlbum.getText();
-                    if(testString(newName))throw new BusinessException(RENAME_ERROR);
+                    if(testString(newName))throw new BusinessException(RENAME_ERROR,mainPanel);
                     currentAlbum.renameAlbum(newName);
                     currentAlbum.getParent().refresh();
                     showAlbum(currentAlbum.getParent());
                 } catch (BusinessException businessException) {
                     businessException.printStackTrace();
-                    JOptionPane.showMessageDialog(mainPanel,RENAME_ERROR,"NAME ERROR",JOptionPane.WARNING_MESSAGE);
                 }
             });
 
@@ -408,7 +405,7 @@ public class PanelGallery extends JPanel {
         acceptAlbum.addActionListener(e -> {
             try {
                 String newName = newNameOfTheAlbum.getText();
-                if(testString(newName))throw new BusinessException(RENAME_ERROR);
+                if(testString(newName))throw new BusinessException(RENAME_ERROR,mainPanel);
                 newName = currentAlbum.getPath().toString()+"/" + newName;
                 Path path = Paths.get(newName);
                 Album a = new Album(path,currentAlbum);
@@ -416,7 +413,6 @@ public class PanelGallery extends JPanel {
                 showAlbum(a);
             } catch (BusinessException businessException) {
                 businessException.printStackTrace();
-                JOptionPane.showMessageDialog(mainPanel,RENAME_ERROR,"NAME ERROR",JOptionPane.WARNING_MESSAGE);
             }
         });
 

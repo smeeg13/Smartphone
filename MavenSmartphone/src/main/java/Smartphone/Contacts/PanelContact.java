@@ -177,6 +177,7 @@ public class PanelContact extends JPanel {
      * @throws BusinessException – if the gallery isn't generate by the {@code file.mkdir() in the Gallery class.}
      *
      */
+
     public PanelContact() {
         try {
             contactList.readFromFile(fileContactList);
