@@ -163,6 +163,7 @@ public class PanelContact extends JPanel {
 
 
     //Fichier de sauvegarde Destination
+
     File fileContactList = new File(System.getenv("HOME") + "/contacts/ContactList.json");
     File fileFavContactList = new File(System.getenv("HOME") + "/contacts/FavContactList.json");
 
