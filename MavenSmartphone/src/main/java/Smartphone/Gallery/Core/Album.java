@@ -26,7 +26,7 @@ public class Album {
      * This constructor create or detect an album.
      * @param path – a String containing the album path in the computer
      * @param parent – the parent Album
-     * @throws BusinessException if the file failed to create by the path
+     * @throws BusinessException if the file failed to create by the path (the user hasn't the permission)
      */
 
     public Album(Path path,Album parent) throws BusinessException {
@@ -78,11 +78,11 @@ public class Album {
     }
 
     /**
-     *
-     * @param path
-     * @param parent
-     * @return
-     * @throws BusinessException
+     * This method discovers all the album in the Album by its path.
+     * @param path – the album Path needed to be discover
+     * @param parent - the parent album of each album discover
+     * @return - the List<Album> containing the childs
+     * @throws BusinessException see the constructor
      */
 
     private static List<Album> discoverAlbums(Path path,Album parent) throws BusinessException {
@@ -96,9 +96,19 @@ public class Album {
         return albumList;
     }
 
+    /**
+     * Get the pictureList.
+     * @return – the List<Picture> containing its Picture
+     */
+
     public List<Picture> getPictureList() {
         return pictureList;
     }
+
+    /**
+     * Get the pictureList of the Album and child albums.
+     * @return - the List<Picture> containing its Picture and its Album Picture
+     */
 
     public List<Picture> getAllPictureList(){
         List<Picture> allPictureList= new ArrayList<>();
@@ -109,7 +119,17 @@ public class Album {
         return allPictureList;
     }
 
+    /**
+     * Get the albumList.
+     * @return – the List<Album> containing its Album
+     */
+
     public List<Album> getAlbumList(){ return albumList;}
+
+    /**
+     * Get the albumList of the Album and child albums.
+     * @return – the List<Album> containing its Album and their Album
+     */
 
     public List<Album> getAllAlbumList(){
         List<Album> allAlbumList= new ArrayList<>();
@@ -120,19 +140,39 @@ public class Album {
         return allAlbumList;
     }
 
+    /**
+     * This method add a Picture to the Album.
+     * @param p – the Picture added
+     */
+
     public void addImage(Picture p){
         pictureList.add(p);
     }
-    
+
+    /**
+     * Delete the Picture file and in the pictureList.
+     * @param p – the Picture to delete
+     */
+
     public void deleteImage(Picture p) {
         if(!pictureList.contains(p))return;
         p.deletePicture();
         pictureList.remove(p);
     }
 
+    /**
+     * This method add an Album to the Album.
+     * @param a – the Album added
+     */
+
     public void addAlbum(Album a) {
         albumList.add(a);
     }
+
+    /**
+     * Remove the Album and his contents in the Album and delete the folder
+     * @param a – the Album concerned
+     */
 
     public void deleteAlbum(Album a){
 
@@ -152,9 +192,18 @@ public class Album {
         a.deleteFolder();
     }
 
+    /**
+     * Delete the folder.
+     */
+
     public void deleteFolder(){
         path.toFile().delete();
     }
+
+    /**
+     * Get the name.
+     * @return – the String containing the name
+     */
 
     public String getName(){return path.toFile().getName();}
 
@@ -164,9 +213,18 @@ public class Album {
         file.renameTo(dest);
     }
 
+    /**
+     * This method counts the number of element.
+     * @return – the int of size
+     */
+
     public int elementsNumber(){
         return pictureList.size()+albumList.size();
     }
+
+    /**
+     * Print all the content of the Album and his Album
+     */
 
     public void print(){
         for (Album a:albumList) {
@@ -179,13 +237,27 @@ public class Album {
         }
     }
 
+    /**
+     * Get the parent
+     * @return – the parent Album
+     */
+
     public Album getParent() {
         return parent;
     }
 
+    /**
+     * Get the path
+     * @return – the Path
+     */
+
     public Path getPath() {
         return path;
     }
+
+    /**
+     * This method refresh and discover the albums and pictures
+     */
 
     public void refresh(){
         try {
