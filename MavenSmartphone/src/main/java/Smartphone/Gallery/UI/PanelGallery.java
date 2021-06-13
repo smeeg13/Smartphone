@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import Smartphone.Contacts.Contact;
 import Smartphone.Errors.BusinessException;
 import Smartphone.Gallery.Core.*;
+import Smartphone.StructureFrame;
 
 /**
  * This class provides graphical implementations for a gallery using {@link javax.swing}  and {@link java.awt}.
@@ -39,7 +40,9 @@ public class PanelGallery extends JPanel {
     private final int WIDTH_OF_SCREEN = 400;
     private final int HEIGT_OF_SCREEN = 650;
     private final int HEIGT_OF_CONTENTS = 500;
-    private final String RENAME_ERROR = "You can't create an album with one of these following characters \\/:*?\"<>|";
+    private final int ERROR_HEIGHT = 150;
+    private final int ERROR_WIDTH = 350;
+    private final String RENAME_ERROR = "You can't create an album with one of \n these following characters \\/:*?\"<>|";
 
     private CardLayout screen = new CardLayout();
 
@@ -97,7 +100,7 @@ public class PanelGallery extends JPanel {
      */
 
     public void showAllPicture(Album a, JPanel panel, CardLayout cardLayout,Picture picture){
-        allPicturePanel.add(createAppBarAllPicture(a,panel,cardLayout),BorderLayout.NORTH);
+//        allPicturePanel.add(createAppBarAllPicture(a,panel,cardLayout),BorderLayout.NORTH);
         allPicturePanel.add(fillGridAllPicture(a,panel, cardLayout,picture));
     }
 
@@ -224,6 +227,7 @@ public class PanelGallery extends JPanel {
                 showAlbum(currentAlbum.getParent());
             } catch (BusinessException businessException) {
                 businessException.printStackTrace();
+                JOptionPane.showMessageDialog(mainPanel,RENAME_ERROR,"NAME ERROR",JOptionPane.WARNING_MESSAGE);
             }
         });
 
@@ -315,6 +319,7 @@ public class PanelGallery extends JPanel {
                     showAlbum(currentAlbum.getParent());
                 } catch (BusinessException businessException) {
                     businessException.printStackTrace();
+                    JOptionPane.showMessageDialog(mainPanel,RENAME_ERROR,"NAME ERROR",JOptionPane.WARNING_MESSAGE);
                 }
             });
 
@@ -448,13 +453,16 @@ public class PanelGallery extends JPanel {
         acceptAlbum.addActionListener(e -> {
             try {
                 String newName = newNameOfTheAlbum.getText();
-                if(testString(newName))throw new BusinessException("\"You can't create an album with one of these following characters \\\\/:*?\\\"<>|");
+                if(testString(newName))throw new BusinessException(RENAME_ERROR);
                 newName = currentAlbum.getPath().toString()+"/" + newName;
                 Path path = Paths.get(newName);
                 Album a = new Album(path,currentAlbum);
                 currentAlbum.refresh();
                 showAlbum(a);
-            } catch (BusinessException businessException) {businessException.printStackTrace();}
+            } catch (BusinessException businessException) {
+                businessException.printStackTrace();
+                JOptionPane.showMessageDialog(mainPanel,RENAME_ERROR,"NAME ERROR",JOptionPane.WARNING_MESSAGE);
+            }
         });
 
         appBarNewAlbum.add(newNameOfTheAlbum);
