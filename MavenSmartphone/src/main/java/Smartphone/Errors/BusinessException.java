@@ -12,7 +12,7 @@ public class BusinessException extends Exception{
 
     private ErrorCodes errorCode;
     /**
-     * This constructor set the gallery display on another class (by a panel).
+     * This constructor sets the gallery display on another class (by a panel).
      * @param msg – the error message that should be displayed
      * @param errorCode – the Error Code linked to this message
      */
@@ -21,7 +21,7 @@ public class BusinessException extends Exception{
         this.errorCode = errorCode;
     }
     /**
-     * This constructor set the gallery display on another class (by a panel).
+     * This constructor sets the gallery display on another class (by a panel).
      * @param msg – the error message that should be displayed
      * @param cause – the CardLayout needed for {@code showAllPicture()}
      * @param errorCode – the Picture needed for {@code showAllPicture()}
@@ -31,15 +31,20 @@ public class BusinessException extends Exception{
         this.errorCode = errorCode;
     }
     /**
-     * This constructor set the gallery display on another class (by a panel).
+     * This constructor sets the gallery display on another class (by a panel).
      * @param msg – the error message that should be displayed
      */
     public BusinessException(String msg){
         super(msg);
     }
 
+    /**
+     * This constructor shows a message in case of error.
+     * @param msg – the error message String
+     * @param panel – the JPanel where the pop up is
+     */
     public BusinessException(String msg, JPanel panel){
-        JOptionPane.showMessageDialog(panel,"This picture already exists in the Album","NAME ERROR",JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(panel,msg,"NAME ERROR",JOptionPane.WARNING_MESSAGE);
     }
 
     public int getErrorCode() {
