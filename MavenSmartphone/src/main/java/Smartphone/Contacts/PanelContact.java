@@ -152,7 +152,7 @@ public class PanelContact extends JPanel {
     private JPanel gallery;
     {
         try {
-            gallery = new PanelGallery(PCentreSelectPhoto,ecran,picture);
+            gallery = new PanelGallery(PCentreSelectPhoto,picture);
         } catch (BusinessException businessException) {
             businessException.printStackTrace();
         }
@@ -825,7 +825,7 @@ public class PanelContact extends JPanel {
 
                 //Ouverture de fenetre pour choisir photo
                 try {
-                    gallery = new PanelGallery(PCentreSelectPhoto,ecran,picture);
+                    gallery = new PanelGallery(PCentreSelectPhoto,picture);
                 } catch (BusinessException f) {
                     f.printStackTrace();
                 }

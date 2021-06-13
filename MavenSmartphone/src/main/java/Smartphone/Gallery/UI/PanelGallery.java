@@ -19,6 +19,7 @@ import Smartphone.StructureFrame;
  * This class provides graphical implementations for a gallery using {@link javax.swing}  and {@link java.awt}.
  *
  * It use all sub-classes in {@link Smartphone.Gallery.Core}.
+ *
  * @author Nathan Dély
  * @version
  */
@@ -52,7 +53,6 @@ public class PanelGallery extends JPanel {
     private JPanel galleryPanel = new JPanel();
     private JPanel picturePanel = new JPanel();
     private JPanel addPanel = new JPanel();
-    private JPanel allPicturePanel = new JPanel();
 
     /**
      * This constructor provides the gallery display.
@@ -79,66 +79,25 @@ public class PanelGallery extends JPanel {
 
     /**
      * This constructor set the gallery display on another class (by a panel).
-     * @param panel – the JPanel to add the gallery JPanel
-     * @param cardLayout – the CardLayout needed for {@code showAllPicture()}
+     * @param mPanel – the JPanel to add the GridLayout with pictures
      * @param picture – the Picture needed for {@code showAllPicture()}
      * @throws BusinessException – if the gallery isn't generate by the {@code file.mkdir() in the Gallery class.}
      */
     //constructeur pour l'ajout d'une photo au contact
-    public PanelGallery(JPanel panel, CardLayout cardLayout, Picture picture) throws BusinessException{
+    public PanelGallery(JPanel mPanel, Picture picture) throws BusinessException{
         currentAlbum =new Gallery();
-        panel.add(allPicturePanel,"galleryPanel");
-        showAllPicture(currentAlbum,panel,cardLayout,picture);
+        mPanel.add(fillGridAllPicture(currentAlbum,picture));
     }
 
-    /**
-     * This method shows all the pictures on the display.
-     * @param a – the current Album (current location).
-     * @param panel – the JPanel needed for {@code showAllPicture()}.
-     * @param cardLayout – the CardLayout needed for {@code showAllPicture()}.
-     * @param picture – the Picture needed for {@code showAllPicture()}.
-     */
-
-    public void showAllPicture(Album a, JPanel panel, CardLayout cardLayout,Picture picture){
-//        allPicturePanel.add(createAppBarAllPicture(a,panel,cardLayout),BorderLayout.NORTH);
-        allPicturePanel.add(fillGridAllPicture(a,panel, cardLayout,picture));
-    }
 
     /**
-     * This method create an app bar to choose a picture.
-     * @param a – the current Album (current location)
-     * @param panel – the JPanel to return in the other class using the gallery if they press on back
-     * @param cardLayout – the CardLayout to return in the other class using the gallery if they press on back
-     * @return – the JPanel containing the appbar
-     */
-
-    public JPanel createAppBarAllPicture(Album a, JPanel panel, CardLayout cardLayout){
-        JPanel appBarAllPicture = new JPanel();
-        appBarAllPicture.setPreferredSize(new Dimension(WIDTH_OF_SCREEN,HEIGHT_OF_APPBAR));
-        appBarAllPicture.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-        JButton backToContact = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Fleche_Back.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
-        backToContact = setTheIcon(backToContact);
-        backToContact.addActionListener(e -> cardLayout.show(panel, "contactedit"));
-
-        JLabel choosingLabel = new JLabel("Click on a picture to select it");
-
-        appBarAllPicture.add(backToContact);
-        appBarAllPicture.add(choosingLabel);
-
-        return appBarAllPicture;
-    }
-
-    /**
-     * This method provides the all picture list and to choose one to set the Contact contact photo.
+     * This method provides the all picture list and to choose one to set the Contact photo.
      * @param a – the current Album(current location)
-     * @param mPanel – the JPanel to return on the other class using the gallery after that the contact get the picture path
-     * @param cardLayout – the CardLayout to return on the other class using the gallery after that the contact get the picture path
      * @param picture – the Picture in the PanelContact to set the photo
      * @return – the JScrollPane containing a GridLayout with a picture in each cells
      */
 
-    public JScrollPane fillGridAllPicture(Album a, JPanel mPanel, CardLayout cardLayout, Picture picture){
+    public JScrollPane fillGridAllPicture(Album a, Picture picture){
         JPanel panel = new JPanel();
         panel.setPreferredSize(new Dimension(WIDTH_OF_SCREEN - 2 * GRID_GAP_WIDTH, rowsLength(a.getAllPictureList().size())*SIZE_OF_ROW));
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -149,8 +108,7 @@ public class PanelGallery extends JPanel {
             pictureContents = setTheIcon(pictureContents);
             pictureContents.addActionListener(e -> {
                 picture.setPath((p.getPath()));
-                cardLayout.show(mPanel, "contactadd");
-               // System.out.println(picture.getPath());
+                JOptionPane.showMessageDialog(panel,"You select this picture","SELECTED",JOptionPane.WARNING_MESSAGE);
             });
             panel.add(pictureContents);
         }
@@ -482,8 +440,14 @@ public class PanelGallery extends JPanel {
             fileChooser.setPreferredSize(new Dimension(IMAGE_SIZE,HEIGT_OF_CONTENTS));
             fileChooser.showOpenDialog(null);
             File file = fileChooser.getSelectedFile();
-            File dest= new File(currentAlbum.getPath().toString()+"/" + file.getName());
-            file.renameTo(dest);
+            File dest = new File(currentAlbum.getPath().toString() + "/" + file.getName());
+            try {
+                if(dest.exists()) throw new BusinessException("This picture already exists in the Album",mainPanel);
+                file.renameTo(dest);
+            }catch(Exception exception){
+                exception.printStackTrace();
+                JOptionPane.showMessageDialog(mainPanel,"You are not allowed to move a picture","PC ERROR",JOptionPane.WARNING_MESSAGE);
+            }
             currentAlbum.refresh();
             showAlbum(currentAlbum);
         });

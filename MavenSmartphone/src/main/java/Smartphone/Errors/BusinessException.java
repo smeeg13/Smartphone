@@ -1,5 +1,7 @@
 package Smartphone.Errors;
 
+import javax.swing.*;
+
 /**
  * This class provides contructors for all the BusinessExceptions,
  * @author Mégane Solliard
@@ -34,6 +36,10 @@ public class BusinessException extends Exception{
      */
     public BusinessException(String msg){
         super(msg);
+    }
+
+    public BusinessException(String msg, JPanel panel){
+        JOptionPane.showMessageDialog(panel,"This picture already exists in the Album","NAME ERROR",JOptionPane.WARNING_MESSAGE);
     }
 
     public int getErrorCode() {
