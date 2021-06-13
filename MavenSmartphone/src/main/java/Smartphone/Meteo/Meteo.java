@@ -79,8 +79,7 @@ public class Meteo extends JPanel {
         mainPanel.add(northPanel, BorderLayout.NORTH);
 
 
-        panelMeteoInfo.setPreferredSize(new Dimension(380, 400));
-
+        panelMeteoInfo.setPreferredSize(new Dimension(380, 300));
 
         mainPanel.add(panelMeteoInfo, BorderLayout.CENTER);
         mainPanel.add(meteoWeekPanel, BorderLayout.SOUTH);
