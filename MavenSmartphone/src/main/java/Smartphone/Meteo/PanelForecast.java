@@ -3,6 +3,11 @@ package Smartphone.Meteo;
 import javax.swing.*;
 import java.awt.*;
 
+
+/**
+ * This class is used to create a panel for a 5 days forecast
+ * @author Thomas Cheseaux
+ */
 public class PanelForecast extends JPanel{
 
     /**
