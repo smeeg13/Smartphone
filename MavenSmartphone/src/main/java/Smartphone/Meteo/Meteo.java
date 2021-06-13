@@ -3,11 +3,13 @@ package Smartphone.Meteo;
 import Smartphone.Errors.BusinessException;
 import Smartphone.ToolBox;
 import lombok.SneakyThrows;
+import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  * This Class display the weather for different country
@@ -123,6 +125,10 @@ public class Meteo extends JPanel {
                 jpCityInfo = mr.getSelectedMeteoInfo(lieu, Meteo.apiKey, unit);
             } catch (BusinessException businessException) {
                 businessException.printStackTrace();
+            } catch (ParseException parseException) {
+                parseException.printStackTrace();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
             }
 
             try {

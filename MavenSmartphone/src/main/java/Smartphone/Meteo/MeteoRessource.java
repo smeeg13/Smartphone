@@ -4,11 +4,15 @@ import Smartphone.Errors.BusinessException;
 import Smartphone.Errors.ErrorCodes;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.json.simple.JSONObject.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -136,7 +140,7 @@ public class MeteoRessource extends Meteo{
      * @return return a JPanel to add to the weather display
      * @throws BusinessException with the error code that request failed
      */
-    public JPanel getSelectedMeteoInfo(String location, String appId, String unit) throws BusinessException {
+    public JPanel getSelectedMeteoInfo(String location, String appId, String unit) throws BusinessException, IOException, ParseException {
         String meteo = "";
         JPanel tPanel;
         JLabel city = new JLabel();
@@ -145,6 +149,7 @@ public class MeteoRessource extends Meteo{
         JLabel jlSunset = new JLabel();
         JLabel jlTempMin = new JLabel();
         JLabel jlTempMax = new JLabel();
+
 
         meteo = getWeather(location, appId, unit);
 
@@ -198,6 +203,7 @@ public class MeteoRessource extends Meteo{
         tempOfTheDay.setFont(new Font("Serif", Font.PLAIN, 12));
         ImageIcon iconDayWeather = new ImageIcon();
         int cptNbJour = 0;
+
 
         meteo = getForecast(location, appId);
 
@@ -316,6 +322,7 @@ public class MeteoRessource extends Meteo{
         Image newimg = image.getScaledInstance(w, h, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
         return img = new ImageIcon(newimg);  // transform it back
     }
+
 
 
 }
