@@ -1,19 +1,16 @@
 package Smartphone.Gallery.UI;
 
-import javax.imageio.ImageIO;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import Smartphone.Contacts.Contact;
 import Smartphone.Errors.BusinessException;
 import Smartphone.Gallery.Core.*;
-import Smartphone.StructureFrame;
+import Smartphone.ToolBox;
 
 /**
  * This class provides graphical implementations for a gallery using {@link javax.swing}  and {@link java.awt}.
@@ -41,8 +38,6 @@ public class PanelGallery extends JPanel {
     private final int WIDTH_OF_SCREEN = 400;
     private final int HEIGT_OF_SCREEN = 650;
     private final int HEIGT_OF_CONTENTS = 500;
-    private final int ERROR_HEIGHT = 150;
-    private final int ERROR_WIDTH = 350;
     private final String RENAME_ERROR = "You can't create an album with one of \n these following characters \\/:*?\"<>|";
 
     private CardLayout screen = new CardLayout();
@@ -53,6 +48,8 @@ public class PanelGallery extends JPanel {
     private JPanel galleryPanel = new JPanel();
     private JPanel picturePanel = new JPanel();
     private JPanel addPanel = new JPanel();
+
+    private ToolBox toolBox = new ToolBox();
 
     /**
      * This constructor provides the gallery display.
@@ -104,7 +101,7 @@ public class PanelGallery extends JPanel {
         GridLayout showContents = new GridLayout(rowsLength(a.getAllPictureList().size()), GRID_COLUMN_LENGTH, GRID_GAP_HEIGHT, GRID_GAP_WIDTH); //nombre d'élément /3
         panel.setLayout(showContents);
         for (Picture p:a.getAllPictureList()){
-            JButton pictureContents = new JButton(addPictureIcon(p.getPath(),IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON));
+            JButton pictureContents = new JButton(toolBox.addPictureIcon(p.getPath(),IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON));
             pictureContents = setTheIcon(pictureContents);
             pictureContents.addActionListener(e -> {
                 picture.setPath((p.getPath()));
@@ -210,7 +207,7 @@ public class PanelGallery extends JPanel {
      */
 
     public JPanel createShowPicture(Picture picture){
-        ImageIcon icon = addPictureIcon(picture.getPath(),IMAGE_SIZE,IMAGE_SIZE);
+        ImageIcon icon = toolBox.addPictureIcon(picture.getPath(),IMAGE_SIZE,IMAGE_SIZE);
         JPanel showPicture = new JPanel();
         showPicture.setPreferredSize(new Dimension(IMAGE_SIZE,IMAGE_SIZE));
         showPicture.add(new JLabel(icon));
@@ -359,7 +356,7 @@ public class PanelGallery extends JPanel {
         for (Picture p:a.getPictureList()){
             JPanel pictures = new JPanel();
             pictures.setPreferredSize(new Dimension(WIDTH_OF_SCREEN-(GRID_COLUMN_LENGTH-1)* GRID_GAP_WIDTH,SIZE_OF_ROW));
-            JButton pictureContents = new JButton(addPictureIcon(a.getPath().toString() + "/" + p.getName(),IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON));
+            JButton pictureContents = new JButton(toolBox.addPictureIcon(a.getPath().toString() + "/" + p.getName(),IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON));
             pictureContents = setTheIcon(pictureContents);
             pictureContents.addActionListener(e -> showPicture(p));
             pictures.add(pictureContents, BorderLayout.CENTER);
@@ -516,40 +513,6 @@ public class PanelGallery extends JPanel {
                 string.contains("<")||
                 string.contains(">")||
                 string.contains("|");
-    }
-
-    /**
-     * This method readjusts the picture with the right perspectives
-     * @param path – Path of the picture
-     * @param width – desired width in int
-     * @param height – desired height in int
-     * @return – ImageIcon with right perspectives
-     */
-
-    public ImageIcon addPictureIcon(String path, int width, int height) {
-        ImageIcon imageSearch;
-        imageSearch = new ImageIcon(path);
-        Image imagetest = imageSearch.getImage();
-        try {
-            File f = new File (path);
-            BufferedImage image = ImageIO.read(f);
-            double width2 = image.getWidth();
-            double height2 = image.getHeight();
-            double divisor;
-            if(width2<height2)
-                divisor=height2/height;
-            else
-                divisor=width2/width;
-            if(divisor==0) throw new BusinessException("can't scale an image of this size");
-            width2=width2/divisor;
-            height2=height2/divisor;
-            Image newTest = imagetest.getScaledInstance((int)width2, (int)height2, Image.SCALE_SMOOTH);
-            return new ImageIcon(newTest);
-        } catch (IOException | BusinessException e) {
-            e.printStackTrace();
-        }
-        Image newTest = imagetest.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        return new ImageIcon(newTest);
     }
 
     /**

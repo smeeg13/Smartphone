@@ -36,7 +36,7 @@ public class Main {
      * @throws IOException
      */
     public static void checkFileExisted(File file) throws BusinessException,IOException {
-        if (file.exists()) {
+        if (!file.exists()) {
             file.createNewFile();
             String str1 = "[]";
             Path path = Paths.get(String.valueOf(file));
