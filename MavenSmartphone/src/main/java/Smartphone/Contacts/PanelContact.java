@@ -2,22 +2,26 @@ package Smartphone.Contacts;
 
 import Smartphone.Errors.BusinessException;
 import Smartphone.Errors.ErrorCodes;
+import Smartphone.Gallery.Core.Picture;
+import Smartphone.Gallery.UI.PanelGallery;
 import Smartphone.Meteo.ClickRecherche;
 import Smartphone.Storage.JSONStorage;
 import Smartphone.Storage.Storable;
 import Smartphone.ToolBox;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
+
 public class PanelContact extends JPanel {
+    private final int SIZE_CONTACT_PICTURE = 65;
+    private final int SIZE_ICONE = 25;
+    private Picture picture = new Picture(ClassLoader.getSystemResource("Icone_AddPicture.png").getPath());
+
+
     private CardLayout ecran = new CardLayout();
     //Page base
     private JPanel mainPanel = new JPanel();
@@ -44,9 +48,7 @@ public class PanelContact extends JPanel {
         private JPanel PContactAddCentre = new JPanel();
             private JPanel PContactAddPicture = new JPanel();
                 private JButton buttonPicturePContactAdd;
-                private ImageIcon photoContact;
-                private Image photochoisie;
-                private ImageIcon appareilPhoto = new ImageIcon(new ImageIcon("MavenSmartphone/src/main/java/Smartphone/Icones/icone_AddPicture.png").getImage().getScaledInstance(55, 55, Image.SCALE_DEFAULT));
+                private final ImageIcon appareilPhoto = new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_AddPicture.png")).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH));
 
             private JPanel PContactAddInfos = new JPanel();
                 private JLabel nomLab = new JLabel("Nom : ");
@@ -87,8 +89,7 @@ public class PanelContact extends JPanel {
     private JPanel PanelSelectCentre = new JPanel();
     private JPanel panelPictureContSelec = new JPanel();
     private JButton buttonPictureContSelec;
-    private ImageIcon photoContact2;
-    private ImageIcon appareilPhotoContSelec = new ImageIcon(new ImageIcon("MavenSmartphone/src/main/java/Smartphone/Icones/icone_AddPicture.png").getImage().getScaledInstance(55, 55, Image.SCALE_DEFAULT));
+    private ImageIcon appareilPhotoContSelec = new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_AddPicture.png")).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH));
 
     private JPanel panelInfosContSelec = new JPanel();
     private JLabel nomLabContSelec = new JLabel("Nom : ");
@@ -140,10 +141,36 @@ public class PanelContact extends JPanel {
 
     private ToolBox toolBox = new ToolBox();
 
+    //Selectionner photo dans galerie
+    private  JPanel panelSelecPhoto = new PanelSelecPhoto();
+    JPanel PHautSelecPhoto = new JPanel();
+    JButton SelectPictureOK = new JButton("Ok");
+    JButton CancelSelectionPic = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Back2.1.png")).getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
+    JLabel labSelectPhoto = new JLabel("     Select a picture");
+    JPanel PCentreSelectPhoto = new JPanel();
+    CardLayout ecranGalery = new CardLayout();
+    private JPanel gallery;
+    {
+        try {
+            gallery = new PanelGallery(PCentreSelectPhoto,ecran,picture);
+        } catch (BusinessException businessException) {
+            businessException.printStackTrace();
+        }
+    }
+
+
+    private Contact contactSelec;
+
+
     //Fichier de sauvegarde Destination
     File fileContactList = new File(System.getenv("HOME") + "/contacts/ContactList.json");
     File fileFavContactList = new File(System.getenv("HOME") + "/contacts/FavContactList.json");
 
+    /**
+     * This constructor provides the Contacts display.
+     * @throws BusinessException – if the gallery isn't generate by the {@code file.mkdir() in the Gallery class.}
+     *
+     */
     public PanelContact() {
         try {
             contactList.readFromFile(fileContactList);
@@ -158,6 +185,7 @@ public class PanelContact extends JPanel {
         mainPanel.add(contactSearch, "contactSearch");
         mainPanel.add(contactSelected, "contactselected");
         mainPanel.add(contactEdit,"contactedit");
+        mainPanel.add(panelSelecPhoto,"panelSelecPhoto");
 
 //PANEL CONTACT PAGE
         //Mise en page panel haut
@@ -165,12 +193,12 @@ public class PanelContact extends JPanel {
         PContactPageHaut.setPreferredSize(new Dimension(400, 35));
         PContactPageHaut.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-        buttonAdd = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Plus.png", 25, 25));
+        buttonAdd = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Plus.png")).getImage().getScaledInstance(SIZE_ICONE, SIZE_ICONE,Image.SCALE_SMOOTH)));
         buttonAdd.setBorderPainted(false);
         buttonAdd.setFocusPainted(false);
         buttonAdd.setContentAreaFilled(false);
         buttonAdd.addActionListener(new Actions());
-        buttonSearch = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Recherche.png", 25, 25));
+        buttonSearch = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Recherche.png")).getImage().getScaledInstance(SIZE_ICONE, SIZE_ICONE,Image.SCALE_SMOOTH)));
         buttonSearch.setBorderPainted(false);
         buttonSearch.setFocusPainted(false);
         buttonSearch.setContentAreaFilled(false);
@@ -227,7 +255,7 @@ public class PanelContact extends JPanel {
         PanelSelectCentre.setPreferredSize(new Dimension(350, 518));
         // panel avec boutton pour photo du contact
         PanelSelectCentre.add(panelPictureContSelec);
-        buttonPictureContSelec = new JButton("", appareilPhotoContSelec);
+        buttonPictureContSelec = new JButton();
         buttonPictureContSelec.setSize(55, 55);
         buttonPictureContSelec.setBorderPainted(false);
         buttonPictureContSelec.setFocusPainted(false);
@@ -239,7 +267,7 @@ public class PanelContact extends JPanel {
         PanelSelectCentre.add(panelInfosContSelec);
         PanelSelectCentre.add(panelDeleteContSelec);
         panelDeleteContSelec.setPreferredSize(new Dimension(400,44));
-        panelInfosContSelec.setPreferredSize(new Dimension(350, 352));
+        panelInfosContSelec.setPreferredSize(new Dimension(350, 342));
         panelInfosContSelec.setLayout(new GridLayout(6, 2, 5, 2));
 
         panelInfosContSelec.add(nomLabContSelec);
@@ -265,7 +293,11 @@ public class PanelContact extends JPanel {
         favCheckBoxContSelec.setFocusable(false);
         favCheckBoxContSelec.setEnabled(false); //Ne peut pas être modifier à ce moment-là
         panelInfosContSelec.add(favCheckBoxContSelec);
-
+        try {
+            contactSelec = contactList.getContactByName(nameTxtContSelec.getText(),fileContactList);
+        } catch (BusinessException businessException) {
+            businessException.printStackTrace();
+        }
         //Mise en page Panel du bas
         PanelSelectCentre.add(panelOkContSelec, BorderLayout.SOUTH);
         panelOkContSelec.setPreferredSize(new Dimension(400, 35));
@@ -291,7 +323,7 @@ public class PanelContact extends JPanel {
         PanelEditCentre.setPreferredSize(new Dimension(350, 518));
         PanelEditCentre.add(panelPictureEdit);
 
-        buttonPictureEdit = new JButton("", appareilPhoto3);
+        buttonPictureEdit = new JButton();
         buttonPictureEdit.setSize(55, 55);
         buttonPictureEdit.setBorderPainted(false);
         buttonPictureEdit.setFocusPainted(false);
@@ -302,7 +334,7 @@ public class PanelContact extends JPanel {
         //panel avec infos à saisir
         PanelEditCentre.add(panelInfosEdit);
         PanelEditCentre.add(panelDeleteEdit);
-        panelInfosEdit.setPreferredSize(new Dimension(350, 352));
+        panelInfosEdit.setPreferredSize(new Dimension(350, 341));
         panelInfosEdit.setLayout(new GridLayout(6, 2, 5, 2));
 
         panelInfosEdit.add(nomLabEdit);
@@ -328,7 +360,7 @@ public class PanelContact extends JPanel {
         favCheckBoxEdit.setFocusable(false);
         panelInfosEdit.add(favCheckBoxEdit);
 
-        buttonDelete = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Delete.png", 25, 25));
+        buttonDelete = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Delete.png")).getImage().getScaledInstance(SIZE_ICONE, SIZE_ICONE,Image.SCALE_SMOOTH)));
         buttonDelete.setBorderPainted(false);
         buttonDelete.setFocusPainted(false);
         buttonDelete.setContentAreaFilled(false);
@@ -363,7 +395,8 @@ public class PanelContact extends JPanel {
         //Mise en page panel centre
         PContactAddCentre.setPreferredSize(new Dimension(350, 498));
         PContactAddCentre.add(PContactAddPicture);
-        buttonPicturePContactAdd = new JButton("", appareilPhoto);
+        buttonPicturePContactAdd = new JButton(new ImageIcon(picture.getPath()));
+        buttonPicturePContactAdd.setIcon(new ImageIcon(new ImageIcon(picture.getPath()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
         buttonPicturePContactAdd.setSize(55, 55);
         buttonPicturePContactAdd.setBorderPainted(false);
         buttonPicturePContactAdd.setFocusPainted(false);
@@ -374,7 +407,7 @@ public class PanelContact extends JPanel {
         //panel avec infos à saisir
         PContactAddCentre.add(PContactAddInfos);
         PContactAddCentre.add(panelErreur);
-        PContactAddInfos.setPreferredSize(new Dimension(350, 342));
+        PContactAddInfos.setPreferredSize(new Dimension(350, 332));
         PContactAddInfos.setLayout(new GridLayout(6, 2, 5, 2));
 
         PContactAddInfos.add(nomLab);
@@ -432,7 +465,7 @@ public class PanelContact extends JPanel {
         //Mise en page panel Back
         PanelBack.setPreferredSize(new Dimension(400, 40));
         PanelBack.setLayout(new FlowLayout(FlowLayout.LEFT));
-        buttonBack = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Back2.1.png", 30, 30));
+        buttonBack = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Back2.1.png")).getImage().getScaledInstance(SIZE_ICONE, SIZE_ICONE,Image.SCALE_SMOOTH)));
         buttonBack.setBorderPainted(false);
         buttonBack.setFocusPainted(false);
         buttonBack.setContentAreaFilled(false);
@@ -445,7 +478,7 @@ public class PanelContact extends JPanel {
         ClickRecherche clickRecherche = new ClickRecherche(rechercheBar);
         rechercheBar.addFocusListener(clickRecherche);
         rechercheBar.setOpaque(false);
-        buttonGoSearch = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Recherche.png", 25, 25));
+        buttonGoSearch = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Recherche.png")).getImage().getScaledInstance(SIZE_ICONE, SIZE_ICONE,Image.SCALE_SMOOTH)));
         buttonGoSearch.setBorderPainted(false);
         buttonGoSearch.setFocusPainted(false);
         buttonGoSearch.setContentAreaFilled(false);
@@ -463,6 +496,37 @@ public class PanelContact extends JPanel {
         buttonContactfind.addActionListener(new Actions());
         PanelBas.add(buttonContactfind);
 
+//PANEL SELECTION D'UNE PHOTO DANS GALERIE
+        PHautSelecPhoto.setLayout(null);
+        PHautSelecPhoto.setPreferredSize(new Dimension(400,45));
+        CancelSelectionPic.setBounds(2,2,48,40);
+        CancelSelectionPic.setBorderPainted(false);
+        CancelSelectionPic.setFocusPainted(false);
+        CancelSelectionPic.setContentAreaFilled(false);
+        CancelSelectionPic.addActionListener(new Actions());
+        PHautSelecPhoto.add(CancelSelectionPic);
+
+        labSelectPhoto.setBounds(50,5,300,40);
+        PHautSelecPhoto.add(labSelectPhoto);
+
+        SelectPictureOK.setBounds(350,5,50,40);
+        SelectPictureOK.setBorderPainted(true);
+        SelectPictureOK.setBorder(BorderFactory.createLineBorder(Color.black));
+        SelectPictureOK.setFocusPainted(false);
+        SelectPictureOK.setContentAreaFilled(false);
+ // SelectPictureOK.addActionListener(new Actions());
+        PHautSelecPhoto.add(SelectPictureOK);
+
+        PCentreSelectPhoto.setPreferredSize(new Dimension(400,400));
+        PCentreSelectPhoto.add(gallery,"galery");
+        PCentreSelectPhoto.setLayout(ecranGalery);
+
+
+        panelSelecPhoto.add(PHautSelecPhoto, BorderLayout.NORTH);
+        panelSelecPhoto.add(PCentreSelectPhoto, BorderLayout.CENTER);
+
+
+
         add(mainPanel);
     }
 
@@ -470,7 +534,7 @@ public class PanelContact extends JPanel {
         @Override
         public void valueChanged(ListSelectionEvent e) {
             String selectedContact;
-            Contact contactSelec;
+
             ecran.show(mainPanel,"contactselected");
             try {
                 if (e.getSource() == JListContacts) {
@@ -485,18 +549,12 @@ public class PanelContact extends JPanel {
                     if (contactSelec == null) return;
                     //Ajouter les infos du contact sélectionné à la page d'info du contact
                     nameTxtContSelec.setText(contactSelec.getName());
-                    indicChoiceContSelec.setText(contactSelec.getIndicatif());
+                    indicChoiceContSelec.setText(contactSelec.getIndicative());
                     numTxtContSelec.setText(contactSelec.getPhoneNumber());
                     emailTxtContSelec.setText(contactSelec.getEmail());
                     adresseTxtContSelec.setText(contactSelec.getAddress());
 
-                    if (contactSelec.isAddphoto() == false) {
-                        buttonPicturePContactAdd.setIcon(contactSelec.getPhoto());
-                        buttonPictureContSelec.setText("");
-                    } else
-                        //Reprendre photo du contact si existe
-                        //    buttonPictureContSelec.setIcon(contactSelec.getPhoto());
-                        buttonPictureContSelec.setText(" ");
+                    buttonPictureContSelec.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
 
                     if (contactSelec.isFavContact() == true)
                         favCheckBoxContSelec.setSelected(true);
@@ -516,18 +574,6 @@ public class PanelContact extends JPanel {
             if (e.getSource() == buttonSearch) {
                 ecran.show(mainPanel, "contactSearch");
             }
-            if (e.getSource() == buttonCancelContSelec){
-                nameTxtContSelec.setText("");
-                indicChoiceContSelec.setText("");
-                numTxtContSelec.setText("");
-                emailTxtContSelec.setText("");
-                adresseTxtContSelec.setText("");
-                buttonPictureContSelec.setText("");
-                favCheckBoxContSelec.setSelected(false);
-                JListContacts.clearSelection();
-                JListFavContact.clearSelection();
-                ecran.show(mainPanel, "contactPage");
-            }
             if (e.getSource() == buttonEdit){
                 ecran.show(mainPanel,"contactedit");
                 nameTxtEdit.setText(nameTxtContSelec.getText());
@@ -535,10 +581,7 @@ public class PanelContact extends JPanel {
                 indicChoiceEdit.setSelectedItem(indicChoiceContSelec.getText());
                 emailTxtEdit.setText(emailTxtContSelec.getText());
                 adresseTxtEdit.setText(adresseTxtContSelec.getText());
-                if (buttonPictureContSelec.getText() == " ")
-                    buttonPictureEdit.setText(" ");
-                else
-                    buttonPictureEdit.setText("");
+                buttonPictureEdit.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
 
                 if (favCheckBoxContSelec.isSelected() == true)
                     favCheckBoxEdit.setSelected(true);
@@ -549,12 +592,6 @@ public class PanelContact extends JPanel {
                     //Supprimer le contact
                     contactList.delete(nameTxtContSelec.getText());
                     favContactList.delete(nameTxtContSelec.getText());
-                    boolean addphoto;
-                    //Ajouter photo à un contact
-                    if (buttonPictureEdit.getText() == "  ")
-                        addphoto = true;
-                    else
-                        addphoto = false;
 
                     boolean favContact;
                     if (favCheckBoxEdit.isSelected() == true)
@@ -563,7 +600,7 @@ public class PanelContact extends JPanel {
                         favContact = false;
                     //Recréer contact avec changement
                     Contact contact = new Contact(nameTxtEdit.getText(), (String) indicChoiceEdit.getSelectedItem(),numTxt3Edit.getText(),
-                                                    emailTxtEdit.getText(),adresseTxtEdit.getText(),addphoto,favContact);
+                                                    emailTxtEdit.getText(),adresseTxtEdit.getText(),picture.getPath(),favContact);
                     if (contact.isFavContact() ==true) {
                         try {
                             favContactList.addToContactList(contact);
@@ -585,9 +622,6 @@ public class PanelContact extends JPanel {
                     }
                     ecran.show(mainPanel,"contactPage");
                     updateUI();
-            }
-            if (e.getSource() == buttonCancelEdit){
-                ecran.show(mainPanel,"contactselected");
             }
             if (e.getSource() == buttonDelete){
                 contactList.delete(nameTxtContSelec.getText());
@@ -611,9 +645,7 @@ public class PanelContact extends JPanel {
                 indicChoice.setSelectedIndex(0);
                 emailTxt.setText("");
                 adresseTxt.setText("");
-                //Remet apareil photo sur bouton et texte empty
-                buttonPicturePContactAdd.setText("");
-                buttonPicturePContactAdd.setIcon(appareilPhoto);
+                picture = resetPicture(picture);      //Remet apareil photo sur bouton
                 favCheckBox.setSelected(false);
                 rechercheBar.setText("");
                 LabelErreurRecherche.setVisible(false);
@@ -621,43 +653,41 @@ public class PanelContact extends JPanel {
                 buttonContactfind.setText("Enter above the name of the contact you want to find");
                 buttonContactfind.setBorder(BorderFactory.createLineBorder(Color.black));
             }
-            //Ajouter photo au contact
-            if (e.getSource() == buttonPicturePContactAdd || e.getSource() == buttonPictureEdit) {
-                //Ouverture de fenetre pour choisir photo
-                JFileChooser fileChooser=new JFileChooser();
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("gif", "png", "bmp", "jpg","jpeg","PNG");
-                fileChooser.setFileFilter(filter);
-                int returnVal = fileChooser.showOpenDialog(null);
-                //Photo choisie
-                File file = fileChooser.getSelectedFile();
-                //variable : "photoContact" = photo choisie
-                try {
-                    Image photochoisie = ImageIO.read(file);
-                    photoContact = new ImageIcon((new ImageIcon(photochoisie).getImage().getScaledInstance(56, 56, Image.SCALE_DEFAULT)));
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-                if (e.getSource() == buttonPicturePContactAdd) {
-                    //modifier bouton avec la photo choisie
-                    buttonPicturePContactAdd.setIcon(photoContact);
-                    //Set texte du boutton si photo ajoutée
-                    buttonPicturePContactAdd.setText("  ");
-                }
-                if (e.getSource() == buttonPictureEdit){
-                    //modifier bouton avec la photo choisie
-                    buttonPictureEdit.setIcon(photoContact);
-                    //Set texte du boutton si photo ajoutée
-                    buttonPictureEdit.setText("  ");
-                }
+            if (e.getSource() == buttonCancelEdit){
+                ecran.show(mainPanel,"contactselected");
             }
+            if (e.getSource() == buttonCancelContSelec){
+                nameTxtContSelec.setText("");
+                indicChoiceContSelec.setText("");
+                numTxtContSelec.setText("");
+                emailTxtContSelec.setText("");
+                adresseTxtContSelec.setText("");
+                favCheckBoxContSelec.setSelected(false);
+                picture = resetPicture(picture);
+                JListContacts.clearSelection();
+                JListFavContact.clearSelection();
+                ecran.show(mainPanel, "contactPage");
+            }
+            if (e.getSource() == buttonPictureEdit) {
+                String lastPanel = "contactedit";
+                CancelSelectionPic.setText(lastPanel);
+                ecran.show(mainPanel,"panelSelecPhoto");
+                openGaleryToSelecPic(e, buttonPictureEdit);
+
+
+            }
+            if (e.getSource() == buttonPicturePContactAdd){
+                String lastPanel = "contactAdd";
+                CancelSelectionPic.setText(lastPanel);
+                ecran.show(mainPanel,"panelSelecPhoto");
+                openGaleryToSelecPic(e, buttonPicturePContactAdd);
+
+            }
+
             //Sauvergarde d'un contact
             if (e.getSource() == buttonSave) {
-                boolean addphoto;
                 //Ajouter photo à un contact
-                if (buttonPicturePContactAdd.getText() == "  ")
-                    addphoto = true;
-                else
-                    addphoto = false;
+
                 //saisie = param du constructeur Contact
                 String nom = nameTxt.getText();
                 String indicatif = (String) indicChoice.getSelectedItem();
@@ -691,10 +721,11 @@ public class PanelContact extends JPanel {
                                 }
                              else {
                                 //Création nouveau contact
-                                Contact contact = new Contact(nom, indicatif, numero, email, adresse, addphoto, favContact);
-                                //ajout de la photo liée
-                                if (contact.isAddphoto())
-                                    contact.setPhoto(photoContact);
+                                Contact contact = new Contact(nom, indicatif, numero, email, adresse, picture.getPath(), favContact);
+                                System.out.println(picture.getPath());
+                                picture = resetPicture(picture);
+                                System.out.println(picture.getPath()+" ap");
+
                                 //Si contact favori ajout à liste des contacts fav aussi
                                 if (contact.isFavContact()) {
                                         //Ajouter à la liste
@@ -719,8 +750,7 @@ public class PanelContact extends JPanel {
                                 emailTxt.setText("");
                                 adresseTxt.setText("");
                                 //Remet apareil photo sur bouton et texte empty
-                                buttonPicturePContactAdd.setText("");
-                                buttonPicturePContactAdd.setIcon(appareilPhoto);
+                                picture = resetPicture(picture);
                                 favCheckBox.setSelected(false);
                                 contactOK = true;
                                 ecran.show(mainPanel, "contactPage"); //Retour sur page des contacts
@@ -755,7 +785,6 @@ public class PanelContact extends JPanel {
             }
             if (e.getSource() == buttonContactfind){
                 String selectedContact;
-                Contact contactSelec;
                 ecran.show(mainPanel,"contactselected");
                 try {
                         selectedContact = buttonContactfind.getText();
@@ -764,18 +793,12 @@ public class PanelContact extends JPanel {
                     if (contactSelec == null) return;
                     //Ajouter les infos du contact sélectionné à la page d'info du contact
                     nameTxtContSelec.setText(contactSelec.getName());
-                    indicChoiceContSelec.setText(contactSelec.getIndicatif());
+                    indicChoiceContSelec.setText(contactSelec.getIndicative());
                     numTxtContSelec.setText(contactSelec.getPhoneNumber());
                     emailTxtContSelec.setText(contactSelec.getEmail());
                     adresseTxtContSelec.setText(contactSelec.getAddress());
 
-                    if (contactSelec.isAddphoto() == false) {
-                        buttonPicturePContactAdd.setIcon(contactSelec.getPhoto());
-                        buttonPictureContSelec.setText("");
-                    } else
-                        //Reprendre photo du contact si existe
-                        //    buttonPictureContSelec.setIcon(contactSelec.getPhoto());
-                        buttonPictureContSelec.setText(" ");
+                    buttonPictureContSelec.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
 
                     if (contactSelec.isFavContact() == true)
                         favCheckBoxContSelec.setSelected(true);
@@ -785,10 +808,48 @@ public class PanelContact extends JPanel {
                     businessException.printStackTrace();
                 }
             }
+            if (e.getSource() == CancelSelectionPic) {
+
+                ecran.show(mainPanel,CancelSelectionPic.getText());
+                CancelSelectionPic.setText("");
+
+            }
+            if (e.getSource() == SelectPictureOK) {
+//Reprend le path de la photo sélectionnée quand clic sur Ok
+
+            }
+        }
+
+        private void openGaleryToSelecPic(ActionEvent e, JButton button) {
+
+                //Ouverture de fenetre pour choisir photo
+                try {
+                    gallery = new PanelGallery(PCentreSelectPhoto,ecran,picture);
+                } catch (BusinessException f) {
+                    f.printStackTrace();
+                }
+                ecranGalery.show(PCentreSelectPhoto,"galery");
+                /*
+                JFileChooser fileChooser=new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("gif", "png", "bmp", "jpg","jpeg","PNG");
+                fileChooser.setFileFilter(filter);
+                int returnVal = fileChooser.showOpenDialog(null);
+                //Photo choisie
+                File file = fileChooser.getSelectedFile();
+                //variable : "photoContact" = photo choisie
+                try {
+                    Image photochoisie = ImageIO.read(file);
+                    photoContact = new ImageIcon((new ImageIcon(photochoisie).getImage().getScaledInstance(56, 56, Image.SCALE_DEFAULT)));
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                 */
+                button.setIcon(new ImageIcon(new ImageIcon(picture.getPath()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
         }
     }
+
+    private Picture resetPicture(Picture picture){
+        picture.setPath(ClassLoader.getSystemResource("Icone_AddPicture.png").getPath());
+        return picture;
+    }
 }
-
-
-
 

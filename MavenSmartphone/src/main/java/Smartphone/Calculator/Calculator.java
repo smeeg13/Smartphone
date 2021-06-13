@@ -1,5 +1,6 @@
-package Smartphone.Calculatrice;
+package Smartphone.Calculator;
 
+import Smartphone.Errors.BusinessException;
 import Smartphone.ToolBox;
 
 import javax.swing.*;
@@ -7,7 +8,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Calculette extends JPanel {
+/**
+ * This class provides the code for creating calculator and displaying it.
+ *
+ * @author Mégane Solliard
+ * @version
+ */
+public class Calculator extends JPanel {
 
     //Pas plus de 3 chiffres
 
@@ -29,8 +36,10 @@ public class Calculette extends JPanel {
     double num1 = 0, num2 = 0,result = 0;
     char operator;
 
-    // default constructor
-    public Calculette() {
+    /**
+     * This constructor provides the calculator display.
+     */
+    public Calculator() {
 
         setBackground(Color.lightGray);
 
@@ -189,37 +198,5 @@ public class Calculette extends JPanel {
                 textField.setText(String.valueOf(temp));
             }
         }
-    }
-
-    public static String evaluate(String expression) {
-        char[] arr = expression.toCharArray();
-        String operand1 = "";String operand2 = "";String operator = "";
-        double result = 0;
-
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] >= '0' && arr[i] <= '9' || arr[i] == '.') {
-                if(operator.isEmpty()){
-                    operand1 += arr[i];
-                }else{
-                    operand2 += arr[i];
-                }
-            }
-
-            if(arr[i] == '+' || arr[i] == '-' || arr[i] == '/' || arr[i] == '*' || arr[i] =='%') {
-                operator += arr[i];
-            }
-        }
-
-        if (operator.equals("+"))
-            result = (Double.parseDouble(operand1) + Double.parseDouble(operand2));
-        else if (operator.equals("-"))
-            result = (Double.parseDouble(operand1) - Double.parseDouble(operand2));
-        else if (operator.equals("/"))
-            result = (Double.parseDouble(operand1) / Double.parseDouble(operand2));
-        else if(operator.equals("*"))
-            result = (Double.parseDouble(operand1) * Double.parseDouble(operand2));
-        else
-            result = (Double.parseDouble(operand1) / 100);
-        return "= " + result;
     }
 }
