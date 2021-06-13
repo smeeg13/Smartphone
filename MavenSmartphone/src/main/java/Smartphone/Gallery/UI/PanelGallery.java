@@ -39,6 +39,7 @@ public class PanelGallery extends JPanel {
     private final int WIDTH_OF_SCREEN = 400;
     private final int HEIGT_OF_SCREEN = 650;
     private final int HEIGT_OF_CONTENTS = 500;
+    private final String RENAME_ERROR = "You can't create an album with one of these following characters \\/:*?\"<>|";
 
     private CardLayout screen = new CardLayout();
 
@@ -83,7 +84,6 @@ public class PanelGallery extends JPanel {
     //constructeur pour l'ajout d'une photo au contact
     public PanelGallery(JPanel panel, CardLayout cardLayout, Picture picture) throws BusinessException{
         currentAlbum =new Gallery();
-
         panel.add(allPicturePanel,"galleryPanel");
         showAllPicture(currentAlbum,panel,cardLayout,picture);
     }
@@ -142,7 +142,7 @@ public class PanelGallery extends JPanel {
         GridLayout showContents = new GridLayout(rowsLength(a.getAllPictureList().size()), GRID_COLUMN_LENGTH, GRID_GAP_HEIGHT, GRID_GAP_WIDTH); //nombre d'élément /3
         panel.setLayout(showContents);
         for (Picture p:a.getAllPictureList()){
-            JButton pictureContents = new JButton(addImageIconJButton(a.getPath().toString() + "/" + p.getName(),IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON));
+            JButton pictureContents = new JButton(addPictureIcon(p.getPath(),IMAGE_SIZE_ON_BUTTON,IMAGE_SIZE_ON_BUTTON));
             pictureContents = setTheIcon(pictureContents);
             pictureContents.addActionListener(e -> {
                 picture.setPath((p.getPath()));
@@ -216,9 +216,15 @@ public class PanelGallery extends JPanel {
         JButton acceptRename = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Validate.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
         acceptRename = setTheIcon(acceptRename);
         acceptRename.addActionListener(e -> {
-            picture.rename(newNameOfThePicture.getText());
-            currentAlbum.refresh();
-            showAlbum(currentAlbum);
+            try {
+                String newName = newNameOfThePicture.getText();
+                if(testString(newName))throw new BusinessException(RENAME_ERROR);
+                currentAlbum.renameAlbum(newName);
+                currentAlbum.getParent().refresh();
+                showAlbum(currentAlbum.getParent());
+            } catch (BusinessException businessException) {
+                businessException.printStackTrace();
+            }
         });
 
         renameAppBarPicture.add(newNameOfThePicture);
@@ -301,9 +307,15 @@ public class PanelGallery extends JPanel {
             JButton acceptRename = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("icone_Validate.png")).getImage().getScaledInstance(IMAGE_SIZE_IN_APPBAR, IMAGE_SIZE_IN_APPBAR,Image.SCALE_SMOOTH)));
             acceptRename = setTheIcon(acceptRename);
             acceptRename.addActionListener(e -> {
-                currentAlbum.renameAlbum(newNameOfTheAlbum.getText());
-                currentAlbum.getParent().refresh();
-                showAlbum(currentAlbum.getParent());
+                try {
+                    String newName = newNameOfTheAlbum.getText();
+                    if(testString(newName))throw new BusinessException(RENAME_ERROR);
+                    currentAlbum.renameAlbum(newName);
+                    currentAlbum.getParent().refresh();
+                    showAlbum(currentAlbum.getParent());
+                } catch (BusinessException businessException) {
+                    businessException.printStackTrace();
+                }
             });
 
             renameAppBarGallery.add(newNameOfTheAlbum);
@@ -459,6 +471,7 @@ public class PanelGallery extends JPanel {
             JFileChooser fileChooser=new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter("gif", "png", "bmp", "jpg","jpeg","PNG");
             fileChooser.setFileFilter(filter);
+            fileChooser.setPreferredSize(new Dimension(IMAGE_SIZE,HEIGT_OF_CONTENTS));
             fileChooser.showOpenDialog(null);
             File file = fileChooser.getSelectedFile();
             File dest= new File(currentAlbum.getPath().toString()+"/" + file.getName());
@@ -495,7 +508,6 @@ public class PanelGallery extends JPanel {
      */
 
     public String checkPictureName(Picture p){
-        String str;
         if(p.getName().lastIndexOf('.')> PICTURE_NAME_LENGTH)
              return p.getName().substring(0, PICTURE_NAME_LENGTH)+"...";
         else
@@ -534,13 +546,13 @@ public class PanelGallery extends JPanel {
                 string.contains("|");
     }
 
-    public ImageIcon addImageIconJButton(String path, int width, int height) {
-        ImageIcon imageSearch;
-        imageSearch = new ImageIcon(path);
-        Image imagetest = imageSearch.getImage();
-        Image newTest = imagetest.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        return imageSearch = new ImageIcon(newTest);
-    }
+    /**
+     * This method readjusts the picture with the right perspectives
+     * @param path – Path of the picture
+     * @param width – desired width in int
+     * @param height – desired height in int
+     * @return – ImageIcon with right perspectives
+     */
 
     public ImageIcon addPictureIcon(String path, int width, int height) {
         ImageIcon imageSearch;
@@ -567,6 +579,12 @@ public class PanelGallery extends JPanel {
         Image newTest = imagetest.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(newTest);
     }
+
+    /**
+     * This method manage the size of an element on a JButton.
+     * @param button – JButton needing modification
+     * @return – JButton modified
+     */
 
     public JButton setTheIcon(JButton button){
         button.setBorderPainted(false);

@@ -26,7 +26,7 @@ public class Album {
      * This constructor create or detect an album.
      * @param path – a String containing the album path in the computer
      * @param parent – the parent Album
-     * @throws BusinessException
+     * @throws BusinessException if the file failed to create by the path
      */
 
     public Album(Path path,Album parent) throws BusinessException {
@@ -76,6 +76,14 @@ public class Album {
         }
         return pictureList;
     }
+
+    /**
+     *
+     * @param path
+     * @param parent
+     * @return
+     * @throws BusinessException
+     */
 
     private static List<Album> discoverAlbums(Path path,Album parent) throws BusinessException {
         List<Album> albumList = new ArrayList<>();

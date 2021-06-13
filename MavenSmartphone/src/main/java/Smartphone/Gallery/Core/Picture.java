@@ -8,6 +8,10 @@ public class Picture {
     private String path;
     private File file;
 
+    /**
+     *
+     * @param path
+     */
     public Picture(String path) {
         this.path = path;
         file = new File(path);
@@ -15,7 +19,7 @@ public class Picture {
 
     public void rename(String name) {
         String str = file.getName();
-        File newFile =new File(file.getParentFile().getPath() + "/" + name + str.substring(str.lastIndexOf('.'),str.length()));
+        File newFile =new File(file.getParentFile().getPath() + "/" + name + str.substring(str.lastIndexOf('.')));
         boolean succeed = file.renameTo(newFile);
         if(succeed)
             file = newFile;
