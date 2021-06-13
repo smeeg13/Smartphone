@@ -1,6 +1,6 @@
 package Smartphone;
 
-import Smartphone.Calculatrice.Calculette;
+import Smartphone.Calculator.Calculator;
 import Smartphone.Contacts.PanelContact;
 import Smartphone.Errors.BusinessException;
 import Smartphone.Gallery.UI.PanelGallery;
@@ -41,7 +41,7 @@ public  class StructureFrame extends JFrame {
     private JPanel contacts = new PanelContact();
     private JPanel galerie = new PanelGallery();
     private JPanel meteo = new Meteo();
-    private JPanel calculette = new Calculette();
+    private JPanel calculette = new Calculator();
 
     private ToolBox toolBox = new ToolBox();
 
@@ -55,7 +55,7 @@ public  class StructureFrame extends JFrame {
    // private JButton buttonGalery = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Galerie.png",48,48));
    // private JButton buttonMeteo = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/icone_Meteo.png",48,48));
    // private JButton buttonMenu = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Menu.png",20,20));
-   // private JButton buttonCalculette = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Calculette.png",48,48));
+   // private JButton buttonCalculette = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Calculator.png",48,48));
     private JPanel panelBoutons =new JPanel();
     private JPanel panelNoms = new JPanel();
     private JPanel panelBoutons2 =new JPanel();
@@ -64,7 +64,7 @@ public  class StructureFrame extends JFrame {
     private JLabel labContact = new JLabel("  Contact");
     private JLabel labGalerie = new JLabel("Galery");
     private JLabel labMeteo = new JLabel(  "Meteo   ");
-    private JLabel labCalculette = new JLabel("Calculatrice");
+    private JLabel labCalculette = new JLabel("Calculator");
 
     private DateFormat formatDate = new SimpleDateFormat("HH:mm");
     private Calendar maintenant = Calendar.getInstance();
@@ -115,12 +115,12 @@ public  class StructureFrame extends JFrame {
         bandeBas.setPreferredSize(tailleBande);
         bandeBas.setFont(bandeBas.getFont().deriveFont(Font.BOLD));
 //bouton pour vérouiller
-buttonVerouiller = new JButton(toolBox.addImageIconJButton("MavenSmartphone/src/main/java/Smartphone/Icones/Icone_Verrou.png",25,25));
-buttonVerouiller.setBorderPainted(false);
-buttonVerouiller.setFocusPainted(false);
-buttonVerouiller.setContentAreaFilled(false);
-buttonVerouiller.addActionListener(new ClicVerrouillage());
-bandeHaut.add(buttonVerouiller);
+        buttonVerouiller = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_Verrou.png")).getImage().getScaledInstance(25, 25,Image.SCALE_SMOOTH)));
+        buttonVerouiller.setBorderPainted(false);
+    buttonVerouiller.setFocusPainted(false);
+    buttonVerouiller.setContentAreaFilled(false);
+    buttonVerouiller.addActionListener(new ClicVerrouillage());
+    bandeHaut.add(buttonVerouiller);
 
         //ajout dans le Jpanel du haut le pourcentage de la batterie
         batteryLevel = batteryTask.getBatteryPercentage();
@@ -233,7 +233,7 @@ bandeHaut.add(buttonVerouiller);
         PageVerouillage.add(timeVerouillage);
         labelDate = new JLabel(dateFormat.format(date));
         labelDate.setFont(fontDate);
-        labelDate.setBounds(127,160,140,40);
+        labelDate.setBounds(127,160,150,40);
         PageVerouillage.add(labelDate);
         buttonDeverouiller = new JButton("Clic here to unlock");
         buttonDeverouiller.setBorderPainted(true);

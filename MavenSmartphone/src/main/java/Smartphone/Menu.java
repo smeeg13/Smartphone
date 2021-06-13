@@ -15,7 +15,7 @@ public class Menu extends JPanel {
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
-        ImageIcon img = new ImageIcon("C:\\Users\\megan\\Desktop\\HES\\FondEcran.jpg");
+        ImageIcon img = new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("FondEcran.jpg")).getImage());
         g.drawImage(img.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
     }
 }

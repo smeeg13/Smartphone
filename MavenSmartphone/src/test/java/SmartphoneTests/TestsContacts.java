@@ -44,6 +44,7 @@ public class TestsContacts {
         String indicatif="+41";
         String email = "gandalf@hotmail.com";
         String address= "Sion";
+        String path = "as";
         ImageIcon photo;
         boolean addphoto=false;
         boolean favContact = false;
@@ -51,7 +52,7 @@ public class TestsContacts {
         Contact testC = null;
 
         try {
-            testC = new Contact(name,indicatif,phoneNumber,email,address,addphoto,favContact);
+            testC = new Contact(name,indicatif,phoneNumber,email,address,path,favContact);
         } catch (Exception e) {
             fail("Failed to create a new Contact");
         }
@@ -71,13 +72,13 @@ public class TestsContacts {
         String email = "gandalf@hotmail.com";
         String address= "Sion";
         ImageIcon photo;
-        boolean addphoto=false;
+        String path = "as";
         boolean favContact = false;
 
         Contact gandalf = null;
 
         try {
-            gandalf = new Contact(name,indicatif,phoneNumber,email,address,addphoto,favContact);
+            gandalf = new Contact(name,indicatif,phoneNumber,email,address,path,favContact);
         } catch (Exception unexpected) {
             fail("Failed to create a new Wizard");
         }

@@ -1,43 +1,48 @@
 package Smartphone.Contacts;
 
-import Smartphone.Errors.BusinessException;
-import Smartphone.Errors.ErrorCodes;
-
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicInteger;
+/**
+ * This class provides the code for a contact.
+ *
+ * @author Mégane Solliard
+ * @version
+ */
 
 public class Contact {
 
     private String name = "";
     private String phoneNumber;
-    private String indicatif;
+    private String indicative;
     private String email;
     private String address;
-    private String pathForImage;
-
-    //Par défaut il n'y a pas de photo
+    private String pathForImage = ClassLoader.getSystemResource("Icone_AddPicture.png").getPath();
     private ImageIcon photo;
-
-    //Fav contact par défaut false
-    private boolean favContact = false;
+    private boolean favContact = false;  //Fav contact par défaut false
     //Utilise classe AtomicInteger pour ne pas avoir 2x le même id
     private static AtomicInteger nextId = new AtomicInteger(0);
 
-    //Constructeur par défaut
-    public Contact(String path){}
-
-    public Contact(String name, String indicatif, String phoneNumber,
-                   String email, String address, String pathForImage,boolean favContact) {
+    /**
+     * This constructor create a contact.
+     * @param name – a String containing the name of the contact
+     * @param indicative – a String containing the indicative of the contact
+     * @param  phoneNumber – a String containing the phonenumber of the contact
+     * @param email – a String containing the email of the contact
+     * @param address – a String containing the address of the contact
+     * @param pathForImage – a String containing the path of the contact's picture
+     * @param favContact – a boolean which is true if the contact is a favourite contact, otherwise false
+     */
+    public Contact(String name, String indicative, String phoneNumber,
+                   String email, String address, String pathForImage, boolean favContact) {
         setName(name);
         this.phoneNumber = phoneNumber;
-        this.indicatif = indicatif;
+        this.indicative = indicative;
         this.email = email;
         this.address = address;
         nextId.getAndIncrement();
         this.favContact = favContact;
         this.pathForImage=pathForImage;
     }
-
 
     public void setPathForImage(String pathForImage) {
         this.pathForImage = pathForImage;
@@ -88,11 +93,11 @@ public class Contact {
         this.address = address;
     }
 
-    public String getIndicatif() {
-        return indicatif;
+    public String getIndicative() {
+        return indicative;
     }
 
-    public void setIndicatif(String indicatif) {
+    public void setIndicative(String indicative) {
     }
 
     public static AtomicInteger getNextId() {
@@ -111,12 +116,21 @@ public class Contact {
         this.favContact = favContact;
     }
 
+    /**
+     * This method put the contact's informations into a String.
+     * @return – String composed by the attributes of the contact
+     */
     @Override
     public String toString() {
-        return name + ", +" + indicatif + "  " + phoneNumber
+        return name + ", +" + indicative + "  " + phoneNumber
                 + ", email "+ email+", addresse "+address;
     }
 
+    /**
+     * This method test if a name already exist.
+     * @param o – the String to test
+     * @return – Boolean true if already exist, otherwise false
+     */
     @Override
     public boolean equals(Object o) {
 

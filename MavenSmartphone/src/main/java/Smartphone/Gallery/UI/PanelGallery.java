@@ -146,8 +146,8 @@ public class PanelGallery extends JPanel {
             pictureContents = setTheIcon(pictureContents);
             pictureContents.addActionListener(e -> {
                 picture.setPath((p.getPath()));
-                cardLayout.show(mPanel, "contactedit");
-                System.out.println(picture.getPath());
+                cardLayout.show(mPanel, "contactadd");
+               // System.out.println(picture.getPath());
             });
             panel.add(pictureContents);
         }
