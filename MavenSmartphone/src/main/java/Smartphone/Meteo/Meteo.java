@@ -9,6 +9,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * This Class display the weather for different country
+ * @author Thomas Cheseaux
+ */
 
 public class Meteo extends JPanel {
 
@@ -79,7 +83,7 @@ public class Meteo extends JPanel {
         mainPanel.add(northPanel, BorderLayout.NORTH);
 
 
-        panelMeteoInfo.setPreferredSize(new Dimension(380, 300));
+        panelMeteoInfo.setPreferredSize(new Dimension(380, 350));
 
         mainPanel.add(panelMeteoInfo, BorderLayout.CENTER);
         mainPanel.add(meteoWeekPanel, BorderLayout.SOUTH);
@@ -89,7 +93,6 @@ public class Meteo extends JPanel {
 
     /**
      * This method look which checkBox is selected
-     *
      * @return a String with the information like (imperial,standard,metric)ß
      */
     public String checkBoxSelected() {
