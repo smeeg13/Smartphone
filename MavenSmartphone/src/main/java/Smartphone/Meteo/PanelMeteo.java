@@ -18,6 +18,8 @@ public class PanelMeteo extends JPanel{
     private ToolBox toolBox = new ToolBox();
     private ImageIcon iconFlag;
     private String pathFlag;
+    private final int IMAGE_WIDTH = 60;
+    private final int IMAGE_HEIGTH = 60;
 
     /**
      * This constructor build the JPanel for the weather display
@@ -33,10 +35,11 @@ public class PanelMeteo extends JPanel{
         ToolBox tb = new ToolBox();
 
         pathFlag = "CountryFlag/"+country.getText().toLowerCase(Locale.ROOT)+".png";
-        iconFlag = toolBox.addImageIcon(pathFlag,50,50);
+        pathFlag = ClassLoader.getSystemResource(pathFlag).getPath();
+        iconFlag = toolBox.addPictureIcon(pathFlag,IMAGE_WIDTH,IMAGE_HEIGTH);
 
         jlCountryFlag = new JLabel(iconFlag);
-        jlCountryFlag.setBounds(120,20,150,50);
+        jlCountryFlag.setBounds(120,20,IMAGE_WIDTH,IMAGE_HEIGTH);
 
         city.setBounds(130,80,100,30);
 
