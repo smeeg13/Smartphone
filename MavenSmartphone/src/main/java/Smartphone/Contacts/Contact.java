@@ -2,6 +2,7 @@ package Smartphone.Contacts;
 
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * This class provides the code for a contact.
  *

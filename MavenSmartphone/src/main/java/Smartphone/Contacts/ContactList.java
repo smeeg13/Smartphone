@@ -3,10 +3,12 @@ package Smartphone.Contacts;
 import Smartphone.Errors.BusinessException;
 import Smartphone.Gallery.Core.Picture;
 import Smartphone.Storage.Storable;
+
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
+
 /**
  * This class provides the code for creating a contacts List.
  *

@@ -19,7 +19,8 @@ import java.io.File;
 public class PanelContact extends JPanel {
     private final int SIZE_CONTACT_PICTURE = 65;
     private final int SIZE_ICONE = 25;
-    private Picture picture = new Picture(ClassLoader.getSystemResource("Icone_AddPicture.png").getPath());
+    private final String PICTURE_DEFAULT = ClassLoader.getSystemResource("Icone_AddPicture.png").getPath();
+    private Picture picture = new Picture(PICTURE_DEFAULT);
 
 
     private CardLayout ecran = new CardLayout();
@@ -104,6 +105,10 @@ public class PanelContact extends JPanel {
     private JLabel adresseTxtContSelec = new JLabel("");
     private JLabel favContactLabContSelec = new JLabel("Add contact to favorite : ");
     private JCheckBox favCheckBoxContSelec = new JCheckBox("", false);
+
+    private JPanel panelRemovePic = new JPanel();
+    private JButton buttonRemovePic ;
+
     private JPanel panelDeleteContSelec = new JPanel();
     private JPanel panelOkContSelec = new JPanel();
     private JButton buttonCancelContSelec;
@@ -266,8 +271,8 @@ public class PanelContact extends JPanel {
 
         //panel avec infos à saisir
         PanelSelectCentre.add(panelInfosContSelec);
-        PanelSelectCentre.add(panelDeleteContSelec);
-        panelDeleteContSelec.setPreferredSize(new Dimension(400,44));
+        PanelSelectCentre.add(panelRemovePic);
+        panelRemovePic.setPreferredSize(new Dimension(400,44));
         panelInfosContSelec.setPreferredSize(new Dimension(350, 342));
         panelInfosContSelec.setLayout(new GridLayout(6, 2, 5, 2));
 
@@ -299,6 +304,13 @@ public class PanelContact extends JPanel {
         } catch (BusinessException businessException) {
             businessException.printStackTrace();
         }
+        buttonRemovePic = new JButton("Remove Picture");
+        buttonRemovePic.setBorderPainted(false);
+        buttonRemovePic.setFocusPainted(false);
+        buttonRemovePic.setContentAreaFilled(false);
+        buttonRemovePic.addActionListener(new Actions());
+        panelRemovePic.add(buttonRemovePic);
+
         //Mise en page Panel du bas
         PanelSelectCentre.add(panelOkContSelec, BorderLayout.SOUTH);
         panelOkContSelec.setPreferredSize(new Dimension(400, 35));
@@ -515,7 +527,7 @@ public class PanelContact extends JPanel {
         SelectPictureOK.setBorder(BorderFactory.createLineBorder(Color.black));
         SelectPictureOK.setFocusPainted(false);
         SelectPictureOK.setContentAreaFilled(false);
- // SelectPictureOK.addActionListener(new Actions());
+        SelectPictureOK.addActionListener(new Actions());
         PHautSelecPhoto.add(SelectPictureOK);
 
         PCentreSelectPhoto.setPreferredSize(new Dimension(400,400));
@@ -570,73 +582,70 @@ public class PanelContact extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == buttonAdd) {
+
                 ecran.show(mainPanel, "contactAdd");
             }
             if (e.getSource() == buttonSearch) {
                 ecran.show(mainPanel, "contactSearch");
             }
-            if (e.getSource() == buttonEdit){
-                ecran.show(mainPanel,"contactedit");
+            if (e.getSource() == buttonEdit) {
+                ecran.show(mainPanel, "contactedit");
                 nameTxtEdit.setText(nameTxtContSelec.getText());
                 numTxt3Edit.setText(numTxtContSelec.getText());
                 indicChoiceEdit.setSelectedItem(indicChoiceContSelec.getText());
                 emailTxtEdit.setText(emailTxtContSelec.getText());
                 adresseTxtEdit.setText(adresseTxtContSelec.getText());
-                buttonPictureEdit.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
+                buttonPictureEdit.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
 
                 if (favCheckBoxContSelec.isSelected() == true)
                     favCheckBoxEdit.setSelected(true);
                 else
                     favCheckBoxEdit.setSelected(false);
             }
-            if (e.getSource() == buttonSaveChanges){
-                    //Supprimer le contact
-                    contactList.delete(nameTxtContSelec.getText());
-                    favContactList.delete(nameTxtContSelec.getText());
+            if (e.getSource() == buttonSaveChanges) {
+                if (PICTURE_DEFAULT.equals(picture.getPath()))
+                    if (!picture.getPath().equals(contactSelec.getPathForImage()))
+                        picture.setPath(contactSelec.getPathForImage());
 
-                    boolean favContact;
-                    if (favCheckBoxEdit.isSelected() == true)
-                        favContact = true;
-                    else
-                        favContact = false;
-                    //Recréer contact avec changement
-                    Contact contact = new Contact(nameTxtEdit.getText(), (String) indicChoiceEdit.getSelectedItem(),numTxt3Edit.getText(),
-                                                    emailTxtEdit.getText(),adresseTxtEdit.getText(),picture.getPath(),favContact);
-                    if (contact.isFavContact() ==true) {
-                        try {
-                            favContactList.addToContactList(contact);
-                            favContactList.saveToFile(fileFavContactList);
-                        } catch (BusinessException businessException){
-                            businessException.printStackTrace();
-                        }
-                    }
+                //Supprimer le contact
+                contactList.delete(nameTxtContSelec.getText());
+                favContactList.delete(nameTxtContSelec.getText());
+
+                boolean favContact;
+                if (favCheckBoxEdit.isSelected() == true)
+                    favContact = true;
+                else
+                    favContact = false;
+                //Recréer contact avec changement
+                Contact contact = new Contact(nameTxtEdit.getText(), (String) indicChoiceEdit.getSelectedItem(), numTxt3Edit.getText(),
+                        emailTxtEdit.getText(), adresseTxtEdit.getText(), picture.getPath(), favContact);
+                if (contact.isFavContact() == true) {
                     try {
-                        contactList.addToContactList(contact);
-                        contactList.saveToFile(fileContactList);
+                        favContactList.addToContactList(contact);
                         favContactList.saveToFile(fileFavContactList);
-                        JListContacts.removeAll();
-                        JListContacts.setListData(contactList.getNameArrayFromJSON(fileContactList).toArray());
-                        JListFavContact.removeAll();
-                        JListFavContact.setListData(favContactList.getNameArrayFromJSON(fileFavContactList).toArray());
                     } catch (BusinessException businessException) {
                         businessException.printStackTrace();
                     }
-                    ecran.show(mainPanel,"contactPage");
-                    updateUI();
-            }
-            if (e.getSource() == buttonDelete){
-                contactList.delete(nameTxtContSelec.getText());
-                favContactList.delete(nameTxtContSelec.getText());
+                }
                 try {
+                    contactList.addToContactList(contact);
                     contactList.saveToFile(fileContactList);
                     favContactList.saveToFile(fileFavContactList);
+                    JListContacts.removeAll();
                     JListContacts.setListData(contactList.getNameArrayFromJSON(fileContactList).toArray());
+                    JListFavContact.removeAll();
                     JListFavContact.setListData(favContactList.getNameArrayFromJSON(fileFavContactList).toArray());
+                    picture = resetPicture(picture);
                 } catch (BusinessException businessException) {
                     businessException.printStackTrace();
                 }
-                ecran.show(mainPanel,"contactPage");
+                ecran.show(mainPanel, "contactPage");
                 updateUI();
+            }
+            if (e.getSource() == buttonDelete) {
+                contactList.delete(nameTxtContSelec.getText());
+                favContactList.delete(nameTxtContSelec.getText());
+                saveToJson();
             }
             if ((e.getSource() == buttonBack) || (e.getSource() == buttonCancel)) {
                 ecran.show(mainPanel, "contactPage");
@@ -647,6 +656,8 @@ public class PanelContact extends JPanel {
                 emailTxt.setText("");
                 adresseTxt.setText("");
                 picture = resetPicture(picture);      //Remet apareil photo sur bouton
+                buttonPicturePContactAdd.setIcon(new ImageIcon(new ImageIcon(picture.getPath()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
+
                 favCheckBox.setSelected(false);
                 rechercheBar.setText("");
                 LabelErreurRecherche.setVisible(false);
@@ -654,10 +665,13 @@ public class PanelContact extends JPanel {
                 buttonContactfind.setText("Enter above the name of the contact you want to find");
                 buttonContactfind.setBorder(BorderFactory.createLineBorder(Color.black));
             }
-            if (e.getSource() == buttonCancelEdit){
-                ecran.show(mainPanel,"contactselected");
+            if (e.getSource() == buttonCancelEdit) {
+                ecran.show(mainPanel, "contactselected");
+                picture = resetPicture(picture);
+                buttonPictureEdit.setIcon(new ImageIcon(new ImageIcon(picture.getPath()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
+                buttonPicturePContactAdd.setIcon(new ImageIcon(new ImageIcon(picture.getPath()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
             }
-            if (e.getSource() == buttonCancelContSelec){
+            if (e.getSource() == buttonCancelContSelec) {
                 nameTxtContSelec.setText("");
                 indicChoiceContSelec.setText("");
                 numTxtContSelec.setText("");
@@ -672,15 +686,15 @@ public class PanelContact extends JPanel {
             if (e.getSource() == buttonPictureEdit) {
                 String lastPanel = "contactedit";
                 CancelSelectionPic.setText(lastPanel);
-                ecran.show(mainPanel,"panelSelecPhoto");
+                ecran.show(mainPanel, "panelSelecPhoto");
                 openGaleryToSelecPic(e, buttonPictureEdit);
 
 
             }
-            if (e.getSource() == buttonPicturePContactAdd){
+            if (e.getSource() == buttonPicturePContactAdd) {
                 String lastPanel = "contactAdd";
                 CancelSelectionPic.setText(lastPanel);
-                ecran.show(mainPanel,"panelSelecPhoto");
+                ecran.show(mainPanel, "panelSelecPhoto");
                 openGaleryToSelecPic(e, buttonPicturePContactAdd);
 
             }
@@ -703,45 +717,40 @@ public class PanelContact extends JPanel {
 
                 boolean contactOK = false;
                 do {
-                //Controle si champs nom et numéro rempli avant d'ajouter
-                if (nameTxt.getText().isEmpty()  || numTxt.getText().isEmpty()) {
-                    //Afficher erreur car champs oblig vide
-                    System.err.println("Données contact vides");
-                    try {
-                        throw new BusinessException("Nom et/ou numéro du contact vide", ErrorCodes.CONTACT_INFORMATIONS_EMPTY);
-                    } catch (BusinessException businessException) {
-                        businessException.printStackTrace();
-                    }
-                    labErreurSaisie.setText("Nom et/ou numéro du contact vide");
-                }
-                else {
+                    //Controle si champs nom et numéro rempli avant d'ajouter
+                    if (nameTxt.getText().isEmpty() || numTxt.getText().isEmpty()) {
+                        //Afficher erreur car champs oblig vide
+                        System.err.println("Données contact vides");
+                        try {
+                            throw new BusinessException("Nom et/ou numéro du contact vide", ErrorCodes.CONTACT_INFORMATIONS_EMPTY);
+                        } catch (BusinessException businessException) {
+                            businessException.printStackTrace();
+                        }
+                        labErreurSaisie.setText("Nom et/ou numéro du contact vide");
+                    } else {
                         try {
                             if (contactList.containsNameInJson(nameTxt.getText(), fileContactList)) {
                                 labErreurSaisie.setText("Contact Already exist !");
                                 throw new BusinessException("Contact already exist", ErrorCodes.CONTACT_ALREADY_EXIST_ERROR);
-                                }
-                             else {
+                            } else {
                                 //Création nouveau contact
                                 Contact contact = new Contact(nom, indicatif, numero, email, adresse, picture.getPath(), favContact);
-                                System.out.println(picture.getPath());
-                                picture = resetPicture(picture);
-                                System.out.println(picture.getPath()+" ap");
 
                                 //Si contact favori ajout à liste des contacts fav aussi
                                 if (contact.isFavContact()) {
-                                        //Ajouter à la liste
-                                        favContactList.addToContactList(contact);
-                                        //Save file
-                                        favContactList.saveToFile(fileFavContactList);
-                                        JListFavContact.removeAll();
-                                        JListFavContact.setListData(contactList.getNameArrayFromJSON(fileFavContactList).toArray());
+                                    //Ajouter à la liste
+                                    favContactList.addToContactList(contact);
+                                    //Save file
+                                    favContactList.saveToFile(fileFavContactList);
+                                    JListFavContact.removeAll();
+                                    JListFavContact.setListData(contactList.getNameArrayFromJSON(fileFavContactList).toArray());
                                 }
-                                    //Ajout du contact à la liste de contact
-                                    contactList.addToContactList(contact);
-                                    //Savuvegarder les fichiers
-                                    contactList.saveToFile(fileContactList);
-                                    JListContacts.removeAll();
-                                    JListContacts.setListData(contactList.getNameArrayFromJSON(fileContactList).toArray());
+                                //Ajout du contact à la liste de contact
+                                contactList.addToContactList(contact);
+                                //Savuvegarder les fichiers
+                                contactList.saveToFile(fileContactList);
+                                JListContacts.removeAll();
+                                JListContacts.setListData(contactList.getNameArrayFromJSON(fileContactList).toArray());
                                 updateUI();
 
                                 //Mise à zéro des champs de saisie
@@ -752,6 +761,7 @@ public class PanelContact extends JPanel {
                                 adresseTxt.setText("");
                                 //Remet apareil photo sur bouton et texte empty
                                 picture = resetPicture(picture);
+                                buttonPicturePContactAdd.setIcon(new ImageIcon(new ImageIcon(picture.getPath()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
                                 favCheckBox.setSelected(false);
                                 contactOK = true;
                                 ecran.show(mainPanel, "contactPage"); //Retour sur page des contacts
@@ -760,15 +770,15 @@ public class PanelContact extends JPanel {
                             businessException.printStackTrace();
                         }
                     }
-            } while (contactOK =false);
+                } while (contactOK = false);
             }
             //Recherche d'un contact
             if (e.getSource() == buttonGoSearch) {
                 String research = "";
                 research = rechercheBar.getText();
                 try {
-                    if (contactList.containsNameInJson(research,fileContactList) ==true) {
-                        Contact searchedCont = contactList.getContactByName(research,fileContactList);
+                    if (contactList.containsNameInJson(research, fileContactList) == true) {
+                        Contact searchedCont = contactList.getContactByName(research, fileContactList);
                         buttonContactfind.setText(searchedCont.getName());
                         buttonContactfind.setEnabled(true);
                         buttonContactfind.setBorder(BorderFactory.createTitledBorder("Contact Find"));
@@ -784,12 +794,12 @@ public class PanelContact extends JPanel {
                 }
                 rechercheBar.setText("");
             }
-            if (e.getSource() == buttonContactfind){
+            if (e.getSource() == buttonContactfind) {
                 String selectedContact;
-                ecran.show(mainPanel,"contactselected");
+                ecran.show(mainPanel, "contactselected");
                 try {
-                        selectedContact = buttonContactfind.getText();
-                        contactSelec = contactList.getContactByName(selectedContact, fileContactList);
+                    selectedContact = buttonContactfind.getText();
+                    contactSelec = contactList.getContactByName(selectedContact, fileContactList);
                     // Si le contact n'existe pas, ne rien mettre à jour
                     if (contactSelec == null) return;
                     //Ajouter les infos du contact sélectionné à la page d'info du contact
@@ -799,7 +809,7 @@ public class PanelContact extends JPanel {
                     emailTxtContSelec.setText(contactSelec.getEmail());
                     adresseTxtContSelec.setText(contactSelec.getAddress());
 
-                    buttonPictureContSelec.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
+                    buttonPictureContSelec.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
 
                     if (contactSelec.isFavContact() == true)
                         favCheckBoxContSelec.setSelected(true);
@@ -811,12 +821,37 @@ public class PanelContact extends JPanel {
             }
             if (e.getSource() == CancelSelectionPic) {
 
-                ecran.show(mainPanel,CancelSelectionPic.getText());
-                CancelSelectionPic.setText("");
+                picture = resetPicture(picture);
+                if (CancelSelectionPic.getText().equals("contactAdd"))
+                    buttonPicturePContactAdd.setIcon(new ImageIcon(new ImageIcon(picture.getPath()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
+                else
+                    buttonPictureEdit.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
 
+                ecran.show(mainPanel, CancelSelectionPic.getText());
+                CancelSelectionPic.setText(null);
             }
             if (e.getSource() == SelectPictureOK) {
 //Reprend le path de la photo sélectionnée quand clic sur Ok
+                System.out.println(picture.getPath());
+                ImageIcon picChoose = new ImageIcon(new ImageIcon(picture.getPath()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH));
+                if (CancelSelectionPic.getText().equals("contactAdd"))
+                    buttonPicturePContactAdd.setIcon(picChoose);
+                else
+                    buttonPictureEdit.setIcon(picChoose);
+
+                ecran.show(mainPanel, CancelSelectionPic.getText());
+            }
+            if (e.getSource() == buttonRemovePic) {
+                Contact contact = new Contact(contactSelec.getName(), contactSelec.getIndicative(), contactSelec.getPhoneNumber(), contactSelec.getEmail(), contactSelec.getAddress(), PICTURE_DEFAULT, contactSelec.isFavContact());
+
+                contactList.delete(contactSelec.getName());
+                favContactList.delete(contactSelec.getName());
+
+                if (contact.isFavContact())
+                    favContactList.addToContactList(contact);
+                //Ajout du contact à la liste de contact
+                contactList.addToContactList(contact);
+                saveToJson();
 
             }
         }
@@ -830,27 +865,25 @@ public class PanelContact extends JPanel {
                     f.printStackTrace();
                 }
                 ecranGalery.show(PCentreSelectPhoto,"galery");
-                /*
-                JFileChooser fileChooser=new JFileChooser();
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("gif", "png", "bmp", "jpg","jpeg","PNG");
-                fileChooser.setFileFilter(filter);
-                int returnVal = fileChooser.showOpenDialog(null);
-                //Photo choisie
-                File file = fileChooser.getSelectedFile();
-                //variable : "photoContact" = photo choisie
-                try {
-                    Image photochoisie = ImageIO.read(file);
-                    photoContact = new ImageIcon((new ImageIcon(photochoisie).getImage().getScaledInstance(56, 56, Image.SCALE_DEFAULT)));
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                 */
-                button.setIcon(new ImageIcon(new ImageIcon(picture.getPath()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
+               // button.setIcon(new ImageIcon(new ImageIcon(picture.getPath()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
         }
     }
 
     private Picture resetPicture(Picture picture){
-        picture.setPath(ClassLoader.getSystemResource("Icone_AddPicture.png").getPath());
+        picture.setPath(PICTURE_DEFAULT);
         return picture;
+    }
+    private void saveToJson(){
+        try {
+            contactList.saveToFile(fileContactList);
+            favContactList.saveToFile(fileFavContactList);
+            JListContacts.setListData(contactList.getNameArrayFromJSON(fileContactList).toArray());
+            JListFavContact.setListData(favContactList.getNameArrayFromJSON(fileFavContactList).toArray());
+        } catch (BusinessException businessException) {
+            businessException.printStackTrace();
+        }
+        ecran.show(mainPanel,"contactPage");
+        updateUI();
     }
 }
 
