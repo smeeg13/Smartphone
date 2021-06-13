@@ -35,11 +35,12 @@ public class PanelMeteo extends JPanel{
         ToolBox tb = new ToolBox();
 
         pathFlag = "CountryFlag/"+country.getText().toLowerCase(Locale.ROOT)+".png";
-        pathFlag = ClassLoader.getSystemResource(pathFlag).getPath();
-        iconFlag = toolBox.addPictureIcon(pathFlag,IMAGE_WIDTH,IMAGE_HEIGTH);
+//        pathFlag = ClassLoader.getSystemResource(pathFlag).getPath();
+        iconFlag = toolBox.addPictureIconFlag(pathFlag,IMAGE_WIDTH,IMAGE_HEIGTH);
 
         jlCountryFlag = new JLabel(iconFlag);
         jlCountryFlag.setBounds(120,20,IMAGE_WIDTH,IMAGE_HEIGTH);
+        jlCountryFlag.setBackground(Color.cyan);
 
         city.setBounds(130,80,100,30);
 
