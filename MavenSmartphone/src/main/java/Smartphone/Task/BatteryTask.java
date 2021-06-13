@@ -6,6 +6,7 @@ import Smartphone.Errors.ErrorCodes;
 import Smartphone.ToolBox;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,6 +19,7 @@ public class BatteryTask extends TimerTask {
     private ToolBox toolBox = new ToolBox();
     private final String commandBatteryOS = "pmset -g batt";
     private final String commandBatteryWIN = "WMIC PATH Win32_Battery Get EstimatedChargeRemaining";
+
 
 
     /**

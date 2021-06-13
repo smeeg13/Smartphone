@@ -196,15 +196,17 @@ public class MeteoRessource extends Meteo{
 
         meteo = getForecast(location, appId);
 
+        System.out.println(meteo);
+
 
         JSONObject jsonObject = new JSONObject(meteo);
-        JSONArray geodata = jsonObject.getJSONArray("list");
+        JSONArray geoData = jsonObject.getJSONArray("list");
 
-        int n = geodata.length();
+        int n = geoData.length();
 
 
         for (int i = 0; i < n; i++) {
-            JSONObject person = geodata.getJSONObject(i);
+            JSONObject person = geoData.getJSONObject(i);
 
             if (firstTime) {
                 firstHour = unixToHour(person.getInt("dt")).toUpperCase(Locale.ROOT);
@@ -257,21 +259,22 @@ public class MeteoRessource extends Meteo{
      * @return a String with the new format of hour
      */
     public String unixToHour(int unixSeconds) {
-        Date date = new java.util.Date(unixSeconds * 1000L);                                          // convert seconds to miliseconds
-        SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH");                       // the format of your date
-        sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+2"));                                   // give a timezone reference for formatting (see comment at the bottom)
+        Date date = new java.util.Date(unixSeconds * 1000L);
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH");
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+2"));
         String formattedDate = sdf.format(date);
         return formattedDate;
     }
+
     /**
      * This method convert the number in unixSecond in human Hour/Minute
      * @param unixSeconds is given by then String on openweathermap
      * @return a String with the new format of hour/minute
      */
     public String unixToHourMinute(int unixSeconds) {
-        Date date = new java.util.Date(unixSeconds * 1000L);                                          // convert seconds to miliseconds
-        SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");                       // the format of your date
-        sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+2"));                                   // give a timezone reference for formatting (see comment at the bottom)
+        Date date = new java.util.Date(unixSeconds * 1000L);
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+2"));
         String formattedDate = sdf.format(date);
         return formattedDate;
     }

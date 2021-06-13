@@ -277,12 +277,13 @@ public  class StructureFrame extends JFrame {
             if(toolBox.isReachableByPing("api.openweathermap.org")){
                 collectionEcrans.show(panelCont, "meteo");
             }else{
-                JOptionPane.showMessageDialog(menu,"Ping to host failed","Internet conection",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(menu,"Ping to host failed","Internet connection",JOptionPane.WARNING_MESSAGE);
             }
         }
 
 
     }
+
 
     class ClicCalculette implements ActionListener{
 

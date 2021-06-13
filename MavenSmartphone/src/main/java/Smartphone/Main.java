@@ -1,6 +1,7 @@
 package Smartphone;
 
 import Smartphone.Errors.BusinessException;
+import Smartphone.Errors.ErrorCodes;
 
 import javax.swing.*;
 import java.io.File;
@@ -12,32 +13,13 @@ import java.nio.file.Paths;
 public class Main {
     public static void main(String[] args) throws BusinessException, IOException {
 
-        String str = System.getenv("HOME") + "/contacts";
-        File contactFolder = new File(str);
-        contactFolder.mkdir();
+        createContactFolder();
+
         File fileContactList = new File(System.getenv("HOME") + "/contacts/ContactList.json");
         File fileFavContactList = new File(System.getenv("HOME") + "/contacts/FavContactList.json");
-        System.out.println(System.getenv());
-        if (!fileContactList.exists()) {
-            fileContactList.createNewFile();
-            String str1 = "[]";
-            Path path = Paths.get(String.valueOf(fileContactList));
-            byte[] strToBytes = str1.getBytes();
-            Files.write(path, strToBytes);
-            System.out.println("File has been created.");
-        } else {
-            System.out.println("File already exists.");
-        }
-        if (!fileFavContactList.exists()) {
-            fileFavContactList.createNewFile();
-            String str2 = "[]";
-            Path path = Paths.get(String.valueOf(fileFavContactList));
-            byte[] strToBytes = str2.getBytes();
-            Files.write(path, strToBytes);
-            System.out.println("File has been created.");
-        } else {
-            System.out.println("File already exists.");
-        }
+
+        checkFileExisted(fileContactList);
+        checkFileExisted(fileFavContactList);
 
         JFrame frame = new StructureFrame();
 
@@ -47,5 +29,40 @@ public class Main {
         frame.setResizable(false);
     }
 
+    /**
+     * This method check if the File exists, when not
+     * it creates a file
+     * @param file is the new file we want to create if it is not created yet
+     * @throws IOException
+     */
+    public static void checkFileExisted(File file) throws BusinessException,IOException {
+        if (file.exists()) {
+            file.createNewFile();
+            String str1 = "[]";
+            Path path = Paths.get(String.valueOf(file));
+            byte[] strToBytes = str1.getBytes();
+
+            try {
+                Files.write(path, strToBytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new BusinessException("Cannot write in the file",e, ErrorCodes.IO_ERROR);
+            }
+
+            System.out.println("File has been created.");
+        } else {
+            System.out.println("File already exists.");
+        }
+    }
+
+    /**
+     * This method create a new contact folder when
+     * we first start the application
+     */
+    public static void createContactFolder(){
+        String str = System.getenv("HOME") + "/contacts";
+        File contactFolder = new File(str);
+        contactFolder.mkdir();
+    }
 
 }
