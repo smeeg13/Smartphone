@@ -14,23 +14,6 @@ public class ToolBox {
 
     private String OS = System.getProperty("os.name").toLowerCase();
 
-    public ImageIcon addImageIconJButton(String path, int width, int height) {
-        ImageIcon imageSearch;
-        imageSearch = new ImageIcon(path);
-        Image imagetest = imageSearch.getImage();
-        Image newTest = imagetest.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        return imageSearch = new ImageIcon(newTest);
-    }
-
-    public ImageIcon addImageIcon(String flagNamePath, int width, int height) {
-        ImageIcon imageSearch;
-        System.out.println(flagNamePath);
-        imageSearch = new ImageIcon(new ImageIcon(ClassLoader.getSystemResource(flagNamePath)).getImage());
-        Image imagetest = imageSearch.getImage();
-        Image newTest = imagetest.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        return imageSearch = new ImageIcon(newTest);
-    }
-
     public boolean isWindows() {
         return OS.contains("win");
     }
