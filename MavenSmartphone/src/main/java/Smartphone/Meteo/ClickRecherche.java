@@ -4,6 +4,11 @@ import javax.swing.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+/**
+ * This class is used for the Foculistener of the searchBar
+ * @author Thomas Cheseaux
+ */
+
 public class ClickRecherche implements FocusListener {
     private final JTextField recherche ;
 

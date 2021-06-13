@@ -17,6 +17,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * This class is used to select and get information from the api openweathermap
+ * @author Thomas Cheseaux
+ */
+
 public class MeteoRessource extends Meteo{
 
     private int responseCode;
@@ -48,7 +53,7 @@ public class MeteoRessource extends Meteo{
     }
 
     /**
-     *
+     * This method get the weather on openweathermap
      * @param location for the city to search
      * @param appId allows to use the website openweathermap
      * @param unit determine the unit to show
@@ -146,7 +151,7 @@ public class MeteoRessource extends Meteo{
         JSONObject jsonObject = new JSONObject(meteo);
 
         city.setText("City: " + jsonObject.getString("name"));
-        country.setText("Country: " + jsonObject.getJSONObject("sys").getString("country"));
+        country.setText(jsonObject.getJSONObject("sys").getString("country"));
         jlSunrise.setText("Sunrise: " + unixToHourMinute(jsonObject.getJSONObject("sys").getInt("sunrise")));
         jlSunset.setText("Sunset: " + unixToHourMinute(jsonObject.getJSONObject("sys").getInt("sunset")));
 
