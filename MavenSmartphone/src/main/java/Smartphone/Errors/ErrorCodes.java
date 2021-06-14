@@ -12,7 +12,8 @@ public enum ErrorCodes {
     CONTACT_NOT_FOUND(203),
     IO_ERROR(301),
     REQUEST_FAIL(401),
-    TERMINALCOMMAND_ERROR(402);
+    TERMINALCOMMAND_ERROR(402),
+    BAD_PARAMETER(403);
 
     private final int code;
     /**
