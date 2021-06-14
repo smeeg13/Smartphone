@@ -68,8 +68,8 @@ public class MeteoRessource extends Meteo{
                     + "?units=" + unit
                     + "&q=" + location
                     + "&appid=" + appId));
-        } catch (MalformedURLException e) {
-            throw new BusinessException("URL is malformed", e, ErrorCodes.BAD_PARAMETER);
+        } catch (IOException e) {
+            throw new BusinessException("URL is malformed", e, ErrorCodes.IO_ERROR);
         }
     }
 
@@ -85,8 +85,8 @@ public class MeteoRessource extends Meteo{
 
         try {
             return weatherInfoWeek = getOpenweathermapInfo(new URL("http://api.openweathermap.org/data/2.5/forecast?q=" + location + "&appid=" + appId));
-        } catch (MalformedURLException e) {
-            throw new BusinessException("URL is malformed", e, ErrorCodes.BAD_PARAMETER);
+        } catch (IOException e) {
+            throw new BusinessException("URL is malformed", e, ErrorCodes.IO_ERROR);
         }
 
     }

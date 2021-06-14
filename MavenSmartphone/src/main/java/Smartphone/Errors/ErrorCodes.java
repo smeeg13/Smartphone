@@ -13,7 +13,8 @@ public enum ErrorCodes {
     IO_ERROR(301),
     REQUEST_FAIL(401),
     TERMINALCOMMAND_ERROR(402),
-    BAD_PARAMETER(403);
+    BAD_PARAMETER(403),
+    BAD_CITYNAME(404);
 
     private final int code;
     /**

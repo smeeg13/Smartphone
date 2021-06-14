@@ -5,26 +5,25 @@ import Smartphone.Errors.ErrorCodes;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.function.Executable;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
+
 import java.awt.*;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class TestMeteo {
+class TestMeteo {
 
 
     @Test
-    public void checkBoxSelected() {
+    void checkBoxSelected() {
         CheckboxGroup cbg = new CheckboxGroup();
         Checkbox checkboxTest;
         Checkbox checkboxMetric = new Checkbox("metric", cbg, true);
@@ -47,7 +46,7 @@ public class TestMeteo {
     }
 
     @Test
-    public void pingOpenweathermapTest() {
+    void pingOpenweathermapTest() {
         String OS = System.getProperty("os.name").toLowerCase();
         String host = "api.openweathermap.org";
         int pingResult = 100;
@@ -76,6 +75,94 @@ public class TestMeteo {
 
     }
 
+    @Test
+    void getWeatherTest() throws BusinessException {
+
+        BusinessException e;
+
+        e = assertThrows(BusinessException.class,
+                new Executable() {
+                    @Override
+                    public void execute() throws Throwable {
+                        String weatherInfo = "";
+                        StringBuilder rt = new StringBuilder();
+                        int responseCode;
+                        String apiKey = "282e58d6c4f45693bc47da6aa566cab5";
+
+                        try {
+                            URL url = new URL("http://apiopenweathermap.org/data/2.5/weather"
+                                    + "?units=" + "metric"
+                                    + "&q=martigny"
+                                    + "&appid=" + apiKey);
+
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("GET");
+                            responseCode = conn.getResponseCode();
+
+                            if (responseCode == HttpURLConnection.HTTP_OK) {
+                                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                                String readLine;
+
+                                while ((readLine = in.readLine()) != null) {
+                                    rt.append(readLine);
+                                }
+
+                                in.close();
+                            } else {
+                                System.err.println("Wrong response code: " + responseCode);
+                            }
+                        } catch (IOException e) {
+                            throw new BusinessException("URL is malformed", e, ErrorCodes.IO_ERROR);
+                        }
+                    }
+                });
+
+        assertEquals(ErrorCodes.IO_ERROR.getCode(), e.getErrorCode());
+
+
+        e = assertThrows(BusinessException.class,
+                new Executable() {
+                    @Override
+                    public void execute() throws Throwable {
+                        String weatherInfo = "";
+                        StringBuilder rt = new StringBuilder();
+                        int responseCode;
+                        String apiKey = "282e58d6c4f45693bc47da6aa566cab5";
+
+                        try {
+                            URL url = new URL("http://api.openweathermap.org/data/2.5/weather"
+                                    + "?units=" + "metric"
+                                    + "&q=murtigny"
+                                    + "&appid=" + apiKey);
+
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("GET");
+                            responseCode = conn.getResponseCode();
+
+
+                            if (responseCode == HttpURLConnection.HTTP_OK) {
+                                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                                String readLine;
+
+                                while ((readLine = in.readLine()) != null) {
+                                    rt.append(readLine);
+                                }
+
+                                in.close();
+                            } else {
+                                throw new BusinessException("Wrong city name",ErrorCodes.BAD_CITYNAME);
+                            }
+                        } catch (IOException e) {
+                            throw new BusinessException("URL is malformed", e, ErrorCodes.BAD_PARAMETER);
+                        }
+                    }
+                });
+
+        assertEquals(ErrorCodes.BAD_CITYNAME.getCode(), e.getErrorCode());
+
+    }
 
     @Test
     public void getSelectedMeteoTest() {
