@@ -22,13 +22,6 @@ public class ToolBox {
         return OS.contains("mac");
     }
 
-//    public boolean isUnix() {
-//        return (OS.contains("nix") || OS.contains("nux") || OS.contains("aix"));
-//    }
-
-//    public boolean isSolaris() {
-//        return OS.contains("sunos");
-//    }
 
     /**
      * This method readjusts the picture with the right perspectives
@@ -65,7 +58,13 @@ public class ToolBox {
         return new ImageIcon(newTest);
     }
 
-    // image thomas essai
+    /**
+     * This method get the country flag
+     * @param path  Path of the picture
+     * @param width desired width in int
+     * @param height desired height in int
+     * @return ImageIcon with right perspectives
+     */
     public ImageIcon addPictureIconFlag(String path, int width, int height) {
         ImageIcon imageSearch;
         imageSearch = new ImageIcon(ClassLoader.getSystemResource(path));

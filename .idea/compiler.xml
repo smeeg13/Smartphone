@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
-      <module name="MavenSmartphone" target="8" />
+      <module name="MavenSmartphone" target="1.8" />
       <module name="Smartphone" target="8" />
     </bytecodeTargetLevel>
   </component>

@@ -56,7 +56,7 @@ public class Main {
     }
 
     /**
-     * This method create a new contact folder when
+     * This method create a new contact folder when starting the app
      * we first start the application
      */
     public static void createContactFolder(){

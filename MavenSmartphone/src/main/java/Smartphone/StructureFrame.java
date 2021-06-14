@@ -106,7 +106,7 @@ public class StructureFrame extends JFrame {
         bandeBas.add(buttonMenu);
         bandeBas.setPreferredSize(tailleBande);
         bandeBas.setFont(bandeBas.getFont().deriveFont(Font.BOLD));
-//bouton pour vérouiller
+        //bouton pour vérouiller
         buttonVerouiller = new JButton(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_Verrou.png")).getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
         buttonVerouiller.setBorderPainted(false);
         buttonVerouiller.setFocusPainted(false);
