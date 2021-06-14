@@ -443,7 +443,7 @@ public class PanelContact extends JPanel {
         add(mainPanel);
     }
 
-    private void openGaleryToSelecPic(ActionEvent e, JButton button) {
+    private void openGaleryToSelecPic() {
         try {
             gallery = new PanelGallery(PCentreSelectPhoto,picture);
         } catch (BusinessException f) {
@@ -484,7 +484,10 @@ public class PanelContact extends JPanel {
         numTxtContSelec.setText(contactSelec.getPhoneNumber());
         emailTxtContSelec.setText(contactSelec.getEmail());
         adresseTxtContSelec.setText(contactSelec.getAddress());
-        buttonPictureContSelec.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
+        if (PICTURE_DEFAULT.equals(contactSelec.getPathForImage()))
+            buttonPictureContSelec.setIcon(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_AddPicture.png")).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
+        else
+            buttonPictureContSelec.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
         favCheckBoxContSelec.setSelected(contactSelec.isFavContact());
     }
     //Mise à zéro des champs de saisie
@@ -610,15 +613,14 @@ public class PanelContact extends JPanel {
             if (e.getSource() == buttonPictureEdit) {
                 String lastPanel = "contactedit";
                 CancelSelectionPic.setText(lastPanel);
+                openGaleryToSelecPic();
                 ecran.show(mainPanel, "panelSelecPhoto");
-                openGaleryToSelecPic(e, buttonPictureEdit);
             }
             if (e.getSource() == buttonPictureContactAdd) {
                 String lastPanel = "contactAdd";
                 CancelSelectionPic.setText(lastPanel);
+                openGaleryToSelecPic();
                 ecran.show(mainPanel, "panelSelecPhoto");
-                openGaleryToSelecPic(e, buttonPictureContactAdd);
-
             }
             if (e.getSource() == buttonSave) { //Sauvergarder un nouveau contact
                 String nom = nameTxt.getText();

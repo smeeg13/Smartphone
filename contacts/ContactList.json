@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "name": "Meg",
+    "phoneNumber": "4",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone/target/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar/Icone_AddPicture.png",
+    "favContact": false
+  }
+]
