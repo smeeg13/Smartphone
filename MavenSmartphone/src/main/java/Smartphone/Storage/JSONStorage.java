@@ -15,14 +15,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 /**
- * This class implemtent the methode of the interface Storable, used to save or read a Json.
+ * This class implement the methods of the interface Storable, used to save or read a Json.
  *
  * @author Mégane Solliard
  * @version
  */
 public class JSONStorage implements Storable {
 
-//Méthode pour lire un ficher JSON
+    /**
+     * This method is used to put into an ArrayList all the contacts already in the Json File.
+     * @param source - the Json file where the contacts are saved into
+     * @return the ArrayList of Contact from the json file
+     * @throws BusinessException If the file cannot be read
+     *                           (the user hasn't the permission)
+     * @see Storable#read(File)
+     *
+     */
     @Override
     public ArrayList<Contact> read(File source) throws BusinessException {
 
@@ -38,7 +46,15 @@ public class JSONStorage implements Storable {
 
     }
 
-//Méthode pour ecrire dans un ficher JSON
+    /**
+     * This method is used to put into the Json File the ArrayList of contacts.
+     * @param destination - the Json file where the contacts will be saved into
+     * @param contacts - the ArrayList of contacts which has to be saved
+     * @throws BusinessException If the file cannot be save
+     *                           (the user hasn't the permission)
+     * @see Storable#write(File, ArrayList)
+     *
+     */
     @Override
     public void write(File destination, ArrayList<Contact> contacts) throws BusinessException {
 

@@ -15,22 +15,11 @@ import java.awt.event.ActionListener;
  * @version
  */
 public class Calculator extends JPanel {
-
-    //Pas plus de 3 chiffres
-
-    ToolBox toolBox = new ToolBox();
-
-    // create a panel
-    private  JPanel mainpanel = new JPanel();
-    private  JPanel paneltexte = new JPanel();
-    private JPanel panelButton = new JPanel();
-
     JTextField textField;
     JButton[] numberButtons = new JButton[10];
     JButton[] functionButtons = new JButton[10];
     JButton addBut, subBut, mulBut,divBut;
     JButton decBut,percBut, negBut, equBut, delBut, clrBut ;
-
     Font myFont = new Font("Tahoma", Font.BOLD, 16);
 
     double num1 = 0, num2 = 0,result = 0;
@@ -43,13 +32,16 @@ public class Calculator extends JPanel {
 
         setBackground(Color.lightGray);
 
+        // create a panel
+        JPanel mainpanel = new JPanel();
         mainpanel.setLayout(new BoxLayout (mainpanel, BoxLayout.Y_AXIS));
         mainpanel.setBackground(Color.lightGray);
         mainpanel.setPreferredSize(new Dimension(400,533));
 
-
+        JPanel paneltexte = new JPanel();
         paneltexte.setBackground(Color.lightGray);
         paneltexte.setLayout(null);
+        JPanel panelButton = new JPanel();
         panelButton.setPreferredSize(new Dimension(350,350));
         panelButton.setBackground(Color.lightGray);
         panelButton.setLayout(new GridLayout(5, 4, 13, 13));
@@ -127,39 +119,58 @@ public class Calculator extends JPanel {
         add(mainpanel);
     }
     /**
-     * This class is used for the JButtons
+     * This class is used to give actionListener to all the JButtons
      */
     class Listener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
+            //Set the number of the button in the textField above
             for (int i = 0; i < 10; i++) {
                 if (e.getSource() == numberButtons[i]) {
                     textField.setText(textField.getText().concat(String.valueOf(i)));
                 }
             }
+
+            //Set a point after the text already in the textField above
             if (e.getSource() == decBut) {
                 textField.setText(textField.getText().concat("."));
             }
+
+            //Take what is inside the textField and put it into an double num1
+            //And set the operator with + before reset the textField
             if (e.getSource() == addBut) {
                 num1 = Double.parseDouble(textField.getText());
                 operator = '+';
                 textField.setText("");
             }
+
+            //Take what is inside the textField and put it into an double num1
+            //And set the operator with - before reset the textField
             if (e.getSource() == subBut) {
                 num1 = Double.parseDouble(textField.getText());
                 operator = '-';
                 textField.setText("");
             }
+
+            //Take what is inside the textField and put it into an double num1
+            //And set the operator with * before reset the textField
             if (e.getSource() == mulBut) {
                 num1 = Double.parseDouble(textField.getText());
                 operator = '*';
                 textField.setText("");
             }
+
+            //Take what is inside the textField and put it into an double num1
+            //And set the operator with / before reset the textField
             if (e.getSource() == divBut) {
                 num1 = Double.parseDouble(textField.getText());
                 operator = '/';
                 textField.setText("");
             }
+
+            //Take what is inside the textField and put it into an double num2
+            //Depending on which operator has been set, the calcul will be done
+            //And the result of this will be put into the num1 and displayed in the textField
             if (e.getSource() == equBut){
                 num2 = Double.parseDouble(textField.getText());
 
@@ -180,9 +191,13 @@ public class Calculator extends JPanel {
                 textField.setText(String.valueOf(result));
                 num1 = result;
             }
+
+            //Reset the textField
             if (e.getSource() == clrBut) {
                 textField.setText("");
             }
+
+            //Delete the last char of the textField
             if (e.getSource() == delBut) {
                 String str = textField.getText();
                 textField.setText("");
@@ -190,11 +205,17 @@ public class Calculator extends JPanel {
                     textField.setText(textField.getText()+str.charAt(i));
                 }
             }
+
+            //Take the text of the textField and put it into a double temp
+            //Then put the temp negative and displayed it in the textField
             if (e.getSource() == negBut) {
                 double temp = Double.parseDouble(textField.getText());
                 temp*=-1;
                 textField.setText(String.valueOf(temp));
             }
+
+            //Take the text of the textField and put it into a double temp
+            //Then divide the temp by 100 and displayed it in the textField
             if (e.getSource() == percBut) {
                 double temp = Double.parseDouble(textField.getText());
                 temp/=100;
