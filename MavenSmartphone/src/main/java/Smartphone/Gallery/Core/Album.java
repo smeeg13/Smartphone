@@ -41,7 +41,6 @@ public class Album {
             pictureList = discoverImages(path);
             albumList = discoverAlbums(path,this);
         }
-
     }
 
     /**
