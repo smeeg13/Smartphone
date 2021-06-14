@@ -2,8 +2,6 @@ package Smartphone.Meteo;
 
 import Smartphone.Errors.BusinessException;
 import Smartphone.ToolBox;
-import lombok.SneakyThrows;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
