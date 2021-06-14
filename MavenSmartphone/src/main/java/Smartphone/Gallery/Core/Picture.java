@@ -28,11 +28,7 @@ public class Picture {
         String str = file.getName();
         boolean succeed =false;
         File newFile =new File(file.getParentFile().getPath() + "/" + name + str.substring(str.lastIndexOf('.')));
-        try {
-            succeed = file.renameTo(newFile); //if the user hasn't the permission to rename a file
-        } catch(Exception e){
-            e.printStackTrace();
-        }
+        succeed = file.renameTo(newFile); //if the user hasn't the permission to rename a file
         if(succeed)
             file = newFile;
     }
