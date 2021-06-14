@@ -4,7 +4,6 @@ import Smartphone.Errors.BusinessException;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * This class creates or find the first Album (see in {@link Smartphone.Gallery.Core.Album}).

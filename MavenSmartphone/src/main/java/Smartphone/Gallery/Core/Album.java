@@ -1,5 +1,4 @@
 package Smartphone.Gallery.Core;
-import Smartphone.*;
 import Smartphone.Errors.BusinessException;
 
 import java.io.File;
