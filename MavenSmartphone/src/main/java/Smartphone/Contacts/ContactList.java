@@ -10,14 +10,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
- * This class provides the code for creating a contacts List.
+ * This class provides the code for creating a list of contacts.
  *
  * @author Mégane Solliard
- * @version
+ * @version 2
  */
 public class ContactList {
-    //Limité à 200 contacts pour le test
-
     private ArrayList<Contact> contacts ;
     private Storable storage;
     private Picture picture = new Picture(ClassLoader.getSystemResource("Icone_AddPicture.png").getPath());
@@ -25,17 +23,21 @@ public class ContactList {
     Label labErreurSaisie=new Label("");
 
     /**
-     * This constructor provides the gallery display.
-     *
+     * This constructor provides the contactlist.
+     * @param storage -
      */
     public ContactList(Storable storage){
         contacts = new ArrayList<>();
         this.storage = storage;
     }
-
+    /**
+     * Get all contacts in an Arraylist.
+     * @return – this phonenumber in a String
+     */
     public ArrayList<Contact> getContacts() {
         return contacts;
     }
+
 
     public void setContacts(ArrayList<Contact> contacts) {
         this.contacts = contacts;
@@ -74,17 +76,18 @@ public class ContactList {
     }
 
     /**
-     * This method add the contact in the contact List.
-     * @param contact – the contact that will be added to the ArrayList of Contact.
+     * This method add the contact in ArrayList of Contact.
+     * @param contact – the contact that will be added
      */
-    //Pour ajouter un nouveau contact à la liste
     public void addToContactList(Contact contact) {
         contacts.add(contact);
     }
 
     /**
-     * This method read the contacts stored in the Json File.
-     * @param source – the Json File where the contact List is save.
+     * This method read the list of contacts that is in the Json File.
+     * @param source – the Json File where the contact List is to be save
+     * @throws BusinessException If the file cannot be read
+     * @see Smartphone.Storage.JSONStorage#read(File)
      */
     public void readFromFile(File source) throws  BusinessException{
         ArrayList<Contact> newContact = storage.read(source);
@@ -95,47 +98,60 @@ public class ContactList {
     }
 
     /**
-     * This method write the contact List in the Json File.
-     * @param destination – the Json File where the contact List is save.
+     * This method save the contact List in the Json File.
+     * @param destination – the Json File where the contact List has to be saved.
+     * @throws BusinessException if the contact List cannot be written into the Json File
+     * @see Smartphone.Storage.JSONStorage#write(File, ArrayList)
      */
     public void saveToFile(File destination) throws BusinessException{
-
         storage.write(destination, contacts) ;
     }
 
     /**
-     * This method provides an ArrayList of String of the contact's names in the Json File.
-     * @param JsonFile – the Json File where the contact List is save.
-     * @return - the ArrayList of String containing the names of the contacts save in the Json
+     * This method provide an alphabetical order ArrayList<String> of the contact List stored in the Json File by his name.
+     * @param JsonFile - the Json file where the contacts are saved into
+     * @return an ArrayListof String containing the name of the contacts saved in the Json File
+     * @throws BusinessException if the Json File cannot be read
+     * @see Smartphone.Storage.JSONStorage#read(File)
      */
-//Méthode pour pouvoir afficher les données de contact des Json dans une JList
     public ArrayList<String> getNameArrayFromJSON(File JsonFile) throws BusinessException {
 
-        //Récupérer données dans JSON
         ArrayList<Contact> contactNames = storage.read(JsonFile);
 
         ArrayList<String> contactNamesString = new ArrayList<>();
-        //Transformer Contact[] en String[] et en prenant que les noms
+
         for (Contact contact : contactNames){
             contactNamesString.add(contact.getName());
-
         }
         contactNamesString.sort(Comparator.naturalOrder());
         return contactNamesString;
     }
 
-//Méthode pour pouvoir reprendre infos du contact sélectionné
+    /**
+     * This method provide the contact stored in the Json File by his name.
+     * @param nameSelected – the name of the contact that has to be provide.
+     * @param JsonFile - the Json file where the contacts are saved into
+     * @return a contact if the name selected exist in the Json File
+     * @throws BusinessException if the Json File cannot be read
+     * @see Smartphone.Storage.JSONStorage#read(File)
+     */
     public Contact getContactByName(String nameSelected,File JsonFile) throws BusinessException {
         ArrayList<Contact> contacts = storage.read(JsonFile);
          for (Contact c : contacts){
              if (c.getName().equals(nameSelected))
                 return c ;
          }
-        //return null ;
          return new Contact("","","","","",picture.getPath(),false);
     }
 
-    //Méthode retourne vraie si un contact est existant
+    /**
+     * This method is true if the name search correspond to a contact in the Json File.
+     * @param valSearched – the name of the contact that has to be searched.
+     * @param JsonFile - the Json file where the contacts are saved into
+     * @return true if the name searched exist in the Json File
+     * @throws BusinessException if the Json File cannot be read
+     * @see Smartphone.Storage.JSONStorage#read(File)
+     */
     public boolean containsNameInJson(String valSearched, File JsonFile) throws BusinessException {
 
         ArrayList<Contact> contacts = storage.read(JsonFile);
@@ -148,7 +164,7 @@ public class ContactList {
     }
 
     /**
-     * This method provide the contact .
+     * This method can remove a contact if the name given equals a contact into the ArrayList.
      * @param name – the name of the contact that has to be delete.
      */
     public void delete(String name){
@@ -157,7 +173,7 @@ public class ContactList {
 
     /**
      * This method put the contact List into a String.
-     * @return – String composed by all the informations of the contacts
+     * @return – String composed by all the information of the contacts
      */
     @Override
     public String toString() {
