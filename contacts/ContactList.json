@@ -1,11 +1,20 @@
 [
   {
+    "name": "Thomas",
+    "phoneNumber": "08",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
     "name": "Meg",
     "phoneNumber": "09",
     "indicative": "+41",
     "email": "",
     "address": "",
-    "pathForImage": ".\\Gallery\\Calculette.png",
+    "pathForImage": ".\\Gallery\\Icone_Contact2.png",
     "favContact": true
   }
 ]
