@@ -3,7 +3,7 @@ package Smartphone.Errors;
 import javax.swing.*;
 
 /**
- * This class provides contructors for all the BusinessExceptions,
+ * This class provides constructors for all the BusinessExceptions,
  * @author Mégane Solliard
  * @version
  */

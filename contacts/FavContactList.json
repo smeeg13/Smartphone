@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "name": "Meg",
+    "phoneNumber": "09",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": ".\\Gallery\\Calculette.png",
+    "favContact": true
+  }
+]

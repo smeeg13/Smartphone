@@ -1,5 +1,7 @@
 package Smartphone;
 
+import Smartphone.Errors.BusinessException;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,9 +11,12 @@ import java.awt.*;
  * @author Mégane Solliard
  * @version
  */
-public class PageVerouillage extends JPanel {
+public class LockScreen extends JPanel {
 
-    public PageVerouillage(){
+    /**
+     * This constructor provides the LockScreen display.
+     */
+    public LockScreen(){
 
     }
 

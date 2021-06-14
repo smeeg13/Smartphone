@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 /**
  * This interface provides the methods for reading/writing in a Json File.
+ * They are implemented by the class JSONStorage
  *
  * @author Mégane Solliard
  * @version
