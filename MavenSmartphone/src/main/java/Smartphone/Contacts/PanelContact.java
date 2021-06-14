@@ -9,20 +9,23 @@ import Smartphone.Storage.JSONStorage;
 import Smartphone.Storage.Storable;
 import Smartphone.ToolBox;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 
 /**
- * This class provides the code for creating and displaying the contact application panel.
+ * This class provides graphical implementations for a gallery using {@link javax.swing}  and {@link java.awt}.
  *
  * @author Mégane Solliard
  * @version 3
+ * @see PanelAdd#PanelAdd()
+ * @see PanelContactSelected#PanelContactSelected()
+ * @see PanelEdit#PanelEdit()
+ * @see PanelSearch#PanelSearch()
+ * @see PanelSelecPhoto#PanelSelecPhoto()
  */
 public class PanelContact extends JPanel {
     private final int SIZE_CONTACT_PICTURE = 65;
@@ -48,7 +51,7 @@ public class PanelContact extends JPanel {
     private final ContactList favContactList = new ContactList(favStorage);
     private JList JListContacts;
     private JList JListFavContact;
-    private final JButton buttonPictureContactAdd;
+    private final JButton buttonPictureAdd;
     private final JTextField nameTxt = new JTextField(30);
     private final JComboBox indicChoice = new JComboBox(indicatifs);
     private final JTextField numTxt = new JTextField(10);
@@ -62,7 +65,7 @@ public class PanelContact extends JPanel {
     private final JTextField rechercheBar = new JTextField(30);
     private final JButton buttonGoSearch;
     private final JLabel LabelErreurRecherche = new JLabel();
-    private final JButton buttonContactfind = new JButton("Enter above the contact you want to find");
+    private final JButton buttonContactFind = new JButton("Enter above the contact you want to find");
     private final JButton buttonPictureContSelec;
     private final JLabel nameTxtContSelec = new JLabel("");
     private final JLabel indicChoiceContSelec = new JLabel("");
@@ -80,9 +83,9 @@ public class PanelContact extends JPanel {
     private final JTextField emailTxtEdit = new JTextField(35);
     private final JTextField adresseTxtEdit = new JTextField(35);
     private final JCheckBox favCheckBoxEdit = new JCheckBox("", false);
-    private JButton buttonDelete ;
-    private JButton buttonCancelEdit;
-    private JButton buttonSaveChanges;
+    private final JButton buttonDelete ;
+    private final JButton buttonCancelEdit;
+    private final JButton buttonSaveChanges;
     private final ToolBox toolBox = new ToolBox();
     private JPanel gallery;
     private Contact contactSelec;
@@ -111,10 +114,8 @@ public class PanelContact extends JPanel {
         mainPanel.setLayout(ecran);
         JPanel pcontactPage = new JPanel();
         mainPanel.add(pcontactPage, "contactPage");
-        //Page ajouter contact
         JPanel PContactAdd = new PanelAdd();
         mainPanel.add(PContactAdd, "contactAdd");
-        //Page rechercher contact
         JPanel contactSearch = new PanelSearch();
         mainPanel.add(contactSearch, "contactSearch");
         JPanel contactSelected = new PanelContactSelected();
@@ -126,7 +127,6 @@ public class PanelContact extends JPanel {
         mainPanel.add(panelSelecPhoto,"panelSelecPhoto");
 
 //PANEL CONTACT PAGE
-        //Contient bouton add et research
         JPanel PContactPageHaut = new JPanel();
         pcontactPage.add(PContactPageHaut);
         PContactPageHaut.setPreferredSize(new Dimension(400, 35));
@@ -141,7 +141,6 @@ public class PanelContact extends JPanel {
         PContactPageHaut.add(labContactList);
         PContactPageHaut.add(buttonAdd);
         PContactPageHaut.add(buttonSearch);
-        //Contient liste de contacts
         JPanel PContactPageBase = new JPanel();
         pcontactPage.add(PContactPageBase);
         PContactPageBase.setPreferredSize(new Dimension(400, 498));
@@ -191,7 +190,6 @@ public class PanelContact extends JPanel {
         contactSelected.add(panelSelectCentre, BorderLayout.EAST);
         //Mise en page panel centre
         panelSelectCentre.setPreferredSize(new Dimension(350, 518));
-        // panel avec boutton pour photo du contact
         JPanel panelPictureContSelec = new JPanel();
         panelSelectCentre.add(panelPictureContSelec);
         Dimension SIZE_PANEL_PICTURE = new Dimension(400, 70);
@@ -332,10 +330,10 @@ public class PanelContact extends JPanel {
         PContactAddCentre.add(panelPictureAdd);
         panelPictureAdd.setPreferredSize(SIZE_PANEL_PICTURE);
 
-        buttonPictureContactAdd = new JButton();
-        buttonPictureContactAdd.setIcon(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_AddPicture.png")).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
-        setFontButton(buttonPictureContactAdd);
-        panelPictureAdd.add(buttonPictureContactAdd);
+        buttonPictureAdd = new JButton();
+        buttonPictureAdd.setIcon(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_AddPicture.png")).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
+        setFontButton(buttonPictureAdd);
+        panelPictureAdd.add(buttonPictureAdd);
         //panel avec infos à saisir
         JPanel PContactAddInfos = new JPanel();
         PContactAddCentre.add(PContactAddInfos);
@@ -413,14 +411,14 @@ public class PanelContact extends JPanel {
         panelCentre.add(rechercheBar);
         panelCentre.add(buttonGoSearch);
         panelBas.setPreferredSize(new Dimension(400, 435));
-        buttonContactfind.setPreferredSize(new Dimension(340,40));
-        buttonContactfind.setBorderPainted(true);
-        buttonContactfind.setBorder(BorderFactory.createLineBorder(Color.black));
-        buttonContactfind.setFocusPainted(false);
-        buttonContactfind.setContentAreaFilled(false);
-        buttonContactfind.setEnabled(false);
-        buttonContactfind.addActionListener(new Actions());
-        panelBas.add(buttonContactfind);
+        buttonContactFind.setPreferredSize(new Dimension(340,40));
+        buttonContactFind.setBorderPainted(true);
+        buttonContactFind.setBorder(BorderFactory.createLineBorder(Color.black));
+        buttonContactFind.setFocusPainted(false);
+        buttonContactFind.setContentAreaFilled(false);
+        buttonContactFind.setEnabled(false);
+        buttonContactFind.addActionListener(new Actions());
+        panelBas.add(buttonContactFind);
 
 //PANEL SELECTION D'UNE PHOTO DANS GALERIE
         PHautSelecPhoto.setLayout(null);
@@ -443,6 +441,12 @@ public class PanelContact extends JPanel {
         add(mainPanel);
     }
 
+    /**
+     * This method create the Gallery panel and display it in the.
+     * @throws BusinessException – if the contact list / favorite contact list isn't generate
+     *                              by the {@code readFromFile(File file) in the ContactList class.}
+     *
+     */
     private void openGaleryToSelecPic() {
         try {
             gallery = new PanelGallery(PCentreSelectPhoto,picture);
@@ -452,10 +456,17 @@ public class PanelContact extends JPanel {
         ecranGalery.show(PCentreSelectPhoto,"galery");
     }
 
+    /**
+     * This method reset the picture's path with the path PICTURE_DEFAULT.
+     */
     private void resetPicture(Picture picture){
         picture.setPath(PICTURE_DEFAULT);
     }
-
+    /**
+     * This method save both contact file and favourite contact file and update the contacts of the two JList.
+     * @throws BusinessException – if the json cannot be written by the {@code saveToFile(File file) in the ContactList class.}
+     *                           - if it cannot be read by the {@code getNameArrayFromJSON(File file) in the ContactList class.}
+     */
     private void saveToJson(){
         try {
             contactList.saveToFile(fileContactList);
@@ -468,29 +479,38 @@ public class PanelContact extends JPanel {
         ecran.show(mainPanel,"contactPage");
         updateUI();
     }
-
+    /**
+     * This method create the font for a button.
+     * @param button - the JButton that we want to set the font and add the ActionListener
+     */
     private void setFontButton(JButton button){
         button.setBorderPainted(false);
         button.setFocusPainted(false);
         button.setContentAreaFilled(false);
         button.addActionListener(new Actions());
-
     }
-    //Ajouter les infos du contact sélectionné à la page d'info du contact
-    private void setInfoFromeContactSelected(Contact contactSelec){
+    /**
+     * This method sets the information of the contact selected into the panel.
+     * @param contactSelec - The contact we want to display information
+     */
+    private void setInfoFromContactSelected(Contact contactSelec){
         if (contactSelec == null) return;
         nameTxtContSelec.setText(contactSelec.getName());
         indicChoiceContSelec.setText(contactSelec.getIndicative());
         numTxtContSelec.setText(contactSelec.getPhoneNumber());
         emailTxtContSelec.setText(contactSelec.getEmail());
         adresseTxtContSelec.setText(contactSelec.getAddress());
-        if (PICTURE_DEFAULT.equals(contactSelec.getPathForImage()))
-            buttonPictureContSelec.setIcon(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_AddPicture.png")).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
-        else
-            buttonPictureContSelec.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
         favCheckBoxContSelec.setSelected(contactSelec.isFavContact());
+
+        if (!PICTURE_DEFAULT.equals(contactSelec.getPathForImage()))
+            buttonPictureContSelec.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
+
+        buttonPictureContSelec.setIcon(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_AddPicture.png")).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
+
     }
-    //Mise à zéro des champs de saisie
+    /**
+     * This method reset all the textFields, Jbutton and Checkbox to default texte/choice.
+     */
     private void resetFields(){
         nameTxt.setText("");
         numTxt.setText("");
@@ -498,11 +518,20 @@ public class PanelContact extends JPanel {
         emailTxt.setText("");
         adresseTxt.setText("");
         resetPicture(picture);
-        buttonPictureContactAdd.setIcon(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_AddPicture.png")).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
+        buttonPictureAdd.setIcon(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_AddPicture.png")).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
         favCheckBox.setSelected(false);
     }
 
+    /**
+     * This class create List Selection Listener.
+     * @see ListSelectionListener#valueChanged(ListSelectionEvent)
+     */
     class ListSelectionListener implements javax.swing.event.ListSelectionListener{
+
+        /**
+         * This method displays the contact selected panel when selecting a name in the list.
+         * @throws BusinessException – if Json File cannot be read by the {@code getContactByName(String string,File file) in the ContactList class.}
+         */
         @Override
         public void valueChanged(ListSelectionEvent e) {
             String selectedContact;
@@ -516,43 +545,67 @@ public class PanelContact extends JPanel {
                     selectedContact = (String) JListFavContact.getSelectedValue();
                     contactSelec = favContactList.getContactByName(selectedContact, fileFavContactList);
                 }
-                setInfoFromeContactSelected(contactSelec);
+                setInfoFromContactSelected(contactSelec);
             } catch (BusinessException businessException) {
                 businessException.printStackTrace();
             }
         }
     }
-
+    /**
+     * This class create List Selection Listener.
+     * @see ActionListener#actionPerformed(ActionEvent)
+     */
     class Actions implements ActionListener {
+
+        /**
+         * Invoked when an action on a JButtons occurs.
+         * @param e the event to be processed
+         * @throws BusinessException – if the contact List cannot be written into the Json File
+         *                           - if contact already exist
+         *                           - if name or phone number textField are empty when you want to add a contact
+         *                           - if the contact we want to search has not been found
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
+            //Display the panelAdd when buttonAdd has been clicked on
             if (e.getSource() == buttonAdd) {
                 ecran.show(mainPanel, "contactAdd");
             }
+
+            //Display the panelSearch when buttonSearch has been clicked on
             if (e.getSource() == buttonSearch) {
                 ecran.show(mainPanel, "contactSearch");
             }
+
+            //Display the panelEdit when buttonEdit has been clicked on And set the information of the contact selected
             if (e.getSource() == buttonEdit) {
+                if (contactSelec == null) return;
+                nameTxtEdit.setText(contactSelec.getName());
+                indicChoiceEdit.setSelectedItem(contactSelec.getIndicative());
+                numTxtEdit.setText(contactSelec.getPhoneNumber());
+                emailTxtEdit.setText(contactSelec.getEmail());
+                adresseTxtEdit.setText(contactSelec.getAddress());
+                favCheckBoxEdit.setSelected(contactSelec.isFavContact());
+
+                if (!PICTURE_DEFAULT.equals(contactSelec.getPathForImage()))
+                    buttonPictureEdit.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
+
+                buttonPictureEdit.setIcon(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_AddPicture.png")).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
+
                 ecran.show(mainPanel, "contactedit");
-                nameTxtEdit.setText(nameTxtContSelec.getText());
-                numTxtEdit.setText(numTxtContSelec.getText());
-                indicChoiceEdit.setSelectedItem(indicChoiceContSelec.getText());
-                emailTxtEdit.setText(emailTxtContSelec.getText());
-                adresseTxtEdit.setText(adresseTxtContSelec.getText());
-                buttonPictureEdit.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
-                favCheckBoxEdit.setSelected(favCheckBoxContSelec.isSelected());
             }
+
+            //Delete the contact, add another one with the changes
+            // And Display the panelcontact when buttonSaveChanges has been clicked on
             if (e.getSource() == buttonSaveChanges) {
                 if (PICTURE_DEFAULT.equals(picture.getPath()))
                     if (!picture.getPath().equals(contactSelec.getPathForImage()))
                         picture.setPath(contactSelec.getPathForImage());
 
-                //Supprimer le contact
                 contactList.delete(nameTxtContSelec.getText());
                 favContactList.delete(nameTxtContSelec.getText());
                 boolean favContact;
                 favContact = favCheckBoxEdit.isSelected();
-                //Recréer contact avec changement
                 Contact contact = new Contact(nameTxtEdit.getText(), (String) indicChoiceEdit.getSelectedItem(), numTxtEdit.getText(),
                         emailTxtEdit.getText(), adresseTxtEdit.getText(), picture.getPath(), favContact);
                 if (contact.isFavContact()) {
@@ -578,26 +631,36 @@ public class PanelContact extends JPanel {
                 ecran.show(mainPanel, "contactPage");
                 updateUI();
             }
+
+            //Delete the contact and save the list of contact without this contact
             if (e.getSource() == buttonDelete) {
                 contactList.delete(nameTxtContSelec.getText());
                 favContactList.delete(nameTxtContSelec.getText());
                 saveToJson();
             }
+
+            //Reset all the necessary fields when buttonBack or buttonCancel has been clicked on
+            //And display the contactPanel
             if ((e.getSource() == buttonBack) || (e.getSource() == buttonCancel)) {
-                ecran.show(mainPanel, "contactPage");
                 resetFields();//Mise à zéro de tous les champs de saisie et de tout les autres champs aussi
                 rechercheBar.setText("");
                 LabelErreurRecherche.setVisible(false);
                 labErreurSaisie.setText(" ");
-                buttonContactfind.setText("Enter above the name of the contact you want to find");
-                buttonContactfind.setBorder(BorderFactory.createLineBorder(Color.black));
+                buttonContactFind.setText("Enter above the name of the contact you want to find");
+                buttonContactFind.setBorder(BorderFactory.createLineBorder(Color.black));
+                ecran.show(mainPanel, "contactPage");
             }
+
+            //Reset the contact's information and his picture when buttonCancelEdit has been clicked on
             if (e.getSource() == buttonCancelEdit) {
-                ecran.show(mainPanel, "contactselected");
                 resetPicture(picture);
                 buttonPictureEdit.setIcon(new ImageIcon(new ImageIcon(picture.getPath()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
                 //buttonPictureContactAdd.setIcon(new ImageIcon(new ImageIcon(picture.getPath()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
+                ecran.show(mainPanel, "contactselected");
+
             }
+
+            //Reset fields in the panelContactSelected when buttonCancelContSelec has been clicked on
             if (e.getSource() == buttonCancelContSelec) {
                 nameTxtContSelec.setText("");
                 indicChoiceContSelec.setText("");
@@ -610,18 +673,25 @@ public class PanelContact extends JPanel {
                 JListFavContact.clearSelection();
                 ecran.show(mainPanel, "contactPage");
             }
+
+            //Display the panelSelecPhoto with the galery when buttonPictureEdit has been clicked on
             if (e.getSource() == buttonPictureEdit) {
                 String lastPanel = "contactedit";
                 CancelSelectionPic.setText(lastPanel);
                 openGaleryToSelecPic();
                 ecran.show(mainPanel, "panelSelecPhoto");
             }
-            if (e.getSource() == buttonPictureContactAdd) {
+
+            //Display the panelSelecPhoto with the galery when buttonPictureAdd has been clicked on
+            if (e.getSource() == buttonPictureAdd) {
                 String lastPanel = "contactAdd";
                 CancelSelectionPic.setText(lastPanel);
                 openGaleryToSelecPic();
                 ecran.show(mainPanel, "panelSelecPhoto");
             }
+
+            //Set the information in the textfield as parameter for a new contact, add it to the list of the contact
+            //And display the panelContact
             if (e.getSource() == buttonSave) { //Sauvergarder un nouveau contact
                 String nom = nameTxt.getText();
                 String indicatif = (String) indicChoice.getSelectedItem(); //saisie = param du constructeur Contact
@@ -657,7 +727,7 @@ public class PanelContact extends JPanel {
                             updateUI();
                             resetFields(); //Mise à zéro des champs de saisie
                             contactOK = true;
-                            ecran.show(mainPanel, "contactPage"); //Retour sur page des contacts
+                            ecran.show(mainPanel, "contactPage");
                         }
                     }
                 } while (contactOK = false);
@@ -665,55 +735,64 @@ public class PanelContact extends JPanel {
                     businessException.printStackTrace();
                 }
             }
-            if (e.getSource() == buttonGoSearch) {  //Recherche d'un contact
+            //Display on the buttonContactFind the name of the contact if existing in the Json File
+            //If the contact does not exist, put message in the button instead of the name
+            if (e.getSource() == buttonGoSearch) {
                 String research = "";
                 research = rechercheBar.getText();
                 try {
                     if (contactList.containsNameInJson(research, fileContactList)) {
                         Contact searchedCont = contactList.getContactByName(research, fileContactList);
-                        buttonContactfind.setText(searchedCont.getName());
-                        buttonContactfind.setEnabled(true);
-                        buttonContactfind.setBorder(BorderFactory.createTitledBorder("Contact Find"));
+                        buttonContactFind.setText(searchedCont.getName());
+                        buttonContactFind.setEnabled(true);
+                        buttonContactFind.setBorder(BorderFactory.createTitledBorder("Contact Find"));
                     } else {
-                        buttonContactfind.setText("Contact not found");
-                        buttonContactfind.setBorder(BorderFactory.createLineBorder(Color.black));
-                        buttonContactfind.setEnabled(false);
-                        throw new BusinessException("Contact not found", ErrorCodes.CONTACT_NOT_FOUND); //Msg erreur car rien trouvé
+                        buttonContactFind.setText("Contact not found");
+                        buttonContactFind.setBorder(BorderFactory.createLineBorder(Color.black));
+                        buttonContactFind.setEnabled(false);
+                        throw new BusinessException("Contact not found", ErrorCodes.CONTACT_NOT_FOUND);
                     }
                 } catch (BusinessException businessException) {
                     businessException.printStackTrace();
                 }
                 rechercheBar.setText("");
             }
-            if (e.getSource() == buttonContactfind) {
+            //Display the panelContactSelected when buttonContactFind has been clicked on
+            if (e.getSource() == buttonContactFind) {
                 String selectedContact;
                 ecran.show(mainPanel, "contactselected");
                 try {
-                    selectedContact = buttonContactfind.getText();
+                    selectedContact = buttonContactFind.getText();
                     contactSelec = contactList.getContactByName(selectedContact, fileContactList);
-                    setInfoFromeContactSelected(contactSelec);
+                    setInfoFromContactSelected(contactSelec);
                 } catch (BusinessException businessException) {
                     businessException.printStackTrace();
                 }
             }
+
+            //Display the panelAdd or panelEdit without any changes when CancelSelectionPic has been clicked on
             if (e.getSource() == CancelSelectionPic) {
                 resetPicture(picture);
                 if (CancelSelectionPic.getText().equals("contactAdd"))
-                    buttonPictureContactAdd.setIcon(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_AddPicture.png")).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
+                    buttonPictureAdd.setIcon(new ImageIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_AddPicture.png")).getImage().getScaledInstance(SIZE_CONTACT_PICTURE,SIZE_CONTACT_PICTURE,Image.SCALE_SMOOTH)));
                 else
                     buttonPictureEdit.setIcon(new ImageIcon(new ImageIcon(contactSelec.getPathForImage()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH)));
                 ecran.show(mainPanel, CancelSelectionPic.getText());
                 CancelSelectionPic.setText(null);
             }
+
+            //Display the panelAdd or panelEdit with the picture change when SelectPictureOK has been clicked on
             if (e.getSource() == SelectPictureOK) {
                 ImageIcon picChoose = new ImageIcon(new ImageIcon(picture.getPath()).getImage().getScaledInstance(SIZE_CONTACT_PICTURE, SIZE_CONTACT_PICTURE, Image.SCALE_SMOOTH));
                 if (CancelSelectionPic.getText().equals("contactAdd"))
-                    buttonPictureContactAdd.setIcon(picChoose);
+                    buttonPictureAdd.setIcon(picChoose);
                    // buttonPictureContactAdd.setIcon(new ImageIcon(ClassLoader.getSystemResource("Icone_AddPicture.png")));
                 else
                     buttonPictureEdit.setIcon(picChoose);
                 ecran.show(mainPanel, CancelSelectionPic.getText());
             }
+
+            //Delete the picture of the contact and reset it with the PICTURE_DEFAULT
             if (e.getSource() == buttonRemovePic) {
                 Contact contact = new Contact(contactSelec.getName(), contactSelec.getIndicative(), contactSelec.getPhoneNumber(), contactSelec.getEmail(), contactSelec.getAddress(), PICTURE_DEFAULT, contactSelec.isFavContact());
                 contactList.delete(contactSelec.getName());
@@ -727,6 +806,9 @@ public class PanelContact extends JPanel {
     }
 }
 
+/**
+ * These Inner Classes provide panels to Panel Contact.
+ */
 class PanelSelecPhoto extends JPanel {
     public PanelSelecPhoto(){
 

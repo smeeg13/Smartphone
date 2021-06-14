@@ -83,7 +83,10 @@ public class PanelGallery extends JPanel {
     //constructeur pour l'ajout d'une photo au contact
     public PanelGallery(JPanel mPanel, Picture picture) throws BusinessException{
         currentAlbum =new Gallery();
+        mPanel.removeAll();
         mPanel.add(fillGridAllPicture(currentAlbum,picture));
+        mPanel.validate();
+        mPanel.repaint();
     }
 
 

@@ -122,8 +122,11 @@ public class Calculator extends JPanel {
      * This class is used to give actionListener to all the JButtons
      */
     class Listener implements ActionListener {
+        /**
+         *  Invoked when an action on a JButtons occurs.
+         *  @param e the event to be processed
+         */
         public void actionPerformed(ActionEvent e) {
-
             //Set the number of the button in the textField above
             for (int i = 0; i < 10; i++) {
                 if (e.getSource() == numberButtons[i]) {

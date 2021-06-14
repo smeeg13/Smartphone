@@ -70,7 +70,7 @@ public class StructureFrame extends JFrame {
     private JLabel time;
 
 
-    private JPanel PageVerouillage = new PageVerouillage();
+    private JPanel PageVerouillage = new LockScreen();
     private ClockTask clockTaskVerouillage = new ClockTask();
     private JLabel timeVerouillage;
     private JLabel labelDate;

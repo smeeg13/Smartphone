@@ -4,6 +4,7 @@ import Smartphone.Errors.BusinessException;
 import Smartphone.Gallery.Core.Picture;
 import Smartphone.Storage.Storable;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -19,12 +20,12 @@ public class ContactList {
     private ArrayList<Contact> contacts ;
     private Storable storage;
     private Picture picture = new Picture(ClassLoader.getSystemResource("Icone_AddPicture.png").getPath());
-    String name;
-    Label labErreurSaisie=new Label("");
 
     /**
-     * This constructor provides the contactlist.
-     * @param storage -
+     * This constructor provides the Arraylist of contacts.
+     * @param storage - the interface that provides Methods to read and write to a Json File
+     * @see Smartphone.Storage.JSONStorage#read(File)
+     * @see Smartphone.Storage.JSONStorage#write(File, ArrayList)
      */
     public ContactList(Storable storage){
         contacts = new ArrayList<>();
@@ -32,45 +33,32 @@ public class ContactList {
     }
     /**
      * Get all contacts in an Arraylist.
-     * @return – this phonenumber in a String
+     * @return – this Arraylist of Contact
      */
     public ArrayList<Contact> getContacts() {
         return contacts;
     }
 
-
+    /**
+     * Set the ArrayList of contact.
+     * @param contacts – the ArrayList of contact
+     */
     public void setContacts(ArrayList<Contact> contacts) {
         this.contacts = contacts;
     }
 
-    public Storable getStorage() {
-        return storage;
-    }
-
-    public void setStorage(Storable storage) {
-        this.storage = storage;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Label getLabErreurSaisie() {
-        return labErreurSaisie;
-    }
-
-    public void setLabErreurSaisie(Label labErreurSaisie) {
-        this.labErreurSaisie = labErreurSaisie;
-    }
-
+    /**
+     * Get the picture of a contact.
+     * @return – this picture
+     */
     public Picture getPicture() {
         return picture;
     }
 
+    /**
+     * Set the picture of the contact.
+     * @param picture  – the picture of the contact
+     */
     public void setPicture(Picture picture) {
         this.picture = picture;
     }
@@ -137,11 +125,11 @@ public class ContactList {
      */
     public Contact getContactByName(String nameSelected,File JsonFile) throws BusinessException {
         ArrayList<Contact> contacts = storage.read(JsonFile);
-         for (Contact c : contacts){
-             if (c.getName().equals(nameSelected))
+        for (Contact c : contacts){
+            if (c.getName().equals(nameSelected))
                 return c ;
-         }
-         return new Contact("","","","","",picture.getPath(),false);
+        }
+        return new Contact("","","","","",picture.getPath(),false);
     }
 
     /**
@@ -184,3 +172,4 @@ public class ContactList {
         return myContacts;
     }
 }
+

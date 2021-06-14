@@ -24,6 +24,10 @@ public enum ErrorCodes {
         this.code = code;
     }
 
+    /**
+     * This Method get the error Code.
+     * @return - the code used
+     */
     public int getCode() {
         return code;
     }
