@@ -126,6 +126,9 @@ public class Calculator extends JPanel {
 
         add(mainpanel);
     }
+    /**
+     * This class is used for the JButtons
+     */
     class Listener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 

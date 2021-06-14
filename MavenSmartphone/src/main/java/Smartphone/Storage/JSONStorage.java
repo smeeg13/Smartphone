@@ -14,7 +14,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+/**
+ * This class implemtent the methode of the interface Storable, used to save or read a Json.
+ *
+ * @author Mégane Solliard
+ * @version
+ */
 public class JSONStorage implements Storable {
 
 //Méthode pour lire un ficher JSON

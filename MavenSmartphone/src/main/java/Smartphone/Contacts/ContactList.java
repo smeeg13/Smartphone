@@ -65,6 +65,14 @@ public class ContactList {
         this.labErreurSaisie = labErreurSaisie;
     }
 
+    public Picture getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Picture picture) {
+        this.picture = picture;
+    }
+
     /**
      * This method add the contact in the contact List.
      * @param contact – the contact that will be added to the ArrayList of Contact.

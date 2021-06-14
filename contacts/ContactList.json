@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Meg",
+    "phoneNumber": "09",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone/target/classes/Icone_AddPicture.png",
+    "favContact": true
+  },
+  {
+    "name": "Thomas",
+    "phoneNumber": "45",
+    "indicative": "+41",
+    "email": "t@gmail.com",
+    "address": "Martigny",
+    "pathForImage": "/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone/target/classes/Icone_AddPicture.png",
+    "favContact": false
+  }
+]

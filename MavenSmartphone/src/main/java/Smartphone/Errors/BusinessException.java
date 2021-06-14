@@ -12,7 +12,7 @@ public class BusinessException extends Exception{
 
     private ErrorCodes errorCode;
     /**
-     * This constructor sets the gallery display on another class (by a panel).
+     * This constructor sets the message of the exception and the error code throw by other panel.
      * @param msg – the error message that should be displayed
      * @param errorCode – the Error Code linked to this message
      */
@@ -21,17 +21,17 @@ public class BusinessException extends Exception{
         this.errorCode = errorCode;
     }
     /**
-     * This constructor sets the gallery display on another class (by a panel).
+     * This constructor sets the message of the exception, the cause and the error code throw by other panel.
      * @param msg – the error message that should be displayed
      * @param cause – the CardLayout needed for {@code showAllPicture()}
-     * @param errorCode – the Picture needed for {@code showAllPicture()}
+     * @param errorCode – the Error Code linked to this message
      */
     public BusinessException(String msg, Throwable cause, ErrorCodes errorCode) {
         super(msg, cause);
         this.errorCode = errorCode;
     }
     /**
-     * This constructor sets the gallery display on another class (by a panel).
+     * This constructor sets the message of the exception throw by other panel.
      * @param msg – the error message that should be displayed
      */
     public BusinessException(String msg){

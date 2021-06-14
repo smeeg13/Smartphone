@@ -1,7 +1,7 @@
 package Smartphone.Errors;
 
 /**
- * This class provides all ErrorCode that can be used for the BusinessExceptions,
+ * This class provides all Error Codes that can be used.
  * @author Mégane Solliard
  * @version
  */
@@ -9,6 +9,7 @@ public enum ErrorCodes {
 
     CONTACT_ALREADY_EXIST_ERROR(200),
     CONTACT_INFORMATIONS_EMPTY(202),
+    CONTACT_NOT_FOUND(203),
     IO_ERROR(301),
     REQUEST_FAIL(401),
     TERMINALCOMMAND_ERROR(402);
