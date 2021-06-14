@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -59,37 +60,19 @@ public class MeteoRessource extends Meteo{
      * @param unit determine the unit to show
      * @return a String with the information of the daily weather
      */
-    public String getWeather(String location, String appId, String unit) throws BusinessException{
-        StringBuilder rt = new StringBuilder();
+    public String getWeather(String location, String appId, String unit) throws BusinessException {
+        String weatherInfo = "";
 
         try {
-            URL url = new URL("http://api.openweathermap.org/data/2.5/weather"
-                    + "?units="+unit
+            return weatherInfo = getOpenweathermapInfo(new URL("http://api.openweathermap.org/data/2.5/weather"
+                    + "?units=" + unit
                     + "&q=" + location
-                    + "&appid=" + appId);
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-
-            responseCode = conn.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-                String readLine;
-
-                while ((readLine = in.readLine()) != null) {
-                    rt.append(readLine);
-                }
-
-                in.close();
-            } else {
-                System.err.println("Wrong response code: " + responseCode);
-            }
-        } catch (Exception ex) {
-            throw new BusinessException("Request error to openweathermap.org",ex, ErrorCodes.REQUEST_FAIL);
+                    + "&appid=" + appId));
+        } catch (MalformedURLException e) {
+            throw new BusinessException("URL is malformed", e, ErrorCodes.BAD_PARAMETER);
         }
-        return rt.toString();
     }
+
 
     /**
      * This method get the weekly forecast on openweathermap
@@ -97,35 +80,15 @@ public class MeteoRessource extends Meteo{
      * @param appId allows to use the website openweathermap
      * @return a String with all the 5 daily forecast
      */
-    public String getForecast(String location, String appId) throws BusinessException{
-        StringBuilder rt = new StringBuilder();
+    public String getForecast(String location, String appId) throws BusinessException {
+        String weatherInfoWeek = "";
 
         try {
-            URL urlForecast = new URL("http://api.openweathermap.org/data/2.5/forecast?q=" + location + "&appid=" + appId);
-
-            HttpURLConnection conn = (HttpURLConnection) urlForecast.openConnection();
-            conn.setRequestMethod("GET");
-            responseCode = conn.getResponseCode();
-
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-                String readLine;
-
-                while ((readLine = in.readLine()) != null) {
-                    rt.append(readLine);
-                }
-
-                in.close();
-            } else {
-                System.err.println("Wrong response code: " + responseCode);
-            }
-        } catch (Exception ex) {
-            throw new BusinessException("Request error to openweathermap.org",ex, ErrorCodes.REQUEST_FAIL);
+            return weatherInfoWeek = getOpenweathermapInfo(new URL("http://api.openweathermap.org/data/2.5/forecast?q=" + location + "&appid=" + appId));
+        } catch (MalformedURLException e) {
+            throw new BusinessException("URL is malformed", e, ErrorCodes.BAD_PARAMETER);
         }
 
-
-        return rt.toString();
     }
 
     /**
@@ -315,6 +278,40 @@ public class MeteoRessource extends Meteo{
         Image image = img.getImage(); // transform it
         Image newimg = image.getScaledInstance(w, h, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
         return img = new ImageIcon(newimg);  // transform it back
+    }
+
+    /**
+     * This method get the information with a URL
+     * @param url for openweathermap to know which data we must get
+     * @return return the result in a String
+     * @throws BusinessException with an error that it doesn't work
+     */
+    public String getOpenweathermapInfo(URL url) throws BusinessException {
+        StringBuilder rt = new StringBuilder();
+
+        try {
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            responseCode = conn.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                String readLine;
+
+                while ((readLine = in.readLine()) != null) {
+                    rt.append(readLine);
+                }
+
+                in.close();
+            } else {
+                System.err.println("Wrong response code: " + responseCode);
+            }
+        } catch (Exception ex) {
+            throw new BusinessException("Request error to openweathermap.org", ex, ErrorCodes.REQUEST_FAIL);
+        }
+
+        return rt.toString();
     }
 
 
