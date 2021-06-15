@@ -96,12 +96,5 @@ public class TestGallery {
 
     }
 
-//    @Test
-//    public void deleteAlbum(){
-//        for (Album al:g1.getAlbumList()) {
-//            g1.deleteAlbum(al);
-//        }
-//        g1.deleteFolder();
-//    }
 }
 
