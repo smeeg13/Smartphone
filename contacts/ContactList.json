@@ -9,12 +9,156 @@
     "favContact": false
   },
   {
-    "name": "Meg",
-    "phoneNumber": "09",
+    "name": "Nathan",
+    "phoneNumber": "98",
     "indicative": "+41",
     "email": "",
     "address": "",
-    "pathForImage": ".\\Gallery\\icone_Recherche.png",
-    "favContact": true
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "j",
+    "phoneNumber": "5",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "f",
+    "phoneNumber": "3",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "4",
+    "phoneNumber": "4",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "6",
+    "phoneNumber": "6",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "8",
+    "phoneNumber": "6",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "fs",
+    "phoneNumber": "2",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "ghh",
+    "phoneNumber": "4",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "jds",
+    "phoneNumber": "3",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "mon",
+    "phoneNumber": "55",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "lk",
+    "phoneNumber": "8",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "mm",
+    "phoneNumber": "5",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "sg",
+    "phoneNumber": "3",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "dd",
+    "phoneNumber": "fff",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "fgh",
+    "phoneNumber": "3",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "ksj",
+    "phoneNumber": "555",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": "file:/C:/Users/megan/Desktop/HES/smartphone/MavenSmartphone-1.0-SNAPSHOT-jar-with-dependencies.jar!/Icone_AddPicture.png",
+    "favContact": false
+  },
+  {
+    "name": "2",
+    "phoneNumber": "4",
+    "indicative": "+41",
+    "email": "",
+    "address": "",
+    "pathForImage": ".\\Gallery\\marc\\ville.jpg",
+    "favContact": false
   }
 ]
