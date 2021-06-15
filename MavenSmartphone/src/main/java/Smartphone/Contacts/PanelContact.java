@@ -711,7 +711,7 @@ public class PanelContact extends JPanel {
                     } else {
                         if (contactList.containsNameInJson(nameTxt.getText(), fileContactList)) {
                             labErreurSaisie.setText("Contact Already exist !");
-                            throw new BusinessException("Contact already exist", ErrorCodes.CONTACT_ALREADY_EXIST_ERROR);
+                            throw new BusinessException("Contact already exist", ErrorCodes.CONTACT_ALREADY_EXIST);
                         } else {
                             Contact contact = new Contact(nom, indicatif, numero, email, adresse, picture.getPath(), favContact);
                             if (contact.isFavContact()) {
@@ -797,9 +797,14 @@ public class PanelContact extends JPanel {
                 Contact contact = new Contact(contactSelec.getName(), contactSelec.getIndicative(), contactSelec.getPhoneNumber(), contactSelec.getEmail(), contactSelec.getAddress(), PICTURE_DEFAULT, contactSelec.isFavContact());
                 contactList.delete(contactSelec.getName());
                 favContactList.delete(contactSelec.getName());
-                if (contact.isFavContact())
-                    favContactList.addToContactList(contact);
-                contactList.addToContactList(contact); //Ajout du contact à la liste de contact
+                if (contact.isFavContact()) {
+                    try {
+                        favContactList.addToContactList(contact);
+                        contactList.addToContactList(contact); //Ajout du contact à la liste de contact
+                    } catch (BusinessException businessException) {
+                        businessException.printStackTrace();
+                    }
+                }
                 saveToJson();
             }
         }

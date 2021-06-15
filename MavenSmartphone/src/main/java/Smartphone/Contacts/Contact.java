@@ -1,5 +1,8 @@
 package Smartphone.Contacts;
 
+import Smartphone.Errors.BusinessException;
+import Smartphone.Errors.ErrorCodes;
+
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -21,28 +24,34 @@ public class Contact {
 
     /**
      * This constructor create a contact.
-     * @param name – a String containing the name of the contact
-     * @param indicative – a String containing the indicative of the contact
-     * @param phoneNumber – a String containing the phone number of the contact
-     * @param email – a String containing the email of the contact
-     * @param address – a String containing the address of the contact
+     *
+     * @param name         – a String containing the name of the contact
+     * @param indicative   – a String containing the indicative of the contact
+     * @param phoneNumber  – a String containing the phone number of the contact
+     * @param email        – a String containing the email of the contact
+     * @param address      – a String containing the address of the contact
      * @param pathForImage – a String containing the path of the contact's picture
-     * @param favContact – a boolean which is true if the contact is a favourite contact, otherwise false
+     * @param favContact   – a boolean which is true if the contact is a favourite contact, otherwise false
      */
     public Contact(String name, String indicative, String phoneNumber,
                    String email, String address, String pathForImage, boolean favContact) {
-        setName(name);
-        this.phoneNumber = phoneNumber;
+        try {
+            setName(name);
+            setPhoneNumber(phoneNumber);
+        } catch (BusinessException businessException) {
+            businessException.printStackTrace();
+        }
         this.indicative = indicative;
         this.email = email;
         this.address = address;
         this.favContact = favContact;
-        this.pathForImage=pathForImage;
+        this.pathForImage = pathForImage;
     }
 
     /**
      * Set the path for the contact's picture.
-     * @param pathForImage  – the path of the picture
+     *
+     * @param pathForImage – the path of the picture
      */
     public void setPathForImage(String pathForImage) {
         this.pathForImage = pathForImage;
@@ -50,6 +59,7 @@ public class Contact {
 
     /**
      * Get the path of the contact's picture.
+     *
      * @return – this path
      */
     public String getPathForImage() {
@@ -58,6 +68,7 @@ public class Contact {
 
     /**
      * Get the name of the contact.
+     *
      * @return – this name
      */
     public String getName() {
@@ -66,13 +77,16 @@ public class Contact {
 
     /**
      * Set the name of the contact.
-     * @param name  – the name of the contact
+     *
+     * @param name – the name of the contact
      */
     public void setName(String name) {
-       if( this.name == ""){
-           this.name = name;
-       }
+        if (this.name == "") {
+            this.name = name;
+        }
+
     }
+
 
     /**
      * Get the phone number of the contact.
@@ -86,7 +100,8 @@ public class Contact {
      * Set the phonenumber of the contact.
      * @param phoneNumber  – the phonenumber of the contact in a String
      */
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) throws BusinessException {
+        this.phoneNumber = phoneNumber;
     }
 
     /**
@@ -134,6 +149,7 @@ public class Contact {
      * @param indicative  – the indicative in a String
      */
     public void setIndicative(String indicative) {
+        this.indicative = indicative;
     }
 
     /**
@@ -159,7 +175,8 @@ public class Contact {
     @Override
     public String toString() {
         return name + ", +" + indicative + "  " + phoneNumber
-                + ", email "+ email+", addresse "+address;
+                + ", email "+ email+", addresse "+address+
+                ", path "+pathForImage;
     }
 
     /**
