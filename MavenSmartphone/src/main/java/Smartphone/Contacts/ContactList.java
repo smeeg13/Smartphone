@@ -1,6 +1,7 @@
 package Smartphone.Contacts;
 
 import Smartphone.Errors.BusinessException;
+import Smartphone.Errors.ErrorCodes;
 import Smartphone.Gallery.Core.Picture;
 import Smartphone.Storage.Storable;
 
@@ -67,7 +68,10 @@ public class ContactList {
      * This method add the contact in ArrayList of Contact.
      * @param contact – the contact that will be added
      */
-    public void addToContactList(Contact contact) {
+    public void addToContactList(Contact contact) throws BusinessException {
+        if (contacts.contains(contact))
+            throw new BusinessException("Contact already exist", ErrorCodes.CONTACT_ALREADY_EXIST);
+        else
         contacts.add(contact);
     }
 

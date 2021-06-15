@@ -7,7 +7,7 @@ package Smartphone.Errors;
  */
 public enum ErrorCodes {
 
-    CONTACT_ALREADY_EXIST_ERROR(200),
+    CONTACT_ALREADY_EXIST(200),
     CONTACT_INFORMATIONS_EMPTY(202),
     CONTACT_NOT_FOUND(203),
     IO_ERROR(301),
